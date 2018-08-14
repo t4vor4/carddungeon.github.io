@@ -1,0 +1,339 @@
+@import url('https://fonts.googleapis.com/css?family=MedievalSharp');
+@import url('https://fonts.googleapis.com/css?family=Oswald');
+
+body {
+	font-size: 14px;
+	box-sizing: border-box;
+	color: #fff;
+	background-image: url('./img/fundo_dungeon.jpg');
+	background-position: center;
+	font-family: 'MedievalSharp', cursive;
+}
+
+body *, body *:before, body *:after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	font-family: font-family: 'MedievalSharp', cursive;
+}
+
+.content {
+	float: left;
+	position: relative;
+	height: 80vh;
+	width: 90%;
+	margin: 1% 5% 0;
+	padding: 25px;
+	background-color: #000;
+	/* background-color: #0ff; */
+}
+
+.deckPlace {
+	float: left;
+    position: relative;
+    width: 50%;
+    height: 90%;
+	padding: 10px;
+	font-size: 2em;
+	/* background-color: #f0f; */
+	padding: 10px;
+}
+
+.deckPlace .baseCarta {
+	float: left;
+	position: relative;
+	background-color: #888;
+	border-radius:  10px;
+	width: 266px;
+    height: 447px;
+}
+
+.deckPlace .baseCartaCemiterio {
+	float: left;
+	position: relative;
+	background-color: #577;
+	border-radius:  10px;
+	width: 266px;
+    height: 447px;
+    margin-left: 50px;
+}
+
+
+	
+/* ESTILO GERAL DAS CARTAS */
+	.card {
+		float: left;
+		position: absolute;
+		width: 266px;
+    	height: 447px;
+		transition: 0.6s;  	
+		transform-style: preserve-3d;    	
+		box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
+		margin:  10px 0 0 10px;
+	}
+
+	.backCard {
+		display: block;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		z-index: 2;
+		background-image: url('./img/backCarta.jpg');
+		backface-visibility: hidden;  
+		border: 15px solid #faf1c3;
+		border-radius: 10px;
+	}
+
+	.frontCard {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		background-color: #6d5419;
+		border-radius: 10px;
+		display: block;
+		border: 15px solid #333;
+		transform: rotateY(180deg);
+		backface-visibility: hidden;  
+		transition: all 0.3s;
+	}
+
+	.frontCard .nome {
+		float: left;
+		position: relative;
+		width: 100%;
+		height: 40px;
+		margin: 0;
+		line-height: 1.4em;
+		padding: 0 10px;
+		font-size: 1em;
+		color: #fff;
+	}
+
+	.frontCard .imagem {
+		float: left;
+		position: relative;
+		width: 100%;
+		height: 190px;
+		-webkit-background-size: 100%;
+		background-size: 100%;
+	}
+
+	.frontCard .cont-stats {
+	    float: right;
+	    position: absolute;
+	    top: 40px;
+	    right: 0;
+	    width: 45px;
+	    height: 190px;
+	    display: flex;
+	    flex-direction: column;
+	}
+
+	.frontCard .cont-stats > span {
+		float: left;
+	    position: relative;
+	    width: 100%;
+	    background: #333;
+	    color: #fff;
+	    height: 20%;
+	    border-radius: 50px 0 0 50px;
+	}
+
+	.frontCard .cont-stats > span img {
+	    float: left;
+	    position: relative;
+	    width: 17px;
+	    top: 9px;
+	    left: 6px;
+	}
+
+	.frontCard .cont-stats > span .valor {
+	    float: right;
+	    width: 17px;
+	    font-size: 0.6em;
+	    text-align: center;
+	    line-height: 2.3em;
+	}
+
+	.frontCard .cont-stats .forca {
+		background-color: #EF946C;		
+	}
+	.frontCard .cont-stats .habilidade {
+		background-color: #C4A77D;
+	}
+	.frontCard .cont-stats .resistencia {
+		background-color: #70877F;
+	}
+	.frontCard .cont-stats .armadura {
+		background-color: #454372;
+	}
+	.frontCard .cont-stats .poderDeFogo {
+		background-color: #2F2963;
+	}
+
+	.frontCard .descricao {
+		float: left;
+		position: relative;
+		padding: 30px;
+		font-family: 'Oswald', sans-serif;
+	    font-size: 0.5em;
+	    float: left;
+	    position: relative;
+	    width: 100%;
+	    height: 45%;
+	   	color: #fff;
+	}
+
+
+/* ESTADO DAS CARTAS */
+	.card.entranojogo {
+		top: -1000px;
+		left: 50%;
+	}
+
+	.card.deFrente {
+		transform: rotateY(180deg);
+	}
+
+	.card.cemiterio .frontCard {
+		filter:grayscale(100%);
+	}
+
+	/* grayscale */
+
+	
+/* STAGE */
+	.stage {
+		float: left;
+	    position: relative;
+	    width: 50%;
+	    height: 90%;
+		padding: 10px;
+		font-size: 2em;
+		/* background-color: #ff0; */
+		padding: 10px 30px 20px;
+	}
+	
+
+	.showtitle {
+		float: left;
+	    position: relative;
+	    width: 100%;
+	    height: 10%;
+		border-bottom: 2px solid #ccc;
+		padding: 10px;
+		/* grid-area: title; */
+	}
+
+	.showText {
+		float: left;
+	    position: relative;
+	    width: 100%;
+	    height: 50%;
+		padding: 10px;
+		/* grid-area: text; */
+	}
+
+	.showBts {
+		float: left;
+	    position: relative;
+	    width: 100%;
+	    height: 20%;
+		border: 2px solid #00f;
+		padding: 10px;
+		/* grid-area: buttons; */
+	}
+
+	.heroBar {
+		float: left;
+	    position: relative;
+	    width: 100%;
+	    height: 15%;
+	    /* border: 2px solid #f0f; */
+	    background-color: #36330d;
+		padding: 10px;
+	}
+
+	.heroBar .barL {
+	    float: left;
+	    position: relative;
+	    width: 30%;
+	}
+
+	.heroBar .nome {
+		float: left;
+	    position: relative;
+	    font-size: 1em;
+	}
+
+	.heroBar .classe {
+	    float: left;
+	    position: relative;
+	    font-size: 0.7em;
+	}
+
+	.heroBar .barR {
+	    float: left;
+	    position: relative;
+	    width: 70%;
+	}
+
+	.heroBar .barR > span {
+		float: left;
+	    position: relative;
+	    width: 20%;	
+	}
+
+	.heroBar .barR > span img {
+		float: left;
+	    position: relative;
+	    width: 20px;	
+	}
+
+/* MODAL */
+	#bgModal {
+		float: left;
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		background-color: rgba(0, 0, 0, 0.5);
+		z-index: 1000;
+		opacity: 0;
+		transition: all 0.3s;
+	}
+	#modal {
+	    float: left;
+	    position: fixed;
+	    left: 50%;
+	    top: 50%;    
+	    z-index: 1001;
+	    opacity: 0;
+	    transition: all 0.3s;
+	}
+
+	#bgModal.complete, #modal.complete {
+		opacity: 1;
+	}
+
+	#modal.gameover {
+		width: 300px;
+	    height: 200px;
+	    margin-top: -100px;
+	    margin-left: -150px;
+	    background-color: transparent;
+	}
+
+	span.text-gameover {
+	    display: block;
+	    margin: auto;
+	    text-align: center;
+	    font-size: 4em;
+	    line-height: 3.2em;
+	    text-shadow: 2px 2px 2px #000;
+	}

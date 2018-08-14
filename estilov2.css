@@ -1,0 +1,219 @@
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-size: 14px;
+	box-sizing: border-box;
+	color: #fff;
+	background-color: #999;
+	
+}
+
+.content {
+	height: 80vh;
+	width: 100%;
+	padding: 25px;
+	box-sizing: border-box;
+	display: grid;
+	grid-template: 3fr 6fr 1fr / 2fr 2fr;
+	grid-gap: 10px 10px;
+	/* background-color: #0ff; */
+}
+
+.deckPlace {
+	grid-column:  1/2;
+	grid-row:  1/4;
+	border: 2px solid #0ff;
+	padding: 10px;
+	font-size: 2em;
+	display: grid;
+	grid-template: 10% 80% 10% / 5% 40% 5%  5% 40% 5% ;
+	padding: 10px;
+}
+
+.deckPlace .baseCarta {
+	grid-column:  2/3;
+	grid-row:  1/3;
+	background-color: #888;
+	border-radius:  10px;
+	max-width: 266px;
+    max-height: 447px;
+}
+
+.deckPlace .baseCartaCemiterio {
+	grid-column:  5/6;
+	grid-row:  1/3;
+	background-color: #577;
+	border-radius:  10px;
+	max-width: 266px;
+    max-height: 447px;
+}
+
+
+	
+/* ESTILO GERAL DAS CARTAS */
+	.card {
+		grid-column:  2/3;
+		grid-row:  1/3;
+		position: relative;
+		transition: 0.6s;  	
+		transform-style: preserve-3d;    	
+		position: relative;  
+		box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
+	}
+
+	.backCard {
+		display: block;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		z-index: 2;
+		background-image: url('./img/backCarta.jpg');
+		backface-visibility: hidden;  
+		border: 15px solid #faf1c3;
+		border-radius: 10px;
+	}
+
+	.frontCard {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		background-color: #6d5419;
+		border-radius: 10px;
+		display: grid;
+		grid-template: 10% 40% 10% 35% / 20% 60% 20%;
+		border: 15px solid #333;
+		transform: rotateY(180deg);
+		backface-visibility: hidden;  
+		transition: all 0.3s;
+	}
+
+	.frontCard .nome {
+		grid-column:  1/4;
+		grid-row:  1/2;
+		padding: 5px 30px;
+		font-size: 1em;
+	}
+
+	.frontCard .imagem {
+		grid-column:  1/4;
+		grid-row:  2/4;	
+		-webkit-background-size: 100%;
+		background-size: 100%;
+	}
+
+	.frontCard .pontosForca {
+		grid-column:  1/2;
+		grid-row:  3/4;		
+		width: 60px;
+	    height: 60px;
+	    border-radius: 100px;
+		background-color: red;
+		text-align: center;
+		line-height: 1.8em;
+	    font-size: 1.2em;
+		bottom: 10px;
+	    left: 10px;
+	    position: relative;
+	}
+
+	.frontCard .descricao {
+		grid-column:  1/4;
+		grid-row:  4/5;
+		padding: 30px;
+		font-size: 0.5em;
+	}
+
+
+/* ESTADO DAS CARTAS */
+	.card.entranojogo {
+		top: -100%;
+		left: 50%;
+	}
+
+	.card.deFrente {
+		transform: rotateY(180deg);
+	}
+
+	.card.cemiterio .frontCard {
+		filter:grayscale(100%);
+	}
+
+	/* grayscale */
+
+	
+
+.showtitle {
+	grid-column:  2/3;
+	grid-row:  1/2;
+	border: 2px solid #f0f;
+	padding: 10px;
+	/* grid-area: title; */
+}
+
+.showText {
+	grid-column:  2/3;
+	grid-row:  2/3;
+	border: 2px solid #0f0;
+	padding: 10px;
+	/* grid-area: text; */
+}
+
+.showBts {
+	grid-column:  2/3;
+	grid-row:  3/4;
+	border: 2px solid #00f;
+	padding: 10px;
+	/* grid-area: buttons; */
+}
+
+/* MODAL */
+	#bgModal {
+		float: left;
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		background-color: rgba(0, 0, 0, 0.5);
+		z-index: 1000;
+		opacity: 0;
+		transition: all 0.3s;
+	}
+	#modal {
+	    float: left;
+	    position: fixed;
+	    left: 50%;
+	    top: 50%;    
+	    z-index: 1001;
+	    opacity: 0;
+	    transition: all 0.3s;
+	}
+
+	#bgModal.complete, #modal.complete {
+		opacity: 1;
+	}
+
+	#modal.gameover {
+		width: 300px;
+	    height: 200px;
+	    margin-top: -100px;
+	    margin-left: -150px;
+	    background-color: transparent;
+	}
+
+	span.text-gameover {
+	    display: block;
+	    margin: auto;
+	    text-align: center;
+	    font-size: 4em;
+	    line-height: 3.2em;
+	    text-shadow: 2px 2px 2px #000;
+	}

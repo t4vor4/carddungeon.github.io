@@ -27,25 +27,79 @@ const cartasBaralho = [
 const imgSrc = './img/';
 
 const cartasJogo = [
-    {nome:'Esqueleto', forca:1, habilidade: 1, resistencia: 1, armadura: 1, poderDeFogo: 1, descricao:'Um morto vivo animado por magia', imagem: 'esqueleto.jpg'},
-    {nome:'Orc', forca:1, habilidade: 1, resistencia: 1, armadura: 1, poderDeFogo: 1, descricao:'Humanóides de pele verde, peludos e malvados', imagem:'orc.jpg'},
-    {nome:'Gnoll', forca:2, habilidade: 1, resistencia: 1, armadura: 1, poderDeFogo: 1, descricao:'Um guerreiro bestial armado e raivoso', imagem:'gnoll.jpg'},
-    {nome:'Aranha Gigante', forca:3, habilidade: 1, resistencia: 1, armadura: 1, poderDeFogo: 1, descricao:'Uma aranha com terríevis garras e a imagem do mal', imagem:'spider.jpg'},
-    {nome:'Dragão', forca:4, habilidade: 1, resistencia: 1, armadura: 1, poderDeFogo: 1, descricao:'Um poderoso lagarto com grandes asas, hálito de fogo e voraz, muito voraz.', imagem:'dragon.jpg'},
-    // {nome:'Esqueleto 2', forca:'1', descricao:'Um morto vivo animado por magia', imagem: 'esqueleto.jpg'},
-    // {nome:'Orc 2', forca:'1', descricao:'Humanóides de pele verde, peludos e malvados', imagem:'orc.jpg'},
-    // {nome:'Gnoll 2', forca:'2', descricao:'Um guerreiro bestial armado e raivoso', imagem:'gnoll.jpg'},
-    // {nome:'Aranha Gigante 2', forca:'3', descricao:'Uma aranha com terríevis garras e a imagem do mal', imagem:'spider.jpg'},
-    // {nome:'Dragão 2', forca:'4', descricao:'Um poderoso lagarto com grandes asas, hálito de fogo e voraz, muito voraz.', imagem:'dragon.jpg'},
+    {   nome:'Esqueleto', 
+        tipo: 'Monstro',
+        forca:1, 
+        habilidade: 1, 
+        resistencia: 1, 
+        armadura: 1, 
+        poderDeFogo: 1, 
+        pv: 5,
+        descricao:'Um morto vivo animado por magia', 
+        imagem: 'esqueleto.jpg'
+    },
+    {
+        nome:'Orc', 
+        tipo: 'Monstro',
+        forca:1, 
+        habilidade: 1, 
+        resistencia: 1,
+        armadura: 1,
+        poderDeFogo: 1,
+        pv: 5,
+        descricao:'Humanóides de pele verde, peludos e malvados', 
+        imagem:'orc.jpg'
+    },
+    {
+        nome:'Gnoll', 
+        tipo: 'Monstro',
+        forca:2, 
+        habilidade: 1, 
+        resistencia: 1, 
+        armadura: 1, 
+        poderDeFogo: 1, 
+        pv: 5,
+        descricao:'Um guerreiro bestial armado e raivoso',
+        imagem:'gnoll.jpg'
+    },
+    {
+        nome:'Aranha Gigante', 
+        tipo: 'Monstro',
+        forca:3, 
+        habilidade: 1, 
+        resistencia: 1, 
+        armadura: 1, 
+        poderDeFogo: 1, 
+        pv: 5,
+        descricao:'Uma aranha com terríevis garras e a imagem do mal', 
+        imagem:'spider.jpg'
+    },
+    {
+        
+        nome:'Dragão', 
+        tipo: 'Monstro',
+        forca:4, 
+        habilidade: 1, 
+        resistencia: 10, 
+        armadura: 1, 
+        poderDeFogo: 1, 
+        pv: 5,
+        descricao:'Um poderoso lagarto com grandes asas, hálito de fogo e voraz, muito voraz.', 
+        imagem:'dragon.jpg'
+    },
 ]
 
-const heroi = {nome:'Heroi', forca: 5, habilidade: 5, resistencia: 5, armadura: 5, poderDeFogo: 5}
+const heroi = {nome:'Heroi', forca: 5, habilidade: 5, resistencia: 5, armadura: 5, poderDeFogo: 5, pv: 25}
 
 
 var deck = embaralhaCartas(cartasJogo);
+var heroiGame = heroi;
 var cemiterio = [];
 
-var topododeckLocais;
+var heroiPV = parseInt(heroiGame.resistencia)*5;
+var inimigoPV = 0;
+
+var cartaAtual;
 var topodoCemiterioLocais;
 var topododeck = 0;
 
@@ -56,6 +110,18 @@ var cardzindex;
 // ==========================================================
 // FUNÇÕES DE APOIO
 // ==========================================================
+
+//game over 
+
+function gameOver () {
+    $('body').append('<span id="bgModal"></span>');
+    $('body').append('<div id="modal" class="gameover"><span class="text-gameover">Fim de Jogo</div>');
+    setTimeout(function(){
+        $('#bgModal, #modal').addClass('complete');
+    },1000);
+}
+    
+
 
 // Embaralha aleatóriamente as cartas
 function embaralhaCartas(a) {
@@ -105,6 +171,9 @@ function verificaTopodoDeck() {
 
 function mostraOpcoes($turno) {
     console.log($turno);
+    if ($turno == 'limpa') {
+        $('.showBts').html('');
+    }
     if ($turno == 'iniciativa') {
         $('.showBts').html('<button class="bt iniciativa">Iniciativa</button>');
         $('.showBts .iniciativa').click(function(event) {
@@ -125,46 +194,53 @@ function ataque($atacante, $defensor) {
     console.log('fd '+fd);
     if (fd >= fa) {
         console.log('O '+$defensor.nome+' se defende do golpe');
+        logsTexto('O '+$defensor.nome+' se defende do golpe');
     }
     else {
         var dano = fa-fd;
         console.log('O '+$defensor.nome+' levou '+dano+' pontos de com o golpe de '+$atacante.nome);
+        logsTexto('O '+$defensor.nome+' levou '+dano+' pontos de com o golpe de '+$atacante.nome);
         return dano;
     }
 }
 
 
-// ==========================================================
-// FUNÇÕES DE APOIO
-// ==========================================================
+//inimigoPV = parseInt($inimigo.resistencia)*5;
 
 function calculaIniciativa($inimigo) {
-    console.log($inimigo);
-    // var inimigo = $inimigo;
-    // var heroi = $inimigo
     var iniciativaInimigo = parseInt($inimigo.habilidade)+calcularJogada(6);
-    var iniciativaHeroi = parseInt(heroi.habilidade)+calcularJogada(6);
-    // console.log('iniciativaInimigo = '+iniciativaInimigo);
-    // console.log('iniciativaHeroi = '+iniciativaHeroi);
+    var iniciativaHeroi = parseInt(heroiGame.habilidade)+calcularJogada(6);
 
-    if (iniciativaInimigo > iniciativaHeroi) {
-        // console.log('Inimigo venceu a iniciativa');
-        ataque($inimigo,heroi);
-
+    if (heroiGame.pv > 0 && $inimigo.pv > 0) {
+        if (iniciativaInimigo > iniciativaHeroi) {
+            logsTexto($inimigo.nome+' venceu a iniciativa');
+            heroiGame.pv = heroiGame.pv-ataque($inimigo,heroiGame);
+            if (heroiGame.pv <= 0) {
+                logsTexto(heroiGame.nome+' foi derrotado.');
+                gameOver();                
+            }
+        }
+        else if (iniciativaInimigo < iniciativaHeroi) {
+            logsTexto(heroiGame.nome+' venceu a iniciativa');
+            mostraOpcoes('ataque');
+            $('.showBts .ataque').click(function(event) {
+                $inimigo.pv = $inimigo.pv-ataque(heroiGame,$inimigo);
+                if ($inimigo.pv <= 0) {
+                    logsTexto($inimigo.nome+' foi derrotado.');
+                    irProCemiterio(verificaTopodoDeck());
+                }
+            });
+            
+        }
+        else {
+            calculaIniciativa($inimigo);
+        }    
     }
-    else if (iniciativaInimigo < iniciativaHeroi) {
-        // console.log('Heroi venceu a iniciativa');
-        mostraOpcoes('ataque');
-        $('.showBts .ataque').click(function(event) {
-            ataque(heroi,$inimigo);
-        });
-        
-    }
-    else {
-        calculaIniciativa($inimigo);
-    }
+    
+}
 
-
+function logsTexto($texto) {
+    $('.showText').prepend('<span class="texto">'+$texto+'</span>');
 }
 
 
@@ -174,11 +250,11 @@ function calculaIniciativa($inimigo) {
 
 function configuraHeroi() {
     var barra = $('.heroBar');
-    barra.find('.forca .valor').html(heroi.forca);
-    barra.find('.habilidade .valor').html(heroi.habilidade);
-    barra.find('.resistencia .valor').html(heroi.resistencia);
-    barra.find('.armadura .valor').html(heroi.armadura);
-    barra.find('.poderDeFogo .valor').html(heroi.poderDeFogo);
+    barra.find('.forca .valor').html(heroiGame.forca);
+    barra.find('.habilidade .valor').html(heroiGame.habilidade);
+    barra.find('.resistencia .valor').html(heroiGame.resistencia);
+    barra.find('.armadura .valor').html(heroiGame.armadura);
+    barra.find('.poderDeFogo .valor').html(heroiGame.poderDeFogo);
 }
 
 function poeAsCartas($deck) {
@@ -199,14 +275,17 @@ function poeAsCartas($deck) {
     },500);
 }
 
-
-
 function viraCartaDoDeck($deck){
-    var topododeck = verificaTopodoDeck();
-    $(verificaTopodoDeck()).click(function(event) {
+    var topododeck = $(verificaTopodoDeck());
+    topododeck.click(function(event) {
         if ( $(this).hasClass('nodeckcompra')) {
-            $(verificaTopodoDeck()).addClass('deFrente').addClass('topododeck');
-            mostraOpcoes('iniciativa');
+            topododeck.addClass('deFrente').addClass('topododeck');
+            if ( deck[deck.length-1].tipo == 'Monstro' ) {
+                mostraOpcoes('iniciativa');
+            }
+            else {
+                console.log('Não era monstro');    
+            }
         }
     });
 
@@ -232,16 +311,11 @@ function irProCemiterio($estacarta) {
 
     switch (deck.length == 1) {
         case true:
-
-            $('body').append('<span id="bgModal"></span>');
-            $('body').append('<div id="modal" class="gameover"><span class="text-gameover">Fim de Jogo</div>');
-            setTimeout(function(){
-                $('#bgModal, #modal').addClass('complete');
-            },1000);
-
+            gameOver();
             break;
         default:
-            cemiterio.push(deck.pop());    
+            cemiterio.push(deck.pop());
+            mostraOpcoes('limpa');
             viraCartaDoDeck(deck);
             break;
     }

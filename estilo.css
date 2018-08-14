@@ -238,6 +238,19 @@ body *, body *:before, body *:after {
 		/* grid-area: text; */
 	}
 
+	.showText .texto {
+		float: left;
+	    position: relative;
+	    width: 100%;
+	    height: auto;
+	    padding: 5px 0;
+	    font-size: 0.7em;
+	}
+
+	.showText .texto:nth-of-type(odd) {
+		background-color: #333;
+	}
+
 	.showBts {
 		float: left;
 	    position: relative;
@@ -245,6 +258,7 @@ body *, body *:before, body *:after {
 	    height: 20%;
 		border: 2px solid #00f;
 		padding: 10px;
+		overflow-y: scroll;
 		/* grid-area: buttons; */
 	}
 

@@ -5,7 +5,8 @@ body {
 	font-size: 14px;
 	box-sizing: border-box;
 	color: #fff;
-	background-image: url('./img/fundo_dungeon.jpg');
+	/* background-image: url('./img/fundo_dungeon.jpg'); */
+	background-color: #fff;
 	background-position: center;
 	font-family: 'MedievalSharp', cursive;
 }
@@ -17,6 +18,14 @@ body *, body *:before, body *:after {
 	font-family: font-family: 'MedievalSharp', cursive;
 }
 
+.bt {
+	border: 5px solid #333;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: -6px 5px 0 #ccc;
+    font-family: font-family: 'MedievalSharp', cursive;
+}
+
 .content {
 	float: left;
 	position: relative;
@@ -24,7 +33,9 @@ body *, body *:before, body *:after {
 	width: 90%;
 	margin: 1% 5% 0;
 	padding: 25px;
-	background-color: #000;
+	background-color: #fff;
+	border:  2px solid #000;
+	box-shadow:  -9px 9px 0px 2px #ccc ;
 	/* background-color: #0ff; */
 }
 
@@ -42,7 +53,7 @@ body *, body *:before, body *:after {
 .deckPlace .baseCarta {
 	float: left;
 	position: relative;
-	background-color: #888;
+	background-color: #eee;
 	border-radius:  10px;
 	width: 266px;
     height: 447px;
@@ -51,7 +62,8 @@ body *, body *:before, body *:after {
 .deckPlace .baseCartaCemiterio {
 	float: left;
 	position: relative;
-	background-color: #577;
+	/* background-color: #ddd; */
+	border: 5px solid #eee;
 	border-radius:  10px;
 	width: 266px;
     height: 447px;
@@ -80,9 +92,10 @@ body *, body *:before, body *:after {
 		top: 0;
 		left: 0;
 		z-index: 2;
-		background-image: url('./img/backCarta.jpg');
+		/* background-image: url('./img/backCarta.jpg'); */
+		background-color: #555;
 		backface-visibility: hidden;  
-		border: 15px solid #faf1c3;
+		border: 15px solid #333;
 		border-radius: 10px;
 	}
 
@@ -92,7 +105,8 @@ body *, body *:before, body *:after {
 		height: 100%;
 		top: 0;
 		left: 0;
-		background-color: #6d5419;
+		background-color: #fff;
+		color:  #333;
 		border-radius: 10px;
 		display: block;
 		border: 15px solid #333;
@@ -110,7 +124,7 @@ body *, body *:before, body *:after {
 		line-height: 1.4em;
 		padding: 0 10px;
 		font-size: 1em;
-		color: #fff;
+		/* color: #fff; */
 	}
 
 	.frontCard .imagem {
@@ -120,6 +134,7 @@ body *, body *:before, body *:after {
 		height: 190px;
 		-webkit-background-size: 100%;
 		background-size: 100%;
+		background-color: #ccc;
 	}
 
 	.frontCard .cont-stats {
@@ -159,7 +174,7 @@ body *, body *:before, body *:after {
 	    line-height: 2.3em;
 	}
 
-	.frontCard .cont-stats .forca {
+	/* .frontCard .cont-stats .forca {
 		background-color: #EF946C;		
 	}
 	.frontCard .cont-stats .habilidade {
@@ -173,7 +188,7 @@ body *, body *:before, body *:after {
 	}
 	.frontCard .cont-stats .poderDeFogo {
 		background-color: #2F2963;
-	}
+	} */
 
 	.frontCard .descricao {
 		float: left;
@@ -185,7 +200,7 @@ body *, body *:before, body *:after {
 	    position: relative;
 	    width: 100%;
 	    height: 45%;
-	   	color: #fff;
+	   	/* color: #fff; */
 	}
 
 
@@ -201,6 +216,7 @@ body *, body *:before, body *:after {
 
 	.card.cemiterio .frontCard {
 		filter:grayscale(100%);
+		background-color: #999;
 	}
 
 	/* grayscale */
@@ -224,7 +240,7 @@ body *, body *:before, body *:after {
 	    position: relative;
 	    width: 100%;
 	    height: 10%;
-		border-bottom: 2px solid #ccc;
+		border-bottom: 2px solid #eee;
 		padding: 10px;
 		/* grid-area: title; */
 	}
@@ -235,6 +251,7 @@ body *, body *:before, body *:after {
 	    width: 100%;
 	    height: 50%;
 		padding: 10px;
+		overflow-y: scroll;
 		/* grid-area: text; */
 	}
 
@@ -244,11 +261,19 @@ body *, body *:before, body *:after {
 	    width: 100%;
 	    height: auto;
 	    padding: 5px 0;
-	    font-size: 0.7em;
+	    font-size: 0.75em;
+	    color: #333;
+	    background-color: #ccc;
+	}
+
+	.showText .texto:first-of-type {
+		color: $fff
+		background-color: #777;
+		font-size: 1em;
 	}
 
 	.showText .texto:nth-of-type(odd) {
-		background-color: #333;
+		background-color: #ddd;
 	}
 
 	.showBts {
@@ -256,7 +281,7 @@ body *, body *:before, body *:after {
 	    position: relative;
 	    width: 100%;
 	    height: 20%;
-		border: 2px solid #00f;
+		border: 2px solid #eee;
 		padding: 10px;
 		overflow-y: scroll;
 		/* grid-area: buttons; */
@@ -275,8 +300,7 @@ body *, body *:before, body *:after {
 	    position: relative;
 	    width: 100%;
 	    height: 15%;
-	    /* border: 2px solid #f0f; */
-	    background-color: #36330d;
+	    background-color: #fff;
 		padding: 10px;
 	}
 
@@ -310,7 +334,8 @@ body *, body *:before, body *:after {
 		float: left;
 	    position: relative;
 	    width: 19%;	
-	    border:  1px solid #fff;
+	    color: #555;
+	    border:  1px solid #ccc;
 	    margin-right: 5px;
 	}
 
@@ -318,14 +343,18 @@ body *, body *:before, body *:after {
 		float: left;
 	    position: relative;
 	    width: 20px;
+	    padding:  3px;
 	    margin: 5px 5px 0 15px;
+	    background-color: #555;
+	    border-radius: 100%;
 	}
 
 	.heroBar .barR .valor {
 	    float: left;
 	    position: relative;
-	    width: 50px;
+	    width: calc(100% - 40px);
 	    text-align: center;
+	    font-size: 0.9em;
 	}
 
 /* MODAL */

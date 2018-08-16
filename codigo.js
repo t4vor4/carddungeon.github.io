@@ -30,10 +30,10 @@ const cartasJogo = [
     {   nome:'Esqueleto', 
         tipo: 'Monstro',
         forca:1, 
-        habilidade: 1, 
+        habilidade: 2, 
         resistencia: 1, 
         armadura: 1, 
-        poderDeFogo: 1, 
+        poderDeFogo: 0, 
         pv: 5,
         descricao:'Um morto vivo animado por magia', 
         imagem: 'esqueleto.jpg'
@@ -41,32 +41,32 @@ const cartasJogo = [
     {
         nome:'Orc', 
         tipo: 'Monstro',
-        forca:1, 
-        habilidade: 1, 
-        resistencia: 1,
+        forca: 1, 
+        habilidade: 2, 
+        resistencia: 2,
         armadura: 1,
         poderDeFogo: 1,
-        pv: 5,
+        pv: 10,
         descricao:'Humanóides de pele verde, peludos e malvados', 
         imagem:'orc.jpg'
     },
     {
         nome:'Gnoll', 
         tipo: 'Monstro',
-        forca:2, 
+        forca: 2, 
         habilidade: 1, 
-        resistencia: 1, 
-        armadura: 1, 
+        resistencia: 2, 
+        armadura: 2, 
         poderDeFogo: 1, 
-        pv: 5,
+        pv: 10,
         descricao:'Um guerreiro bestial armado e raivoso',
         imagem:'gnoll.jpg'
     },
     {
         nome:'Aranha Gigante', 
         tipo: 'Monstro',
-        forca:3, 
-        habilidade: 1, 
+        forca: 3, 
+        habilidade: 3, 
         resistencia: 1, 
         armadura: 1, 
         poderDeFogo: 1, 
@@ -74,29 +74,28 @@ const cartasJogo = [
         descricao:'Uma aranha com terríevis garras e a imagem do mal', 
         imagem:'spider.jpg'
     },
-    {
-        
+    {        
         nome:'Dragão', 
         tipo: 'Monstro',
-        forca:4, 
-        habilidade: 1, 
-        resistencia: 10, 
-        armadura: 1, 
-        poderDeFogo: 1, 
-        pv: 5,
+        forca: 4, 
+        habilidade: 5, 
+        resistencia: 4, 
+        armadura: 3, 
+        poderDeFogo: 5, 
+        pv: 20,
         descricao:'Um poderoso lagarto com grandes asas, hálito de fogo e voraz, muito voraz.', 
         imagem:'dragon.jpg'
     },
 ]
 
-const heroi = {nome:'Heroi', forca: 5, habilidade: 5, resistencia: 5, armadura: 5, poderDeFogo: 5, pv: 25}
+var heroi = {nome:'Heroi', forca: 3, habilidade: 4, resistencia: 3, armadura: 3, poderDeFogo: 2, pv: 15}
 
 
 var deck = embaralhaCartas(cartasJogo);
 var heroiGame = heroi;
 var cemiterio = [];
 
-var heroiPV = parseInt(heroiGame.resistencia)*5;
+var vidaHeroi = 15;
 var inimigoPV = 0;
 
 var cartaAtual;
@@ -144,7 +143,8 @@ function carta($val, $id) {
         '<div class="backCard"></div>'+
         '<div class="frontCard" >'+
             '<h2 class="nome">'+$val.nome+'</h2>'+
-            '<span class="imagem" style="background-image: url('+imgSrc+$val.imagem+');"></span>'+
+            //'<span class="imagem" style="background-image: url('+imgSrc+$val.imagem+');"></span>'+
+            '<span class="imagem" ></span>'+
             '<span class="cont-stats">'+
                 '<span class="forca"><img src="'+imgSrc+'forca.svg" alt="Força" /><span class="valor">'+$val.forca+'</span></span>'+
                 '<span class="habilidade"><img src="'+imgSrc+'habilidade.svg" alt="Força" /><span class="valor">'+$val.habilidade+'</span></span>'+
@@ -177,7 +177,7 @@ function mostraOpcoes($turno) {
     if ($turno == 'iniciativa') {
         $('.showBts').html('<button class="bt iniciativa">Iniciativa</button>');
         $('.showBts .iniciativa').click(function(event) {
-            calculaIniciativa(deck[deck.length-1]);
+            turnosdecombate(deck[deck.length-1]);
         });    
     }
     else if ($turno == 'ataque') {
@@ -186,57 +186,95 @@ function mostraOpcoes($turno) {
 }
 
 function ataque($atacante, $defensor) {
-    console.log('$atacante = '+$atacante.nome);
-    console.log('$defensor = '+$defensor.nome);
+    var dano;
     var fa = parseInt($atacante.habilidade)+parseInt($atacante.forca)+calcularJogada(6);
     var fd = parseInt($defensor.habilidade)+parseInt($defensor.armadura)+calcularJogada(6);
-    console.log('fa '+fa);
-    console.log('fd '+fd);
     if (fd >= fa) {
         console.log('O '+$defensor.nome+' se defende do golpe');
         logsTexto('O '+$defensor.nome+' se defende do golpe');
+        dano = 0;
+        return dano;
     }
     else {
-        var dano = fa-fd;
+        dano = fa-fd;
         console.log('O '+$defensor.nome+' levou '+dano+' pontos de com o golpe de '+$atacante.nome);
         logsTexto('O '+$defensor.nome+' levou '+dano+' pontos de com o golpe de '+$atacante.nome);
         return dano;
+    }    
+}
+
+function combate($iniciativa,$inimigo) {
+    var iniciativa = $iniciativa;
+    var inimigo = $inimigo;
+    if (vidaHeroi > 0 && inimigoPV > 0) {
+        //Inimigo ganha a iniciativa
+        if (iniciativa == true) {
+            logsTexto(inimigo.nome+' venceu a iniciativa');
+
+            danoFeito = ataque(inimigo,heroiGame);
+
+            if (danoFeito > 0) {
+                vidaHeroi = vidaHeroi-danoFeito;
+                if (vidaHeroi <= 0) {
+                    logsTexto(heroiGame.nome+' foi derrotado.');
+                    gameOver();                
+                }
+                else {
+                    mostraOpcoes('iniciativa');
+                }
+            }            
+        }
+        //Heroi ganha a iniciativa
+        else {
+            logsTexto(heroiGame.nome+' venceu a iniciativa');
+            mostraOpcoes('ataque');
+            $('.showBts .ataque').click(function(event) {
+
+                danoFeito = ataque(heroiGame,inimigo)
+                if (danoFeito > 0) {
+                    console.log('inimigoPV depois = '+inimigoPV);
+                    inimigoPV = inimigoPV-danoFeito;    
+                    console.log('inimigoPV depois = '+inimigoPV);
+                    if (inimigoPV <= 0) {
+                        logsTexto(inimigo.nome+' foi derrotado.');
+                        irProCemiterio(verificaTopodoDeck());
+                    }
+                    else {
+                        mostraOpcoes('iniciativa');
+                    }
+                }
+                else {
+                    console.log('Não houve dano');
+                }
+                
+            });
+            
+        }       
     }
+}
+
+function jogadaIniciativa($inimigo) {
+    var inimigo = $inimigo;
+    var iniciativaInimigo = parseInt(inimigo.habilidade)+calcularJogada(6);
+    var iniciativaHeroi = parseInt(heroiGame.habilidade)+calcularJogada(6);
+    // inimigo ganha
+    if ( iniciativaInimigo > iniciativaHeroi ) {
+        return true;
+    }
+    // heroi ganha
+    else if (iniciativaInimigo <= iniciativaHeroi) {
+        return false;
+    } 
 }
 
 
 //inimigoPV = parseInt($inimigo.resistencia)*5;
 
-function calculaIniciativa($inimigo) {
-    var iniciativaInimigo = parseInt($inimigo.habilidade)+calcularJogada(6);
-    var iniciativaHeroi = parseInt(heroiGame.habilidade)+calcularJogada(6);
-
-    if (heroiGame.pv > 0 && $inimigo.pv > 0) {
-        if (iniciativaInimigo > iniciativaHeroi) {
-            logsTexto($inimigo.nome+' venceu a iniciativa');
-            heroiGame.pv = heroiGame.pv-ataque($inimigo,heroiGame);
-            if (heroiGame.pv <= 0) {
-                logsTexto(heroiGame.nome+' foi derrotado.');
-                gameOver();                
-            }
-        }
-        else if (iniciativaInimigo < iniciativaHeroi) {
-            logsTexto(heroiGame.nome+' venceu a iniciativa');
-            mostraOpcoes('ataque');
-            $('.showBts .ataque').click(function(event) {
-                $inimigo.pv = $inimigo.pv-ataque(heroiGame,$inimigo);
-                if ($inimigo.pv <= 0) {
-                    logsTexto($inimigo.nome+' foi derrotado.');
-                    irProCemiterio(verificaTopodoDeck());
-                }
-            });
-            
-        }
-        else {
-            calculaIniciativa($inimigo);
-        }    
-    }
-    
+function turnosdecombate($inimigo) {
+    var inimigo = $inimigo;
+    console.log('turnosdecombate');
+    var iniciativa = jogadaIniciativa(inimigo);    
+    combate(iniciativa,inimigo);
 }
 
 function logsTexto($texto) {
@@ -281,7 +319,9 @@ function viraCartaDoDeck($deck){
         if ( $(this).hasClass('nodeckcompra')) {
             topododeck.addClass('deFrente').addClass('topododeck');
             if ( deck[deck.length-1].tipo == 'Monstro' ) {
-                mostraOpcoes('iniciativa');
+                inimigoPV = deck[deck.length-1].pv;
+                console.log(inimigoPV);
+                mostraOpcoes('iniciativa');                
             }
             else {
                 console.log('Não era monstro');    

@@ -8,6 +8,22 @@ const locais = [
     {local: 'Posto de gasolina', chanceDeZumbi: 2},
 ]
 
+const cartasBaralho = [
+    {carta: 'As', naipe: 'copas'},
+    {carta: '2', naipe: 'copas'},
+    {carta: '3', naipe: 'copas'},
+    {carta: '4', naipe: 'copas'},
+    {carta: '5', naipe: 'copas'},
+    {carta: '6', naipe: 'copas'},
+    {carta: '7', naipe: 'copas'},
+    {carta: '8', naipe: 'copas'},
+    {carta: '9', naipe: 'copas'},
+    {carta: '10', naipe: 'copas'},
+    {carta: 'J', naipe: 'copas'},
+    {carta: 'Q', naipe: 'copas'},
+    {carta: 'K', naipe: 'copas'}
+]
+
 const imgSrc = './img/';
 
 const cartasJogo = [
@@ -16,6 +32,8 @@ const cartasJogo = [
         forca:1, 
         habilidade: 2, 
         resistencia: 1, 
+        armadura: 1, 
+        poderDeFogo: 0, 
         pv: 5,
         descricao:'Um morto vivo animado por magia', 
         imagem: 'esqueleto.jpg'
@@ -26,6 +44,8 @@ const cartasJogo = [
         forca: 1, 
         habilidade: 2, 
         resistencia: 2,
+        armadura: 1,
+        poderDeFogo: 1,
         pv: 10,
         descricao:'Humanóides de pele verde, peludos e malvados', 
         imagem:'orc.jpg'
@@ -36,6 +56,8 @@ const cartasJogo = [
         forca: 2, 
         habilidade: 1, 
         resistencia: 2, 
+        armadura: 2, 
+        poderDeFogo: 1, 
         pv: 10,
         descricao:'Um guerreiro bestial armado e raivoso',
         imagem:'gnoll.jpg'
@@ -46,6 +68,8 @@ const cartasJogo = [
         forca: 3, 
         habilidade: 3, 
         resistencia: 1, 
+        armadura: 1, 
+        poderDeFogo: 1, 
         pv: 5,
         descricao:'Uma aranha com terríevis garras e a imagem do mal', 
         imagem:'spider.jpg'
@@ -56,13 +80,15 @@ const cartasJogo = [
         forca: 4, 
         habilidade: 5, 
         resistencia: 4, 
+        armadura: 3, 
+        poderDeFogo: 5, 
         pv: 20,
         descricao:'Um poderoso lagarto com grandes asas, hálito de fogo e voraz, muito voraz.', 
         imagem:'dragon.jpg'
     },
 ]
 
-var heroi = {nome:'Heroi', forca: 3, habilidade: 4, resistencia: 3, pv: 15}
+var heroi = {nome:'Heroi', forca: 3, habilidade: 4, resistencia: 3, armadura: 3, poderDeFogo: 2, pv: 15}
 
 
 var deck = embaralhaCartas(cartasJogo);
@@ -94,6 +120,8 @@ function gameOver () {
     },1000);
 }
     
+
+
 // Embaralha aleatóriamente as cartas
 function embaralhaCartas(a) {
     a.sort(function() { return 0.5 - Math.random() });
@@ -120,22 +148,15 @@ function carta($val, $id) {
             '<span class="cont-stats">'+
                 '<span class="forca"><img src="'+imgSrc+'forca.svg" alt="Força" /><span class="valor">'+$val.forca+'</span></span>'+
                 '<span class="habilidade"><img src="'+imgSrc+'habilidade.svg" alt="Força" /><span class="valor">'+$val.habilidade+'</span></span>'+
-                '<span class="resistencia"><img src="'+imgSrc+'armadura.svg" alt="Força" /><span class="valor">'+$val.resistencia+'</span></span>'+
-                '<span class="pv"><img src="'+imgSrc+'resistencia.svg" alt="pv" /><span class="valor">'+$val.pv+'</span></span>'+
+                '<span class="resistencia"><img src="'+imgSrc+'resistencia.svg" alt="Força" /><span class="valor">'+$val.resistencia+'</span></span>'+
+                '<span class="armadura"><img src="'+imgSrc+'armadura.svg" alt="Força" /><span class="valor">'+$val.armadura+'</span></span>'+
+                '<span class="poderDeFogo"><img src="'+imgSrc+'poderDeFogo.svg" alt="Força" /><span class="valor">'+$val.poderDeFogo+'</span></span>'+
             '</span>'+
             '<p class="descricao">'+$val.descricao+'</p>'+
         '</div>'+
         
     '</div>';
     return trechoHtml;
-}
-
-function configuraHeroi() {
-    var barra = $('.heroBar');
-    barra.find('.forca .valor').html(heroiGame.forca);
-    barra.find('.habilidade .valor').html(heroiGame.habilidade);
-    barra.find('.resistencia .valor').html(heroiGame.resistencia);
-    barra.find('.pv .valor').html(heroiGame.pv);
 }
 
 function posicao_cemiterio () {
@@ -166,8 +187,8 @@ function mostraOpcoes($turno) {
 
 function ataque($atacante, $defensor) {
     var dano;
-    var fa = parseInt($atacante.forca)+calcularJogada(6);
-    var fd = parseInt($defensor.resistencia)+calcularJogada(6);
+    var fa = parseInt($atacante.habilidade)+parseInt($atacante.forca)+calcularJogada(6);
+    var fd = parseInt($defensor.habilidade)+parseInt($defensor.armadura)+calcularJogada(6);
     if (fd >= fa) {
         console.log('O '+$defensor.nome+' se defende do golpe');
         logsTexto('O '+$defensor.nome+' se defende do golpe');
@@ -185,7 +206,6 @@ function ataque($atacante, $defensor) {
 function combate($iniciativa,$inimigo) {
     var iniciativa = $iniciativa;
     var inimigo = $inimigo;
-    var cartaInimigo = verificaTopodoDeck();
     if (vidaHeroi > 0 && inimigoPV > 0) {
         //Inimigo ganha a iniciativa
         if (iniciativa == true) {
@@ -195,11 +215,6 @@ function combate($iniciativa,$inimigo) {
 
             if (danoFeito > 0) {
                 vidaHeroi = vidaHeroi-danoFeito;
-                $('.heroBar .pv .valor').text(vidaHeroi).addClass('mudandoValor');
-                // $('.heroBar .pv .valor').removeClass('mudaValor');
-                setTimeout(function(){
-                	$('.heroBar .pv .valor').removeClass('mudandoValor');
-                },500);
                 if (vidaHeroi <= 0) {
                     logsTexto(heroiGame.nome+' foi derrotado.');
                     gameOver();                
@@ -216,12 +231,10 @@ function combate($iniciativa,$inimigo) {
             $('.showBts .ataque').click(function(event) {
 
                 danoFeito = ataque(heroiGame,inimigo)
-                if (danoFeito > 0) {                    
+                if (danoFeito > 0) {
+                    console.log('inimigoPV depois = '+inimigoPV);
                     inimigoPV = inimigoPV-danoFeito;    
-                    cartaInimigo.find('.pv .valor').text(inimigoPV).addClass('mudandoValor');
-                    setTimeout(function(){
-                    	cartaInimigo.find('.pv .valor').removeClass('mudandoValor');
-                    },500);                	
+                    console.log('inimigoPV depois = '+inimigoPV);
                     if (inimigoPV <= 0) {
                         logsTexto(inimigo.nome+' foi derrotado.');
                         irProCemiterio(verificaTopodoDeck());
@@ -273,7 +286,14 @@ function logsTexto($texto) {
 
 // ==========================================================
 
-
+function configuraHeroi() {
+    var barra = $('.heroBar');
+    barra.find('.forca .valor').html(heroiGame.forca);
+    barra.find('.habilidade .valor').html(heroiGame.habilidade);
+    barra.find('.resistencia .valor').html(heroiGame.resistencia);
+    barra.find('.armadura .valor').html(heroiGame.armadura);
+    barra.find('.poderDeFogo .valor').html(heroiGame.poderDeFogo);
+}
 
 function poeAsCartas($deck) {
     var i = 0;

@@ -174,22 +174,6 @@ body *, body *:before, body *:after {
 	    line-height: 2.3em;
 	}
 
-	/* .frontCard .cont-stats .forca {
-		background-color: #EF946C;		
-	}
-	.frontCard .cont-stats .habilidade {
-		background-color: #C4A77D;
-	}
-	.frontCard .cont-stats .resistencia {
-		background-color: #70877F;
-	}
-	.frontCard .cont-stats .armadura {
-		background-color: #454372;
-	}
-	.frontCard .cont-stats .poderDeFogo {
-		background-color: #2F2963;
-	} */
-
 	.frontCard .descricao {
 		float: left;
 		position: relative;
@@ -217,6 +201,12 @@ body *, body *:before, body *:after {
 	.card.cemiterio .frontCard {
 		filter:grayscale(100%);
 		background-color: #999;
+	}
+
+	.card .mudandoValor {
+		transition: all 0.3s;
+		transform:  scale(3);
+		color: yellow;
 	}
 
 	/* grayscale */
@@ -355,6 +345,12 @@ body *, body *:before, body *:after {
 	    width: calc(100% - 40px);
 	    text-align: center;
 	    font-size: 0.9em;
+	}
+
+	.heroBar .barR .valor.mudandoValor {
+		transition: all 0.3s;
+		transform:  scale(2.5);
+		color: red;
 	}
 
 /* MODAL */

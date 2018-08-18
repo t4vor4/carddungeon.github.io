@@ -30,36 +30,36 @@ const cartasJogo = [
         descricao:'Humanóides de pele verde, peludos e malvados', 
         imagem:'orc.jpg'
     },
-    {
-        nome:'Gnoll', 
-        tipo: 'Monstro',
-        forca: 2, 
-        habilidade: 1, 
-        resistencia: 2, 
-        pv: 10,
-        descricao:'Um guerreiro bestial armado e raivoso',
-        imagem:'gnoll.jpg'
-    },
-    {
-        nome:'Aranha Gigante', 
-        tipo: 'Monstro',
-        forca: 3, 
-        habilidade: 3, 
-        resistencia: 1, 
-        pv: 5,
-        descricao:'Uma aranha com terríevis garras e a imagem do mal', 
-        imagem:'spider.jpg'
-    },
-    {        
-        nome:'Dragão', 
-        tipo: 'Monstro',
-        forca: 4, 
-        habilidade: 5, 
-        resistencia: 4, 
-        pv: 20,
-        descricao:'Um poderoso lagarto com grandes asas, hálito de fogo e voraz, muito voraz.', 
-        imagem:'dragon.jpg'
-    },
+    // {
+    //     nome:'Gnoll', 
+    //     tipo: 'Monstro',
+    //     forca: 2, 
+    //     habilidade: 1, 
+    //     resistencia: 2, 
+    //     pv: 10,
+    //     descricao:'Um guerreiro bestial armado e raivoso',
+    //     imagem:'gnoll.jpg'
+    // },
+    // {
+    //     nome:'Aranha Gigante', 
+    //     tipo: 'Monstro',
+    //     forca: 3, 
+    //     habilidade: 3, 
+    //     resistencia: 1, 
+    //     pv: 5,
+    //     descricao:'Uma aranha com terríevis garras e a imagem do mal', 
+    //     imagem:'spider.jpg'
+    // },
+    // {        
+    //     nome:'Dragão', 
+    //     tipo: 'Monstro',
+    //     forca: 4, 
+    //     habilidade: 5, 
+    //     resistencia: 4, 
+    //     pv: 20,
+    //     descricao:'Um poderoso lagarto com grandes asas, hálito de fogo e voraz, muito voraz.', 
+    //     imagem:'dragon.jpg'
+    // },
 ]
 
 var heroi = {nome:'Heroi', forca: 3, habilidade: 4, resistencia: 3, pv: 15}
@@ -265,7 +265,8 @@ function turnosdecombate($inimigo) {
 }
 
 function logsTexto($texto) {
-    $('.showText').prepend('<span class="texto">'+$texto+'</span>');
+    // $('.showText').prepend('<span class="texto">'+$texto+'</span>');
+    $('.showText').html('<span class="texto">'+$texto+'</span>');
 }
 
 
@@ -320,12 +321,16 @@ function viraCartaDoDeck($deck){
 }
 
 function irProCemiterio($estacarta) {
-    var pCemiterio = $('.baseCartaCemiterio').position();
-    var posicaoX =  parseInt($estacarta.css('left'));
-    var posicaoY =  parseInt($estacarta.css('top'));
-    $estacarta.
-        css('left', (posicaoX+pCemiterio.left+30))
-            .addClass('cemiterio')
+    // var pCemiterio = $('.baseCartaCemiterio').position();
+    // var posicaoX =  parseInt($estacarta.css('left'));
+    // var posicaoY =  parseInt($estacarta.css('top'));
+    // $estacarta.
+    //     css('left', (posicaoX+pCemiterio.left+30))
+    //         .addClass('cemiterio')
+    //         .removeClass('nodeckcompra')
+    //         .css('z-index', cemiterio.length);
+
+    $estacarta.addClass('cemiterio')
             .removeClass('nodeckcompra')
             .css('z-index', cemiterio.length);
 

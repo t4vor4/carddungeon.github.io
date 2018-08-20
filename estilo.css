@@ -5,7 +5,7 @@ body {
 	font-size: 14px;
 	box-sizing: border-box;
 	color: #fff;
-	background-color: #fff;
+	background-color: #333;
 	background-position: center;
 	font-family: 'MedievalSharp', cursive;
 	margin: 0;
@@ -29,23 +29,17 @@ body *, body *:before, body *:after {
 }
 
 .content {
-	/* float: left;
-	position: relative;
-	height: 80vh;
-	width: 90%;
-	margin: 1% 5% 0;
-	padding: 25px;
-	background-color: #fff;
-	border:  2px solid #000;
-	box-shadow:  -9px 9px 0px 2px #ccc ; */
-	/* background-color: #0ff; */
 	float: left;
 	position: relative;
-	width: 100%;
+	width: 320px;
+	margin-left: 50%;
+	left: -160px;
 	background-color: #fff;
 	border: none;
 	height: 100%;
-	/* overflow: hidden; */
+	min-height: 555px;
+	/* margin-top: 50%;
+    top: -305px; */
 }
 
 .deckPlace {
@@ -229,12 +223,12 @@ body *, body *:before, body *:after {
 		transform: rotateY(180deg);
 	}
 
-	.card.nodeckcompra.deFrente {
-		
+	.card.ativo.deFrente {		
 		transform: rotateY(180deg) scale(1.6);
 	    margin-left: 50%;
 	    left: -68px!important;
 	    top: 28px!important;
+	    z-index: 1;
 	}
 
 	.card.cemiterio .frontCard {
@@ -245,7 +239,7 @@ body *, body *:before, body *:after {
 	.card .mudandoValor {
 		transition: all 0.3s;
 		transform:  scale(3);
-		color: yellow;
+		color: red;
 	}
 
 	.card.cemiterio {
@@ -257,17 +251,9 @@ body *, body *:before, body *:after {
 	
 /* STAGE */
 	.stage {
-		/* float: left;
-	    position: relative;
-	    width: 50%;
-	    height: 90%;
-		padding: 10px;
-		font-size: 2em; */
-		/* background-color: #ff0; */
-		/* padding: 10px 30px 20px; */
-
 		float: left;
-	    position: fixed;
+	    /* position: fixed; */
+	    position: absolute;
 	    bottom: 0;
 	    left: 0;
 	    width: 100%;
@@ -300,8 +286,9 @@ body *, body *:before, body *:after {
 		    position: relative;
 		    width: 100%;
 		    height: auto;
-		    padding: 5px 10px;
-		    font-size: 0.75em;
+		    padding: 0px 10px;
+		    font-size: 1em;
+		    line-height: 2em;
 		    color: #fff;
 		    /* background-color: #ccc; */
 		    font-family: 'Oswald', sans-serif;
@@ -407,6 +394,16 @@ body *, body *:before, body *:after {
 	    background-size: 75%;
 		background-repeat: no-repeat;
     	background-position: center;
+	}
+
+	.heroBar .barR > .habilidade .img {
+		background-image: url('./img/habilidade.svg');
+	}
+	.heroBar .barR > .resistencia .img {
+		background-image: url('./img/armadura.svg');
+	}
+	.heroBar .barR > .pv .img {
+		background-image: url('./img/resistencia.svg');
 	}
 
 	.heroBar .barR .valor {

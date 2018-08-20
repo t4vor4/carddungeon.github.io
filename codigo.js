@@ -11,10 +11,11 @@ const locais = [
 const imgSrc = './img/';
 
 const cartasJogo = [
-    {   nome:'Esqueleto', 
+    {   
+        nome:'Esqueleto', 
         tipo: 'Monstro',
-        forca:1, 
-        habilidade: 2, 
+        forca: 1, 
+        habilidade: 1, 
         resistencia: 1, 
         pv: 5,
         descricao:'Um morto vivo animado por magia', 
@@ -30,37 +31,39 @@ const cartasJogo = [
         descricao:'Humanóides de pele verde, peludos e malvados', 
         imagem:'orc.jpg'
     },
-    // {
-    //     nome:'Gnoll', 
-    //     tipo: 'Monstro',
-    //     forca: 2, 
-    //     habilidade: 1, 
-    //     resistencia: 2, 
-    //     pv: 10,
-    //     descricao:'Um guerreiro bestial armado e raivoso',
-    //     imagem:'gnoll.jpg'
-    // },
-    // {
-    //     nome:'Aranha Gigante', 
-    //     tipo: 'Monstro',
-    //     forca: 3, 
-    //     habilidade: 3, 
-    //     resistencia: 1, 
-    //     pv: 5,
-    //     descricao:'Uma aranha com terríevis garras e a imagem do mal', 
-    //     imagem:'spider.jpg'
-    // },
-    // {        
-    //     nome:'Dragão', 
-    //     tipo: 'Monstro',
-    //     forca: 4, 
-    //     habilidade: 5, 
-    //     resistencia: 4, 
-    //     pv: 20,
-    //     descricao:'Um poderoso lagarto com grandes asas, hálito de fogo e voraz, muito voraz.', 
-    //     imagem:'dragon.jpg'
-    // },
+    {
+        nome:'Gnoll', 
+        tipo: 'Monstro',
+        forca: 2, 
+        habilidade: 1, 
+        resistencia: 2, 
+        pv: 10,
+        descricao:'Um guerreiro bestial armado e raivoso',
+        imagem:'gnoll.jpg'
+    },
+    {
+        nome:'Aranha Gigante', 
+        tipo: 'Monstro',
+        forca: 3, 
+        habilidade: 3, 
+        resistencia: 1, 
+        pv: 5,
+        descricao:'Uma aranha com terríevis garras e a imagem do mal', 
+        imagem:'spider.jpg'
+    },
+    {        
+        nome:'Dragão', 
+        tipo: 'Monstro',
+        forca: 3, 
+        habilidade: 2, 
+        resistencia: 4, 
+        pv: 20,
+        descricao:'Um poderoso lagarto com grandes asas, hálito de fogo e voraz, muito voraz.', 
+        imagem:'dragon.jpg'
+    }
 ]
+
+const delayTime = 700;
 
 var heroi = {nome:'Heroi', forca: 3, habilidade: 4, resistencia: 3, pv: 15}
 
@@ -149,34 +152,32 @@ function verificaTopodoDeck() {
 }
 
 function mostraOpcoes($turno) {
-    console.log($turno);
     if ($turno == 'limpa') {
         $('.showBts').html('');
     }
-    if ($turno == 'iniciativa') {
-        $('.showBts').html('<button class="bt iniciativa">Iniciativa</button>');
-        $('.showBts .iniciativa').click(function(event) {
-            turnosdecombate(deck[deck.length-1]);
-        });    
-    }
+
     else if ($turno == 'ataque') {
         $('.showBts').html('<button class="bt ataque">Ataque</button>');
-    }    
+        $('.showBts .ataque').click(function(event) {
+            $('.showBts').html('');
+            turnosdecombate(deck[deck.length-1]);
+        });
+
+    }
 }
 
 function ataque($atacante, $defensor) {
     var dano;
     var fa = parseInt($atacante.forca)+calcularJogada(6);
     var fd = parseInt($defensor.resistencia)+calcularJogada(6);
+
     if (fd >= fa) {
-        console.log('O '+$defensor.nome+' se defende do golpe');
         logsTexto('O '+$defensor.nome+' se defende do golpe');
         dano = 0;
         return dano;
     }
     else {
         dano = fa-fd;
-        console.log('O '+$defensor.nome+' levou '+dano+' pontos de com o golpe de '+$atacante.nome);
         logsTexto('O '+$defensor.nome+' levou '+dano+' pontos de com o golpe de '+$atacante.nome);
         return dano;
     }    
@@ -186,58 +187,104 @@ function combate($iniciativa,$inimigo) {
     var iniciativa = $iniciativa;
     var inimigo = $inimigo;
     var cartaInimigo = verificaTopodoDeck();
+    //turno
+
     if (vidaHeroi > 0 && inimigoPV > 0) {
         //Inimigo ganha a iniciativa
         if (iniciativa == true) {
-            logsTexto(inimigo.nome+' venceu a iniciativa');
-
-            danoFeito = ataque(inimigo,heroiGame);
-
-            if (danoFeito > 0) {
-                vidaHeroi = vidaHeroi-danoFeito;
-                $('.heroBar .pv .valor').text(vidaHeroi).addClass('mudandoValor');
-                // $('.heroBar .pv .valor').removeClass('mudaValor');
-                setTimeout(function(){
-                	$('.heroBar .pv .valor').removeClass('mudandoValor');
-                },500);
-                if (vidaHeroi <= 0) {
-                    logsTexto(heroiGame.nome+' foi derrotado.');
-                    gameOver();                
-                }
-                else {
-                    mostraOpcoes('iniciativa');
-                }
-            }            
+            turnoInimigo(iniciativa);
         }
         //Heroi ganha a iniciativa
         else {
-            logsTexto(heroiGame.nome+' venceu a iniciativa');
-            mostraOpcoes('ataque');
-            $('.showBts .ataque').click(function(event) {
+            turnoJogador(iniciativa);
+        }     
+    }
 
-                danoFeito = ataque(heroiGame,inimigo)
-                if (danoFeito > 0) {                    
-                    inimigoPV = inimigoPV-danoFeito;    
-                    cartaInimigo.find('.pv .valor').text(inimigoPV).addClass('mudandoValor');
+    var combateFim = 'combateFim';
+
+    return combateFim;
+
+    function turnoInimigo($iniciativa) {
+            // logsTexto(inimigo.nome+' venceu a iniciativa');
+            danoFeito = ataque(inimigo,heroiGame);
+            if (danoFeito > 0) {
+                vidaHeroi = vidaHeroi-danoFeito;
+                setTimeout(function(){
+                    $('.heroBar .pv .valor').text(vidaHeroi).addClass('mudandoValor');
                     setTimeout(function(){
-                    	cartaInimigo.find('.pv .valor').removeClass('mudandoValor');
-                    },500);                	
-                    if (inimigoPV <= 0) {
-                        logsTexto(inimigo.nome+' foi derrotado.');
-                        irProCemiterio(verificaTopodoDeck());
+                        $('.heroBar .pv .valor').removeClass('mudandoValor');
+                    },delayTime);
+                    if (vidaHeroi <= 0) {
+                        logsTexto(heroiGame.nome+' foi derrotado.');
+                        gameOver();                
                     }
                     else {
-                        mostraOpcoes('iniciativa');
+                        if ($iniciativa == true) {
+                            setTimeout(function() {
+                                turnoJogador(iniciativa);
+                            },delayTime);    
+                        }
+                        else {
+                            mostraOpcoes('ataque');
+                        }
                     }
-                }
-                else {
-                    console.log('Não houve dano');
-                }
-                
-            });
-            
-        }       
-    }
+                },delayTime);
+            }  
+            else {
+                console.log('Não houve dano no heroi');
+                setTimeout(function() {
+                    if ($iniciativa == true) {
+                        setTimeout(function() {
+                            turnoJogador(iniciativa);
+                        },delayTime);    
+                    }
+                    else {
+                        mostraOpcoes('ataque');
+                    }
+                },delayTime);                
+            }
+    } 
+
+    function turnoJogador($iniciativa) {
+            // logsTexto(inimigo.nome+' venceu a iniciativa');
+            danoFeito = ataque(heroiGame, inimigo);
+            if (danoFeito > 0) {
+                inimigoPV = inimigoPV-danoFeito;
+                setTimeout(function(){
+                    cartaInimigo.find('.pv .valor').text(inimigoPV).addClass('mudandoValor');
+                    setTimeout(function(){
+                        cartaInimigo.find('.pv .valor').removeClass('mudandoValor');
+                    },delayTime);
+                    if (inimigoPV <= 0) {
+                        logsTexto(inimigo.nome+' foi derrotado.');
+                        irProCemiterio(verificaTopodoDeck()); 
+                    }
+                    else {
+                        if ($iniciativa != true) {
+                            setTimeout(function() {
+                                turnoInimigo(iniciativa);
+                            },delayTime);    
+                        }
+                        else {
+                            mostraOpcoes('ataque');
+                        }
+                    }
+                },delayTime);
+            }  
+            else {
+                console.log('Não houve dano no heroi');
+                setTimeout(function() {
+                    if ($iniciativa != true) {
+                        setTimeout(function() {
+                            turnoInimigo(iniciativa);
+                        },delayTime);    
+                    }
+                    else {
+                        mostraOpcoes('ataque');
+                    }
+                },delayTime);                
+            }
+    } 
 }
 
 function jogadaIniciativa($inimigo) {
@@ -246,10 +293,12 @@ function jogadaIniciativa($inimigo) {
     var iniciativaHeroi = parseInt(heroiGame.habilidade)+calcularJogada(6);
     // inimigo ganha
     if ( iniciativaInimigo > iniciativaHeroi ) {
+        logsTexto(inimigo.nome+' ganhou a iniciativa');
         return true;
     }
     // heroi ganha
     else if (iniciativaInimigo <= iniciativaHeroi) {
+        logsTexto(heroiGame.nome+' ganhou a iniciativa');
         return false;
     } 
 }
@@ -262,11 +311,12 @@ function turnosdecombate($inimigo) {
     console.log('turnosdecombate');
     var iniciativa = jogadaIniciativa(inimigo);    
     combate(iniciativa,inimigo);
+    
 }
 
 function logsTexto($texto) {
-    // $('.showText').prepend('<span class="texto">'+$texto+'</span>');
     $('.showText').html('<span class="texto">'+$texto+'</span>');
+    console.log($texto);
 }
 
 
@@ -292,46 +342,35 @@ function poeAsCartas($deck) {
             },i*($deck.length*10));
         });   
     },500);
+
+    $('head').append('<style>.card.deFrente.ativo{z-index: '+deck.length+'}</style>');
 }
 
 function viraCartaDoDeck($deck){
     var topododeck = $(verificaTopodoDeck());
     topododeck.click(function(event) {
         if ( $(this).hasClass('nodeckcompra')) {
-            topododeck.addClass('deFrente').addClass('topododeck');
+            topododeck.addClass('deFrente').addClass('topododeck').addClass('ativo').removeClass('nodeckcompra');
             if ( deck[deck.length-1].tipo == 'Monstro' ) {
                 inimigoPV = deck[deck.length-1].pv;
                 console.log(inimigoPV);
-                mostraOpcoes('iniciativa');                
+                setTimeout(function(){
+                    logsTexto('Um '+deck[deck.length-1].nome+' surge!');
+                    mostraOpcoes('ataque');
+                },delayTime*0.5);
+
             }
             else {
                 console.log('Não era monstro');    
             }
         }
     });
-
-    // topododeck.find('.frontCard').click(function(event) {
-    //     if ( $(this).parent().hasClass('nodeckcompra')) {
-    //         irProCemiterio(topododeck);
-    //     }
-    //     else {
-    //         console.log('pixaim');
-    //     }
-    // });
 }
 
 function irProCemiterio($estacarta) {
-    // var pCemiterio = $('.baseCartaCemiterio').position();
-    // var posicaoX =  parseInt($estacarta.css('left'));
-    // var posicaoY =  parseInt($estacarta.css('top'));
-    // $estacarta.
-    //     css('left', (posicaoX+pCemiterio.left+30))
-    //         .addClass('cemiterio')
-    //         .removeClass('nodeckcompra')
-    //         .css('z-index', cemiterio.length);
-
     $estacarta.addClass('cemiterio')
             .removeClass('nodeckcompra')
+            .removeClass('ativo')
             .css('z-index', cemiterio.length);
 
     switch (deck.length == 1) {

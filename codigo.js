@@ -11,69 +11,139 @@ const locais = [
 const imgSrc = './img/';
 
 const cartasJogo = [
-    {   
-        nome:'Esqueleto', 
+    {   id: 0001,
+        nome:'filler', 
         tipo: 'Monstro',
+        tipo2: 'Morto-vivo',
         forca: 1, 
-        habilidade: 1, 
-        resistencia: 1, 
-        pv: 5,
+        habilidade: 0, 
+        resistencia: 0, 
+        pv: 1,
         descricao:'Um morto vivo animado por magia', 
         imagem: 'esqueleto.jpg'
     },
-    {
-        nome:'Orc', 
+    {   id: 0002,
+        nome:'attacker', 
         tipo: 'Monstro',
+        tipo2: 'Morto-vivo',
         forca: 1, 
-        habilidade: 2, 
-        resistencia: 2,
-        pv: 10,
+        habilidade: 1, 
+        resistencia: 1,
+        pv: 1,
         descricao:'Humanóides de pele verde, peludos e malvados', 
         imagem:'orc.jpg'
     },
-    {
-        nome:'Gnoll', 
+    {   id: 0003,
+        nome:'Caster', 
         tipo: 'Monstro',
+        tipo2: 'Morto-vivo',
         forca: 2, 
         habilidade: 1, 
-        resistencia: 2, 
-        pv: 10,
-        descricao:'Um guerreiro bestial armado e raivoso',
-        imagem:'gnoll.jpg'
+        resistencia: 1,
+        pv: 1,
+        descricao:'Humanóides de pele verde, peludos e malvados', 
+        imagem:'orc.jpg'
     },
-    {
-        nome:'Aranha Gigante', 
+    {   id: 0004,
+        nome:'Defender', 
         tipo: 'Monstro',
-        forca: 3, 
-        habilidade: 3, 
-        resistencia: 1, 
-        pv: 5,
-        descricao:'Uma aranha com terríevis garras e a imagem do mal', 
-        imagem:'spider.jpg'
+        tipo2: 'Morto-vivo',
+        forca: 2, 
+        habilidade: 1, 
+        resistencia: 1,
+        pv: 1,
+        descricao:'Humanóides de pele verde, peludos e malvados', 
+        imagem:'orc.jpg'
     },
-    {        
-        nome:'Dragão', 
+    {   id: 0005,
+        nome:'Healer', 
         tipo: 'Monstro',
-        forca: 3, 
-        habilidade: 2, 
-        resistencia: 4, 
-        pv: 20,
-        descricao:'Um poderoso lagarto com grandes asas, hálito de fogo e voraz, muito voraz.', 
-        imagem:'dragon.jpg'
-    }
+        tipo2: 'Morto-vivo',
+        forca: 2, 
+        habilidade: 1, 
+        resistencia: 1,
+        pv: 1,
+        descricao:'Humanóides de pele verde, peludos e malvados', 
+        imagem:'orc.jpg'
+    },
+    {   id: 0006,
+        nome:'Necromante', //Buffer
+        tipo: 'Monstro',
+        tipo2: 'Morto-vivo',
+        forca: 2, 
+        habilidade: 1, 
+        resistencia: 1,
+        pv: 2,
+        descricao:'Quando Necromante entra em jogo, ele invoca as 2 últimas cartas tipo morto-vivo do zumbis que foram para o cemiterio.', 
+        imagem:'orc.jpg',
+    },
+    {   id: 0007,
+        nome:'Debuffer', 
+        tipo: 'Monstro',
+        tipo2: 'Morto-vivo',
+        forca: 2, 
+        habilidade: 1, 
+        resistencia: 1,
+        pv: 1,
+        descricao:'Humanóides de pele verde, peludos e malvados', 
+        imagem:'orc.jpg'
+    },
+    {   id: 0008,
+        nome:'Boss', 
+        tipo: 'Monstro',
+        tipo2: 'Morto-vivo',
+        forca: 2, 
+        habilidade: 1, 
+        resistencia: 1,
+        pv: 1,
+        descricao:'Humanóides de pele verde, peludos e malvados', 
+        imagem:'orc.jpg'
+    },
+
+
+
+    // {
+    //     nome:'Gnoll', 
+    //     tipo: 'Monstro',
+    //     forca: 2, 
+    //     habilidade: 1, 
+    //     resistencia: 2, 
+    //     pv: 10,
+    //     descricao:'Um guerreiro bestial armado e raivoso',
+    //     imagem:'gnoll.jpg'
+    // },
+    // {
+    //     nome:'Aranha Gigante', 
+    //     tipo: 'Monstro',
+    //     forca: 3, 
+    //     habilidade: 3, 
+    //     resistencia: 1, 
+    //     pv: 5,
+    //     descricao:'Uma aranha com terríevis garras e a imagem do mal', 
+    //     imagem:'spider.jpg'
+    // },
+    // {        
+    //     nome:'Dragão', 
+    //     tipo: 'Monstro',
+    //     forca: 3, 
+    //     habilidade: 2, 
+    //     resistencia: 4, 
+    //     pv: 20,
+    //     descricao:'Um poderoso lagarto com grandes asas, hálito de fogo e voraz, muito voraz.', 
+    //     imagem:'dragon.jpg'
+    // }
 ]
 
 const delayTime = 700;
 
 var heroi = {nome:'Heroi', forca: 3, habilidade: 4, resistencia: 3, pv: 15}
-
-
-var deck = embaralhaCartas(cartasJogo);
 var heroiGame = heroi;
-var cemiterio = [];
-
 var vidaHeroi = 15;
 var inimigoPV = 0;
+
+var deck = embaralhaCartas(cartasJogo);
+var cemiterio = [];
+var emJogo = [];
 
 var cartaAtual;
 var topodoCemiterioLocais;
@@ -114,7 +184,7 @@ function calcularJogada(variavel){
 function carta($val, $id) {
     // console.log($val);
     var trechoHtml = 
-    '<div class="card" id="carta-'+$id+'">'+
+    '<div class="card" id="carta-'+$id+'" data-id="'+$val.id+'">'+
         '<div class="backCard"></div>'+
         '<div class="frontCard" >'+
             '<h2 class="nome">'+$val.nome+'</h2>'+
@@ -126,6 +196,7 @@ function carta($val, $id) {
                 '<span class="resistencia"><img src="'+imgSrc+'armadura.svg" alt="Força" /><span class="valor">'+$val.resistencia+'</span></span>'+
                 '<span class="pv"><img src="'+imgSrc+'resistencia.svg" alt="pv" /><span class="valor">'+$val.pv+'</span></span>'+
             '</span>'+
+            '<div class="tipo">'+$val.tipo+' - '+$val.tipo2+'</div>'+
             '<p class="descricao">'+$val.descricao+'</p>'+
         '</div>'+
         
@@ -141,15 +212,24 @@ function configuraHeroi() {
     barra.find('.pv .valor').html(heroiGame.pv);
 }
 
-function posicao_cemiterio () {
-    posicaoCemiterio = $('.baseCartaCemiterio').position();
-    return posicaoCemiterio;
-}
+// function posicao_cemiterio () {
+//     posicaoCemiterio = $('.baseCartaCemiterio').position();
+//     return posicaoCemiterio;
+// }
 
 function verificaTopodoDeck() {
     var esteId = deck.length;
     return $('#carta-'+esteId);
 }
+
+function verificaEmJogo() {
+    return $('.card[data-id="'+emJogo[0].id+'"]');
+}
+
+// function verificaTopodoCemiterio() {
+//     var esteId = cemiterio[cemiterio.length-1].id;
+//     return $('.card[data-id="'+esteId+'"]');
+// }
 
 function mostraOpcoes($turno) {
     if ($turno == 'limpa') {
@@ -157,12 +237,26 @@ function mostraOpcoes($turno) {
     }
 
     else if ($turno == 'ataque') {
-        $('.showBts').html('<button class="bt ataque">Ataque</button>');
+        // $('.showBts').html('<button class="bt ataque">Ataque</button>');
+        $('.showBts').html('<button class="bt ataque">Ataque</button><button class="bt exumar">Exumar</button>');
         $('.showBts .ataque').click(function(event) {
             $('.showBts').html('');
-            turnosdecombate(deck[deck.length-1]);
+            // turnosdecombate(deck[deck.length-1]);
+            turnosdecombate(emJogo[0]);
+        });
+        $('.showBts .exumar').click(function(event) {
+            exumarCartaParaDeck();
         });
 
+    }
+}
+function exumarCartaParaDeck() {
+    if (cemiterio.length > 0) {
+        deck.push(cemiterio.pop());
+        var $id = deck.length+1;
+        var $carta = deck[deck.length-1];
+        $('.deckPlace').append(carta($carta, $id));
+        $('#carta-'+deck.length+2).addClass('nodeckcompra');
     }
 }
 
@@ -186,7 +280,7 @@ function ataque($atacante, $defensor) {
 function combate($iniciativa,$inimigo) {
     var iniciativa = $iniciativa;
     var inimigo = $inimigo;
-    var cartaInimigo = verificaTopodoDeck();
+    var cartaInimigo = verificaEmJogo();
     //turno
 
     if (vidaHeroi > 0 && inimigoPV > 0) {
@@ -257,7 +351,7 @@ function combate($iniciativa,$inimigo) {
                     },delayTime);
                     if (inimigoPV <= 0) {
                         logsTexto(inimigo.nome+' foi derrotado.');
-                        irProCemiterio(verificaTopodoDeck()); 
+                        irProCemiterio(cartaInimigo); 
                     }
                     else {
                         if ($iniciativa != true) {
@@ -349,52 +443,39 @@ function poeAsCartas($deck) {
 function viraCartaDoDeck($deck){
     var topododeck = $(verificaTopodoDeck());
     topododeck.click(function(event) {
-        if ( $(this).hasClass('nodeckcompra')) {
-            topododeck.addClass('deFrente').addClass('topododeck').addClass('ativo').removeClass('nodeckcompra');
-            if ( deck[deck.length-1].tipo == 'Monstro' ) {
-                inimigoPV = deck[deck.length-1].pv;
-                console.log(inimigoPV);
-                setTimeout(function(){
-                    logsTexto('Um '+deck[deck.length-1].nome+' surge!');
-                    mostraOpcoes('ataque');
-                },delayTime*0.5);
-
-            }
-            else {
-                console.log('Não era monstro');    
-            }
+        emJogo.push(deck.pop());
+        console.log(emJogo);
+        $('.card[data-id="'+emJogo[0].id+'"]').removeClass('nodeckcompra').addClass('deFrente');
+        if (emJogo[0].tipo == 'Monstro') {
+            inimigoPV = emJogo[0].pv;
+            // console.log(inimigoPV);
+            setTimeout(function(){
+                logsTexto('Um '+emJogo[0].nome+' surge!');
+                mostraOpcoes('ataque');
+            },delayTime*0.5);
+        }   
+        else {
+            console.log('Não era monstro');
         }
     });
 }
 
 function irProCemiterio($estacarta) {
-    $estacarta.addClass('cemiterio')
-            .removeClass('nodeckcompra')
-            .removeClass('ativo')
-            .css('z-index', cemiterio.length);
+    $estacarta.addClass('cemiterio');
+    setTimeout(function(){
+        $estacarta.remove();
+    },3000);
 
-    switch (deck.length == 1) {
+    switch (deck.length == 0) {
         case true:
             gameOver();
             break;
         default:
-            cemiterio.push(deck.pop());
+            cemiterio.push(emJogo.pop());
             mostraOpcoes('limpa');
             viraCartaDoDeck(deck);
             break;
     }
-    
-    // if (deck.length == 0) {
-    //     cemiterio.push(deck.pop());    
-    //     viraCartaDoDeck(deck);
-    // }
-    // else {
-    //     $('body').append('<span id="bgModal"></span>');
-    //     $('body').append('<div id="modal" class="gameover"><span class="text-gameover">Fim de Jogo</div>');
-    //     setTimeout(function(){
-    //         $('#bgModal, #modal').addClass('complete');
-    //     },100);
-    // }
 }
 
 

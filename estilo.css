@@ -19,6 +19,9 @@ body *, body *:before, body *:after {
 	font-family: font-family: 'MedievalSharp', cursive;
 }
 
+.hide {
+	opacity: 0!important;
+}
 .bt {
 	border: 5px solid #333;
     background: #fff;
@@ -44,32 +47,26 @@ body *, body *:before, body *:after {
 
 .deckPlace {
 	float: left;
-    position: relative;
-    width: 94%;
-	height: 50%;
+    position: absolute;
+    top: 0;
+    left:  0;
+    width: 100%;
+	height: calc(100% - 165px);
 	background-color: #fff;
-	margin: 50px 0 0 3%; 
-	/* border: 1px solid #000; */
+	margin: 0; 
 	padding: 10px;
-
-	/* width: 50%;
-    height: 90%;
-	padding: 10px;
-	font-size: 2em;
-	padding: 10px; */
+	overflow: hidden;
 }
 
 .deckPlace .baseCarta {
     position: absolute;
     border-radius: 10px;
-    width: 136px;
+	width: 136px;
     height: 228px;
-    margin: 0 0 0 50%;
-    left: -146px;
-	
-	border: 5px solid #eee;
-	border-radius:  10px;
-
+    margin: 70px 0 0 50%;
+    left: -68px;
+    border: 5px solid #eee;
+    border-radius: 10px;
 }
 
 .deckPlace .baseCartaCemiterio {
@@ -89,15 +86,6 @@ body *, body *:before, body *:after {
 	
 /* ESTILO GERAL DAS CARTAS */
 	.card {
-		/* float: left;
-		position: absolute;
-		width: 266px;
-    	height: 447px;
-		transition: 0.6s;  	
-		transform-style: preserve-3d;    	
-		box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
-		margin:  10px 0 0 10px; */
-
 		float: left;
 		position: absolute;
 		width: 136px;
@@ -105,7 +93,9 @@ body *, body *:before, body *:after {
 		transition: 0.6s;  	
 		transform-style: preserve-3d;    	
 		box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
-		margin:  10px 0 0 10px;
+		margin:  0;
+		margin-left: calc(50% - 68px);
+    	margin-top: calc(50% - 81px);
 	}
 
 	.backCard {
@@ -116,7 +106,6 @@ body *, body *:before, body *:after {
 		top: 0;
 		left: 0;
 		z-index: 2;
-		/* background-image: url('./img/backCarta.jpg'); */
 		background-color: #555;
 		backface-visibility: hidden;  
 		border: 10px solid #333;
@@ -197,18 +186,27 @@ body *, body *:before, body *:after {
 	    line-height: 2.3em;
 	    font-size: 0.8em;
 	}
+	.frontCard .tipo {
+		float: left;
+	    position: relative;
+	    padding: 3px 10px;
+	    font-family: 'Oswald', sans-serif;
+	    font-size: 0.5em;
+	    line-height: 0.6em;
+	    width: 100%;
+	}
 
 	.frontCard .descricao {
 		float: left;
 		position: relative;
-		padding: 10px;
+		padding: 5px 10px 10px;
 		font-family: 'Oswald', sans-serif;
 	    font-size: 0.7em;
 	    line-height: 1.2em;
 	    float: left;
 	    position: relative;
 	    width: 100%;
-	    height: 45%;
+	    height: 35%;
 	   	/* color: #fff; */
 	}
 
@@ -219,21 +217,12 @@ body *, body *:before, body *:after {
 		left: 50%;
 	}
 
-	.card.deFrente {
-		transform: rotateY(180deg);
-	}
-
-	.card.ativo.deFrente {		
+	.card.deFrente, .card.cemiterio {
 		transform: rotateY(180deg) scale(1.6);
 	    margin-left: 50%;
 	    left: -68px!important;
-	    top: 28px!important;
+	    top: 0px!important;
 	    z-index: 1;
-	}
-
-	.card.cemiterio .frontCard {
-		filter:grayscale(100%);
-		background-color: #999;
 	}
 
 	.card .mudandoValor {
@@ -243,10 +232,13 @@ body *, body *:before, body *:after {
 	}
 
 	.card.cemiterio {
-	    left: 150px!important;
-	}
+		transition: all 0.5s ease-in;
+		transform: rotateY(45deg) rotateZ(13deg);
+	    left: -150%!important;
 
-	/* grayscale */
+	    /* filter:grayscale(100%); */
+		/* background-color: #999; */
+	}
 
 	
 /* STAGE */
@@ -293,16 +285,6 @@ body *, body *:before, body *:after {
 		    /* background-color: #ccc; */
 		    font-family: 'Oswald', sans-serif;
 		}
-
-		/* .showText .texto:first-of-type {
-			color: $fff
-			background-color: #777;
-			font-size: 1em;
-		}
-
-		.showText .texto:nth-of-type(odd) {
-			background-color: #ddd;
-		} */
 
 	.showBts {
 		float: left;
@@ -465,3 +447,8 @@ body *, body *:before, body *:after {
 	    line-height: 1em;
 	    text-shadow: 2px 2px 2px #000;
 	}
+
+/* Animações */
+/* @keyframes destruirCarta {
+	
+} */

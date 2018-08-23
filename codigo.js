@@ -170,6 +170,9 @@ function gameOver () {
 // Embaralha aleatóriamente as cartas
 function embaralhaCartas(a) {
     a.sort(function() { return 0.5 - Math.random() });
+    $(a).each(function(i, el) {
+        el.idCarta = 'carta-'+i;
+    });
     return a;
 }
 
@@ -181,10 +184,9 @@ function calcularJogada(variavel){
 }
 
 // Cria a carta na mesa
-function carta($val, $id) {
-    // console.log($val);
+function carta($val) {
     var trechoHtml = 
-    '<div class="card" id="carta-'+$id+'" data-id="'+$val.id+'">'+
+    '<div class="card" id="'+$val.idCarta+'" data-id="'+$val.id+'">'+
         '<div class="backCard"></div>'+
         '<div class="frontCard" >'+
             '<h2 class="nome">'+$val.nome+'</h2>'+
@@ -212,24 +214,14 @@ function configuraHeroi() {
     barra.find('.pv .valor').html(heroiGame.pv);
 }
 
-// function posicao_cemiterio () {
-//     posicaoCemiterio = $('.baseCartaCemiterio').position();
-//     return posicaoCemiterio;
-// }
-
-function verificaTopodoDeck() {
-    var esteId = deck.length;
+function verificaTopodoDeck($deck) {
+    var esteId = $deck.length;
     return $('#carta-'+esteId);
 }
 
 function verificaEmJogo() {
     return $('.card[data-id="'+emJogo[0].id+'"]');
 }
-
-// function verificaTopodoCemiterio() {
-//     var esteId = cemiterio[cemiterio.length-1].id;
-//     return $('.card[data-id="'+esteId+'"]');
-// }
 
 function mostraOpcoes($turno) {
     if ($turno == 'limpa') {
@@ -250,13 +242,18 @@ function mostraOpcoes($turno) {
 
     }
 }
+
 function exumarCartaParaDeck() {
     if (cemiterio.length > 0) {
         deck.push(cemiterio.pop());
-        var $id = deck.length+1;
-        var $carta = deck[deck.length-1];
-        $('.deckPlace').append(carta($carta, $id));
-        $('#carta-'+deck.length+2).addClass('nodeckcompra');
+        var estacarta = deck[deck.length-1];
+        console.log(estacarta);
+        $('.deckPlace').append(carta(estacarta));
+        setTimeout(function(){
+            $('#'+estacarta.idCarta).addClass('nodeckcompra')
+                .css('top',(-1*deck.length)+'px')
+                .css('left',(2*deck.length)+'px');
+        },0);        
     }
 }
 
@@ -396,8 +393,6 @@ function jogadaIniciativa($inimigo) {
         return false;
     } 
 }
-
-
 //inimigoPV = parseInt($inimigo.resistencia)*5;
 
 function turnosdecombate($inimigo) {
@@ -405,7 +400,6 @@ function turnosdecombate($inimigo) {
     console.log('turnosdecombate');
     var iniciativa = jogadaIniciativa(inimigo);    
     combate(iniciativa,inimigo);
-    
 }
 
 function logsTexto($texto) {
@@ -423,7 +417,7 @@ function logsTexto($texto) {
 function poeAsCartas($deck) {
     var i = 0;
     $($deck).each(function(i, el) {
-        $('.deckPlace').append(carta(el, i+1));
+        $('.deckPlace').append(carta(el));
         $('.card').addClass('entranojogo').addClass('nodeckcompra');
     });
     setTimeout(function(){
@@ -441,14 +435,12 @@ function poeAsCartas($deck) {
 }
 
 function viraCartaDoDeck($deck){
-    var topododeck = $(verificaTopodoDeck());
-    topododeck.click(function(event) {
+    var topododeck = '#'+deck[deck.length-1].idCarta;
+    $(topododeck).click(function(event) {
         emJogo.push(deck.pop());
-        console.log(emJogo);
         $('.card[data-id="'+emJogo[0].id+'"]').removeClass('nodeckcompra').addClass('deFrente');
         if (emJogo[0].tipo == 'Monstro') {
             inimigoPV = emJogo[0].pv;
-            // console.log(inimigoPV);
             setTimeout(function(){
                 logsTexto('Um '+emJogo[0].nome+' surge!');
                 mostraOpcoes('ataque');
@@ -460,11 +452,37 @@ function viraCartaDoDeck($deck){
     });
 }
 
+function viraDuasCartaDoDeck($deck,$qtd){
+    // devo dar um jeito de ver quais cartas eu devo virar, mas por hora vai ser as duas primeiras do deck
+    var topododeck = '#'+deck[deck.length-1].idCarta;
+    var qtd = $qtd;
+    $(topododeck).click(function(event) {        
+        $('.deckPlace').addClass('qtd-'+qtd);
+        for (qtd > emJogo.length; qtd--;) { 
+            emJogo.push(deck.pop());
+            console.log('emJogo');
+            console.log(emJogo);
+            // $('.card[data-id="'+emJogo[0].id+'"]').removeClass('nodeckcompra').addClass('deFrente');
+            $('#'+emJogo[emJogo.length-1].idCarta).removeClass('nodeckcompra').addClass('deFrente').addClass('pos-'+qtd);
+            if (emJogo[0].tipo == 'Monstro') {
+                inimigoPV = emJogo[0].pv;
+                setTimeout(function(){
+                    logsTexto('Um '+emJogo[0].nome+' surge!');
+                    mostraOpcoes('ataque');
+                },delayTime*0.5);
+            }   
+            else {
+                console.log('Não era monstro');
+            }
+        }
+    });
+}
+
 function irProCemiterio($estacarta) {
     $estacarta.addClass('cemiterio');
     setTimeout(function(){
         $estacarta.remove();
-    },3000);
+    },500);
 
     switch (deck.length == 0) {
         case true:
@@ -483,7 +501,8 @@ function jogo() {
 
     configuraHeroi();
     poeAsCartas(deck);
-    viraCartaDoDeck(deck);
+    // viraCartaDoDeck(deck);
+    viraDuasCartaDoDeck(deck,4);
 
 } 
 $(document).ready(function($) {

@@ -81,9 +81,6 @@ body *, body *:before, body *:after {
 	/* width: 266px;
     height: 447px; */    
 }
-
-
-	
 /* ESTILO GERAL DAS CARTAS */
 	.card {
 		float: left;
@@ -210,7 +207,6 @@ body *, body *:before, body *:after {
 	   	/* color: #fff; */
 	}
 
-
 /* ESTADO DAS CARTAS */
 	.card.entranojogo {
 		top: -1000px;
@@ -235,12 +231,67 @@ body *, body *:before, body *:after {
 		transition: all 0.5s ease-in;
 		transform: rotateY(45deg) rotateZ(13deg);
 	    left: -150%!important;
-
-	    /* filter:grayscale(100%); */
-		/* background-color: #999; */
 	}
 
-	
+/* Estilo das cartas se tiver mais de uma na tela Máximo */
+
+	.qtd-2 .card{
+		transform: scale(0.8);
+	}
+
+	.qtd-2 .deFrente {
+		transform: rotateY(180deg) scale(1.0);
+	    margin-left: 25%;
+	    z-index: 1;
+	}
+
+	.qtd-2 .deFrente.pos-0 {
+		left: -57px!important;
+	    top: 0px!important;
+	    color:  red;
+	}
+
+	.qtd-2 .deFrente.pos-1 {
+		left: 84px!important;
+	    top: 0px!important;
+	    color:  blue;
+	}
+
+	.qtd-3 .card, 
+	.qtd-4 .card {
+		transform: scale(0.8);
+	}
+
+	.qtd-3 .deFrente, 
+	.qtd-4 .deFrente {
+		transform: rotateY(180deg) scale(0.80);
+	    margin-left: 25%;
+	    z-index: 1;
+	}
+
+	.qtd-3 .deFrente.pos-0, 
+	.qtd-4 .deFrente.pos-0 {
+		left: -57px!important;
+	    top: -94px!important;
+	}
+
+	.qtd-3 .deFrente.pos-1, 
+	.qtd-4 .deFrente.pos-1 {
+		left: 84px!important;
+	    top: -94px!important;
+	}
+
+	.qtd-3 .deFrente.pos-2, 
+	.qtd-4 .deFrente.pos-2 {
+		left: -57px!important;
+	    top: 97px!important;
+	}
+
+	.qtd-4 .deFrente.pos-3 {
+		left: 84px!important;
+	    top: 97px!important;
+	}
+
 /* STAGE */
 	.stage {
 		float: left;

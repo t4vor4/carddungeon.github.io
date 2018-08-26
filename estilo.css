@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=MedievalSharp');
 @import url('https://fonts.googleapis.com/css?family=Oswald');
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P');
 
 body {
 	font-size: 14px;
@@ -7,7 +8,8 @@ body {
 	color: #fff;
 	background-color: #333;
 	background-position: center;
-	font-family: 'MedievalSharp', cursive;
+	/* font-family: 'MedievalSharp', cursive; */
+	font-family: 'Press Start 2P', cursive;
 	margin: 0;
     padding: 0;
 }
@@ -16,7 +18,9 @@ body *, body *:before, body *:after {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
-	font-family: font-family: 'MedievalSharp', cursive;
+	image-rendering: crisp-edges;
+  	image-rendering: pixelated;
+	/* font-family: font-family: 'MedievalSharp', cursive; */
 }
 
 .hide {
@@ -28,7 +32,8 @@ body *, body *:before, body *:after {
     border-radius: 10px;
     padding: 10px;
     box-shadow: -6px 5px 0 #555;
-    font-family: font-family: 'MedievalSharp', cursive;
+    /* font-family: font-family: 'MedievalSharp', cursive; */
+    font-family: 'Press Start 2P', cursive;
 }
 
 .content {
@@ -52,7 +57,7 @@ body *, body *:before, body *:after {
     left:  0;
     width: 100%;
 	height: calc(100% - 165px);
-	background-color: #fff;
+	background-color: #2e4e95;
 	margin: 0; 
 	padding: 10px;
 	overflow: hidden;
@@ -60,13 +65,16 @@ body *, body *:before, body *:after {
 
 .deckPlace .baseCarta {
     position: absolute;
-    border-radius: 10px;
-	width: 136px;
-    height: 228px;
-    margin: 70px 0 0 50%;
-    left: -68px;
-    border: 5px solid #eee;
-    border-radius: 10px;
+	width: 176px;
+    height: 258px;
+    margin: 49px 0 0 50%;
+    left: -81px;
+    background-color: #ff00007a;
+    z-index: 9999;
+    /* border: 5px solid #eee; */
+    /* border-radius: 10px; */
+    
+
 }
 
 .deckPlace .baseCartaCemiterio {
@@ -77,6 +85,7 @@ body *, body *:before, body *:after {
     margin-left: 50%;
     left: 10px;
 	background-color: #eee;
+
     /* background-color: #ddd; */
 	/* width: 266px;
     height: 447px; */    
@@ -105,8 +114,22 @@ body *, body *:before, body *:after {
 		z-index: 2;
 		background-color: #555;
 		backface-visibility: hidden;  
-		border: 10px solid #333;
-		border-radius: 10px;
+		border: 10px solid #152244;
+		/* border-radius: 10px; */
+		background-image: url(./img/fundo-da-carta.png);
+	    background-size: 240%;
+	    background-position: center -40px;
+	}
+
+	.backCard .name {
+		color: #2e4e95;
+	    text-shadow: 1px 2px 0 #152244;
+	    font-size: 1.2em;
+	    top: 81%;
+	    float: left;
+	    position: relative;
+	    margin-left: 0px;
+	    transform: rotateZ(-7deg);
 	}
 
 	.frontCard {
@@ -117,7 +140,7 @@ body *, body *:before, body *:after {
 		left: 0;
 		background-color: #fff;
 		color:  #333;
-		border-radius: 10px;
+		/* border-radius: 10px; */
 		display: block;
 		border: 10px solid #333;
 		transform: rotateY(180deg);
@@ -131,10 +154,9 @@ body *, body *:before, body *:after {
 		width: 100%;
 		height: 20px;
 		margin: 0;
-		line-height: 1.4em;
+		line-height: 3em;
 		padding: 0 10px;
-		font-size: 1em;
-		/* color: #fff; */
+		font-size: 0.55em;
 	}
 
 	.frontCard .imagem {
@@ -142,9 +164,12 @@ body *, body *:before, body *:after {
 		position: relative;
 		width: 100%;
 		height: 100px;
-		-webkit-background-size: 100%;
-		background-size: 100%;
+		/* -webkit-background-size: 100%;
+		background-size: 100%; */
 		background-color: #ccc;
+		background-position: -5px 0;
+	    background-size: 93%;
+	    background-repeat: no-repeat;
 	}
 
 	.frontCard .cont-stats {

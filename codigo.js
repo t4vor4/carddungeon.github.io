@@ -12,7 +12,7 @@ const imgSrc = './img/';
 
 const cartasJogo = [
     {   id: 0001,
-        nome:'filler', 
+        nome:'Esqueleto', //filler
         tipo: 'Monstro',
         tipo2: 'Morto-vivo',
         forca: 1, 
@@ -20,10 +20,10 @@ const cartasJogo = [
         resistencia: 0, 
         pv: 1,
         descricao:'Um morto vivo animado por magia', 
-        imagem: 'esqueleto.jpg'
+        imagem: 'esqueleto.png'
     },
     {   id: 0002,
-        nome:'attacker', 
+        nome:'Zumbi Raivoso', //attacker
         tipo: 'Monstro',
         tipo2: 'Morto-vivo',
         forca: 1, 
@@ -31,10 +31,10 @@ const cartasJogo = [
         resistencia: 1,
         pv: 1,
         descricao:'Humanóides de pele verde, peludos e malvados', 
-        imagem:'orc.jpg'
+        imagem:'zumbi-agressivo.png'
     },
     {   id: 0003,
-        nome:'Caster', 
+        nome:'Necromante Acolito', //Caster
         tipo: 'Monstro',
         tipo2: 'Morto-vivo',
         forca: 2, 
@@ -42,10 +42,10 @@ const cartasJogo = [
         resistencia: 1,
         pv: 1,
         descricao:'Humanóides de pele verde, peludos e malvados', 
-        imagem:'orc.jpg'
+        imagem:'jovem-necromante.png'
     },
     {   id: 0004,
-        nome:'Defender', 
+        nome:'Cavaleiro da Morte',  //Defender
         tipo: 'Monstro',
         tipo2: 'Morto-vivo',
         forca: 2, 
@@ -53,21 +53,10 @@ const cartasJogo = [
         resistencia: 1,
         pv: 1,
         descricao:'Humanóides de pele verde, peludos e malvados', 
-        imagem:'orc.jpg'
+        imagem:'cavaleiro-da-morte.png'
     },
     {   id: 0005,
-        nome:'Healer', 
-        tipo: 'Monstro',
-        tipo2: 'Morto-vivo',
-        forca: 2, 
-        habilidade: 1, 
-        resistencia: 1,
-        pv: 1,
-        descricao:'Humanóides de pele verde, peludos e malvados', 
-        imagem:'orc.jpg'
-    },
-    {   id: 0006,
-        nome:'Necromante', //Buffer
+        nome:'Necromante Ancião', //Buffer
         tipo: 'Monstro',
         tipo2: 'Morto-vivo',
         forca: 2, 
@@ -75,9 +64,9 @@ const cartasJogo = [
         resistencia: 1,
         pv: 2,
         descricao:'Quando Necromante entra em jogo, ele invoca as 2 últimas cartas tipo morto-vivo do zumbis que foram para o cemiterio.', 
-        imagem:'orc.jpg',
+        imagem:'velho-necromante.png',
     },
-    {   id: 0007,
+    {   id: 0006,
         nome:'Debuffer', 
         tipo: 'Monstro',
         tipo2: 'Morto-vivo',
@@ -86,9 +75,9 @@ const cartasJogo = [
         resistencia: 1,
         pv: 1,
         descricao:'Humanóides de pele verde, peludos e malvados', 
-        imagem:'orc.jpg'
+        imagem:'esqueleto.png'
     },
-    {   id: 0008,
+    {   id: 0007,
         nome:'Boss', 
         tipo: 'Monstro',
         tipo2: 'Morto-vivo',
@@ -97,7 +86,7 @@ const cartasJogo = [
         resistencia: 1,
         pv: 1,
         descricao:'Humanóides de pele verde, peludos e malvados', 
-        imagem:'orc.jpg'
+        imagem:'esqueleto.png'
     },
 
 
@@ -139,7 +128,7 @@ const delayTime = 700;
 var heroi = {nome:'Heroi', forca: 3, habilidade: 4, resistencia: 3, pv: 15}
 var heroiGame = heroi;
 var vidaHeroi = 15;
-var inimigoPV = 0;
+var inimigoPV = [];
 
 var deck = embaralhaCartas(cartasJogo);
 var cemiterio = [];
@@ -186,25 +175,47 @@ function calcularJogada(variavel){
 // Cria a carta na mesa
 function carta($val) {
     var trechoHtml = 
-    '<div class="card" id="'+$val.idCarta+'" data-id="'+$val.id+'">'+
-        '<div class="backCard"></div>'+
+    '<div class="card" id="" data-id="">'+
+        '<div class="backCard"><span class="name">Card<br/>Dungeon</span></div>'+
         '<div class="frontCard" >'+
-            '<h2 class="nome">'+$val.nome+'</h2>'+
+            '<h2 class="nome"></h2>'+
             //'<span class="imagem" style="background-image: url('+imgSrc+$val.imagem+');"></span>'+
             '<span class="imagem" ></span>'+
             '<span class="cont-stats">'+
-                '<span class="forca"><img src="'+imgSrc+'forca.svg" alt="Força" /><span class="valor">'+$val.forca+'</span></span>'+
-                '<span class="habilidade"><img src="'+imgSrc+'habilidade.svg" alt="Força" /><span class="valor">'+$val.habilidade+'</span></span>'+
-                '<span class="resistencia"><img src="'+imgSrc+'armadura.svg" alt="Força" /><span class="valor">'+$val.resistencia+'</span></span>'+
-                '<span class="pv"><img src="'+imgSrc+'resistencia.svg" alt="pv" /><span class="valor">'+$val.pv+'</span></span>'+
+                '<span class="forca"><img src="'+imgSrc+'forca.svg" alt="Força" /><span class="valor"></span></span>'+
+                '<span class="habilidade"><img src="'+imgSrc+'habilidade.svg" alt="Força" /><span class="valor"></span></span>'+
+                '<span class="resistencia"><img src="'+imgSrc+'armadura.svg" alt="Força" /><span class="valor"></span></span>'+
+                '<span class="pv"><img src="'+imgSrc+'resistencia.svg" alt="pv" /><span class="valor"></span></span>'+
             '</span>'+
-            '<div class="tipo">'+$val.tipo+' - '+$val.tipo2+'</div>'+
-            '<p class="descricao">'+$val.descricao+'</p>'+
+            '<div class="tipo"><span class="tipo1"></span> - <span class="tipo2"></span></div>'+
+            '<p class="descricao"></p>'+
         '</div>'+
         
     '</div>';
     return trechoHtml;
 }
+
+// function carta($val) {
+//     var trechoHtml = 
+//     '<div class="card" id="'+$val.idCarta+'" data-id="'+$val.id+'">'+
+//         '<div class="backCard"><span class="name">Card<br/>Dungeon</span></div>'+
+//         '<div class="frontCard" >'+
+//             '<h2 class="nome">'+$val.nome+'</h2>'+
+//             //'<span class="imagem" style="background-image: url('+imgSrc+$val.imagem+');"></span>'+
+//             '<span class="imagem" ></span>'+
+//             '<span class="cont-stats">'+
+//                 '<span class="forca"><img src="'+imgSrc+'forca.svg" alt="Força" /><span class="valor">'+$val.forca+'</span></span>'+
+//                 '<span class="habilidade"><img src="'+imgSrc+'habilidade.svg" alt="Força" /><span class="valor">'+$val.habilidade+'</span></span>'+
+//                 '<span class="resistencia"><img src="'+imgSrc+'armadura.svg" alt="Força" /><span class="valor">'+$val.resistencia+'</span></span>'+
+//                 '<span class="pv"><img src="'+imgSrc+'resistencia.svg" alt="pv" /><span class="valor">'+$val.pv+'</span></span>'+
+//             '</span>'+
+//             '<div class="tipo">'+$val.tipo+' - '+$val.tipo2+'</div>'+
+//             '<p class="descricao">'+$val.descricao+'</p>'+
+//         '</div>'+
+        
+//     '</div>';
+//     return trechoHtml;
+// }
 
 function configuraHeroi() {
     var barra = $('.heroBar');
@@ -269,7 +280,7 @@ function ataque($atacante, $defensor) {
     }
     else {
         dano = fa-fd;
-        logsTexto('O '+$defensor.nome+' levou '+dano+' pontos de com o golpe de '+$atacante.nome);
+        logsTexto('O '+$defensor.nome+' levou '+dano+' pontos de dano com o golpe de '+$atacante.nome);
         return dano;
     }    
 }
@@ -417,13 +428,14 @@ function logsTexto($texto) {
 function poeAsCartas($deck) {
     var i = 0;
     $($deck).each(function(i, el) {
-        $('.deckPlace').append(carta(el));
+        $('.deckPlace').append(carta());
         $('.card').addClass('entranojogo').addClass('nodeckcompra');
     });
     setTimeout(function(){
         $($deck).each(function(i, el) {
            setTimeout(function(){
-                $('#carta-'+(i+1))
+                // $('#carta-'+(i+1))
+                $('.card:nth-of-type('+(i+1)+')')
                 .css('top',i*-1+'px')
                 .css('left',i*2+'px')
                 .removeClass('entranojogo');
@@ -431,51 +443,86 @@ function poeAsCartas($deck) {
         });   
     },500);
 
-    $('head').append('<style>.card.deFrente.ativo{z-index: '+deck.length+'}</style>');
+    // $('head').append('<style>.card.deFrente.ativo{z-index: '+deck.length+'}</style>');
 }
 
-function viraCartaDoDeck($deck){
-    var topododeck = '#'+deck[deck.length-1].idCarta;
-    $(topododeck).click(function(event) {
-        emJogo.push(deck.pop());
-        $('.card[data-id="'+emJogo[0].id+'"]').removeClass('nodeckcompra').addClass('deFrente');
-        if (emJogo[0].tipo == 'Monstro') {
-            inimigoPV = emJogo[0].pv;
-            setTimeout(function(){
-                logsTexto('Um '+emJogo[0].nome+' surge!');
-                mostraOpcoes('ataque');
-            },delayTime*0.5);
-        }   
-        else {
-            console.log('Não era monstro');
-        }
-    });
-}
+// function viraCartaDoDeck($deck){
+//     var topododeck = '#'+deck[deck.length-1].idCarta;
+//     $(topododeck).click(function(event) {
+//         emJogo.push(deck.pop());
+//         $('.card[data-id="'+emJogo[0].id+'"]').removeClass('nodeckcompra').addClass('deFrente');
+//         if (emJogo[0].tipo == 'Monstro') {
+//             inimigoPV = emJogo[0].pv;
+//             setTimeout(function(){
+//                 logsTexto('Um '+emJogo[0].nome+' surge!');
+//                 mostraOpcoes('ataque');
+//             },delayTime*0.5);
+//         }   
+//         else {
+//             console.log('Não era monstro');
+//         }
+//     });
+// }
 
-function viraDuasCartaDoDeck($deck,$qtd){
-    // devo dar um jeito de ver quais cartas eu devo virar, mas por hora vai ser as duas primeiras do deck
-    var topododeck = '#'+deck[deck.length-1].idCarta;
-    var qtd = $qtd;
-    $(topododeck).click(function(event) {        
-        $('.deckPlace').addClass('qtd-'+qtd);
+function viraCartasDoDeck($deck,$qtd){
+    var topododeck = $('.card:nth-of-type('+deck.length+')');
+
+	$('.baseCarta').click(function(ev) {
+    	var qtd = $qtd;
+    	$('.baseCarta').hide();
+    	$('.deckPlace').addClass('qtd-'+qtd);
+	        
         for (qtd > emJogo.length; qtd--;) { 
+        	topododeck = $('.card:nth-of-type('+deck.length+')').removeClass('nodeckcompra').addClass('pos-'+qtd);
             emJogo.push(deck.pop());
-            console.log('emJogo');
-            console.log(emJogo);
-            // $('.card[data-id="'+emJogo[0].id+'"]').removeClass('nodeckcompra').addClass('deFrente');
-            $('#'+emJogo[emJogo.length-1].idCarta).removeClass('nodeckcompra').addClass('deFrente').addClass('pos-'+qtd);
-            if (emJogo[0].tipo == 'Monstro') {
-                inimigoPV = emJogo[0].pv;
-                setTimeout(function(){
-                    logsTexto('Um '+emJogo[0].nome+' surge!');
-                    mostraOpcoes('ataque');
-                },delayTime*0.5);
-            }   
-            else {
-                console.log('Não era monstro');
-            }
+			configuraCarta(topododeck);
         }
-    });
+
+        interacaoComCartas(emJogo);
+
+	});	
+
+    function configuraCarta($carta) {
+    	var front = $carta.find('.frontCard');
+    	var este = emJogo[emJogo.length-1]
+    	front.find('.nome').text(este.nome);
+    	front.find('.imagem').css('background-image','url(./img/'+este.imagem+')');
+    	front.find('.cont-stats .forca').text(este.forca);
+    	front.find('.cont-stats .habilidade').text(este.habilidade);
+    	front.find('.cont-stats .resistencia').text(este.resistencia);
+    	front.find('.cont-stats .pv').text(este.pv);    	
+    	front.find('.tipo .tipo1').text(este.tipo);
+    	front.find('.tipo .tipo2').text(este.tipo2);
+    	front.find('.descricao').text(este.descricao);
+    	$carta.addClass('deFrente');
+    }
+    
+}
+
+
+function interacaoComCartas($obj) {
+	console.log($obj);
+	$($obj).each(function(i,el){
+		// console.log(el);
+		if (el.tipo == 'Monstro') {
+			//Estabelece o sangue de cada inimigo
+			inimigoPV.push({
+				pVida: el.pv,
+				nome: el.nome});			
+		}
+		else {
+			console.log('Não monstro');
+		}
+
+		$('.card.pos-'+i+' .frontCard').click(function(event) {
+			
+		});
+
+
+		
+	});
+	// console.log(inimigoPV);
+
 }
 
 function irProCemiterio($estacarta) {
@@ -502,7 +549,7 @@ function jogo() {
     configuraHeroi();
     poeAsCartas(deck);
     // viraCartaDoDeck(deck);
-    viraDuasCartaDoDeck(deck,4);
+    viraCartasDoDeck(deck,4);
 
 } 
 $(document).ready(function($) {

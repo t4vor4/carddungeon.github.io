@@ -1,0 +1,544 @@
+// VARIAVEIS
+// ===================================================================
+
+
+// CORES
+// ===================================================================
+
+//VERMELHO
+$vermelho-1: #a44944;
+$vermelho-2: #b4241c;
+$vermelho-3: #3e0001;
+
+// //LARANJA
+// $laranja-1: #fe9001;
+// $laranja-2: #a86811;
+// $laranja-3: #78490e;
+
+// //AMARELO
+// $amarelo-1: #e5e3ba;
+// $amarelo-2: #bfbe62;
+// $amarelo-3: #7b8250;
+
+// //VERDE
+// $verde-1: #8ce382;
+// $verde-2: #18ee00;
+// $verde-3: #539251
+
+// //AZUL
+$azul-1: #2e4e95;
+$azul-2: #22386e;
+$azul-3: #152244;
+
+// //VIOLETA
+// $violeta-1: #f802fa;
+// $violeta-2: #5a2985;
+// $violeta-3: #381954;
+
+$cinza-1: #333;
+$cinza-2: #999;
+$cinza-3: #ccc;
+
+
+// FONTES
+// ===================================================================
+
+// @import url('https://fonts.googleapis.com/css?family=MedievalSharp');
+@import url('https://fonts.googleapis.com/css?family=Oswald');
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P');
+
+$font-1: 'Press Start 2P', cursive;
+//$font-1: 'MedievalSharp', cursive;
+$font-2: 'Oswald', sans-serif;
+
+body {
+	font-size: 14px;
+	box-sizing: border-box;
+	color: #fff;
+	background-color: #333;
+	background-position: center;
+	font-family: $font-1;
+	margin: 0;
+    padding: 0;
+}
+
+body *, body *:before, body *:after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	image-rendering: crisp-edges;
+  	image-rendering: pixelated;
+}
+
+.hide {
+	opacity: 0!important;
+}
+.bt {
+	border: 5px solid $cinza-1;
+    background: #fff;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: -6px 5px 0 $cinza-2;
+    font-family: $font-1;
+}
+
+.content {
+	float: left;
+	position: relative;
+	width: 320px;
+	margin-left: 50%;
+	left: -160px;
+	background-color: #fff;
+	border: none;
+	height: 100%;
+	min-height: 555px;
+
+    .deckPlace {
+		float: left;
+	    position: absolute;
+	    top: 0;
+	    left:  0;
+	    width: 100%;
+		height: calc(100% - 165px);
+		background-color: $azul-1;
+		margin: 0; 
+		padding: 10px;
+		overflow: hidden;
+		.baseCarta {
+		    position: absolute;
+			width: 176px;
+		    height: 258px;
+		    margin: 49px 0 0 50%;
+		    left: -81px;
+		    z-index: 9999;
+		}
+	}
+}
+
+
+
+
+
+
+/* ESTILO GERAL DAS CARTAS */
+.card {
+	float: left;
+	position: absolute;
+	width: 136px;
+	height: 228px;
+	transition: 0.6s;  	
+	transform-style: preserve-3d;    	
+	box-shadow: 0 0 2px rgba(#000, 0.1);
+	margin:  0;
+	margin-left: calc(50% - 68px);
+	margin-top: calc(50% - 81px);
+	
+	.backCard {
+		display: block;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		z-index: 2;
+		background-color: $azul-1;
+		backface-visibility: hidden;  
+		border: 10px solid $azul-3;
+		background-image: url(./img/fundo-da-carta.png);
+	    background-size: 240%;
+	    background-position: center -40px;
+
+	    .name {
+			color: $azul-1;
+		    text-shadow: 1px 2px 0 $azul-3;
+		    font-size: 1.2em;
+		    top: 81%;
+		    float: left;
+		    position: relative;
+		    margin-left: 0px;
+		    transform: rotateZ(-7deg);
+		}
+	}
+
+	.frontCard {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		background-color: #fff;
+		color:  $azul-3;
+		display: block;
+		border: 10px solid $azul-3;
+		transform: rotateY(180deg);
+		backface-visibility: hidden;  
+		transition: all 0.3s;
+
+		.nome {
+			float: left;
+			position: relative;
+			width: 100%;
+			height: 20px;
+			margin: 0;
+			line-height: 3em;
+			padding: 0 10px;
+			font-size: 0.55em;
+		}
+
+		.imagem {
+			float: left;
+			position: relative;
+			width: 100%;
+			height: 100px;
+			background-color: $azul-1;
+			background-position: -5px 0;
+		    background-size: 93%;
+		    background-repeat: no-repeat;
+		}
+
+		.cont-stats {
+		    float: right;
+		    position: absolute;
+		    top: 20px;
+		    right: 0;
+		    width: 25px;
+		    height: 124px;
+		    display: flex;
+		    flex-direction: column;
+			
+			> span {
+				float: left;
+			    position: relative;
+			    width: 100%;
+			    background: $azul-3;
+			    color: #fff;
+			    height: 20%;
+			    border-radius: 0;
+			    
+			    img {
+				    float: left;
+				    position: relative;
+				    width: 10px;
+				    top: 7px;
+			    	left: 0px;
+				}
+
+				.valor {
+				    float: right;
+				    width: 12px;
+				    text-align: center;
+				    line-height: 3.1em;
+				    font-size: 0.6em;
+				}
+			}
+		}
+
+		.tipo {
+			float: left;
+		    position: relative;
+		    padding: 3px 10px;
+		    font-family: $font-2;
+		    font-size: 0.5em;
+		    line-height: 0.6em;
+		    width: 100%;
+		}
+
+		.descricao {
+			float: left;
+			position: relative;
+			padding: 5px 10px 10px;
+			font-family: $font-2;;
+		    font-size: 0.7em;
+		    line-height: 1.2em;
+		    float: left;
+		    position: relative;
+		    width: 100%;
+		    height: 35%;
+		}
+	}
+
+}
+
+/* ESTADO DAS CARTAS */
+	.card {
+		&.entranojogo {
+			top: -1000px;
+			left: 50%;
+		}	
+		&.deFrente {
+			transform: rotateY(180deg) scale(1.6);
+		    margin-left: 50%;
+		    left: -68px!important;
+		    top: 0px!important;
+		    z-index: 1;
+		}
+		&.cemiterio {
+			transform: rotateY(45deg) rotateZ(13deg);
+			margin-left: 50%;
+			left: -150%!important;
+			top: 0px!important;
+			transition: all 0.5s ease-in;
+		}
+		.mudandoValor {
+			transition: all 0.3s;
+			transform:  scale(3);
+			color: red;
+		}
+	}
+
+/* Estilo das cartas se tiver mais de uma na tela Máximo */
+
+	.qtd-2 {
+		.card{
+			transform: scale(0.8);
+		}
+		.deFrente {
+			transform: rotateY(180deg) scale(1.0);
+		    margin-left: 25%;
+		    z-index: 1;
+		    &.pos-0 {
+				left: -57px!important;
+			    top: 0px!important;
+			    color:  red;
+			}
+			&.pos-1 {
+				left: 84px!important;
+			    top: 0px!important;
+			    color:  blue;
+			}
+		}
+	}
+
+	.qtd-3, .qtd-4 {
+		.card {
+			transform: scale(0.8);
+		}
+		.deFrente {
+			transform: rotateY(180deg) scale(0.80);
+		    margin-left: 25%;
+		    z-index: 1;
+		    &.pos-0 {
+				left: -57px!important;
+			    top: -94px!important;
+			}
+			&.pos-1 {
+				left: 84px!important;
+			    top: -94px!important;
+			}
+			&.pos-2 {
+				left: -57px!important;
+			    top: 97px!important;
+			}
+			&.pos-3 {
+				left: 84px!important;
+			    top: 97px!important;
+			}
+		}
+	}
+
+/* STAGE */
+	.stage {
+		float: left;
+	    position: absolute;
+	    bottom: 0;
+	    left: 0;
+	    width: 100%;
+	    height: 165px;
+	    background: $cinza-1;
+	    
+	    .showtitle {
+			float: left;
+		    position: relative;
+		    width: 100%;
+		    height: 25px;
+		    padding: 3px;
+		    background-color: $cinza-1;
+		}
+
+		.showText {
+			float: left;
+		    position: relative;
+		    width: 100%;
+		    height: 30px;
+			background-color: $cinza-1;
+			border-top: 1px solid $cinza-3;
+	    	border-bottom: 1px solid $cinza-3;
+
+	    	&.texto {
+				float: left;
+			    position: relative;
+			    width: 100%;
+			    height: auto;
+			    padding: 0px 10px;
+			    font-size: 1em;
+			    line-height: 2em;
+			    color: #fff;
+			    font-family: $font-2;
+			} 
+		}
+
+		.heroBar {
+			float: left;
+		    position: relative;
+		    width: 100%;
+		    height: 60px;
+		    background-color: #fff;
+			padding: 0px;
+
+			.photo {
+				float: left;
+			    position: relative;
+			    width: 60px;
+			    height: 60px;
+			    background: green;
+			}
+
+			.barL {
+				float: left;
+			    position: relative;
+			    width: calc(100% - 60px);
+			    padding: 3px;
+			    height: 26px;
+			    background: #333;
+
+			    .nome {
+					float: left;
+				    position: relative;
+				    font-size: 1.3em;
+				    width: auto;
+				    padding-right: 10px;
+				    line-height: 1.3em;
+				}
+
+				.classe {
+				    float: left;
+				    position: relative;
+				    font-size: 0.8em;
+				    width: auto;
+				    padding-top: 7px;
+				}
+
+			}
+
+		}
+
+		.showBts {
+			float: left;
+		    position: relative;
+		    width: 100%;
+		    height: 50px;
+			padding: 0px;
+			display: flex;
+	    	justify-content: center;
+	    	.bt {
+			    float: left;
+			    position: relative;
+			    font-size: 1.4em;
+			}
+		}
+	}
+
+	.heroBar .barR {
+	    float: left;
+	    position: relative;
+	    width: calc(100% - 60px);
+	    background-color: $cinza-3;
+	    padding: 3px;
+
+		    > span {
+			float: left;
+		    position: relative;
+		    width: 23%;
+		    color: #fff;
+		    border: 1px solid #ccc;
+		    margin-right: 5px;
+		    height: 28px;
+
+		    .img {
+				float: left;
+			    position: relative;
+			    width: 25px;
+			    height: 25px;
+			    padding:  3px;
+			    margin: 0;
+			    background-image: url('./img/forca.svg');
+			    -webkit-background-size: 75%;
+			    background-size: 75%;
+				background-repeat: no-repeat;
+		    	background-position: center;
+			}
+
+			> .habilidade .img {
+				background-image: url('./img/habilidade.svg');
+			}
+
+			> .resistencia .img {
+				background-image: url('./img/armadura.svg');
+			}
+
+			> .pv {
+				.img {
+					background-image: url('./img/resistencia.svg');
+				}
+
+				.valor {
+					float: left;
+				    position: relative;
+				    width: calc(100% - 25px);
+				    font-size: 1.2em;
+				    padding: 0;
+				    text-align: center;
+				    line-height: 1.6em;
+				    &.mudandoValor {
+						transition: all 0.3s;
+						transform:  scale(2.5);
+						color: red;
+					}
+				}
+			}
+		}
+	}
+
+/* MODAL */
+	#bgModal {
+		float: left;
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		background-color: rgba(#000,0.5);
+		z-index: 1000;
+		opacity: 0;
+		transition: all 0.3s;
+	}
+	#modal {
+	    float: left;
+	    position: fixed;
+	    left: 50%;
+	    top: 50%;    
+	    z-index: 1001;
+	    opacity: 0;
+	    transition: all 0.3s;
+	    &.gameover {
+			width: 300px;
+		    height: 200px;
+		    margin-top: -100px;
+		    margin-left: -150px;
+		    background-color: transparent;
+		}
+	}
+
+	#bgModal.complete, #modal.complete {
+		opacity: 1;
+	}
+
+	span.text-gameover {
+	    display: block;
+	    margin: auto;
+	    text-align: center;
+	    font-size: 4em;
+	    line-height: 1em;
+	    text-shadow: 2px 2px 2px #000;
+	}
+

@@ -1,0 +1,530 @@
+@import url('https://fonts.googleapis.com/css?family=MedievalSharp');
+@import url('https://fonts.googleapis.com/css?family=Oswald');
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P');
+
+body {
+	font-size: 14px;
+	box-sizing: border-box;
+	color: #fff;
+	background-color: #333;
+	background-position: center;
+	/* font-family: 'MedievalSharp', cursive; */
+	font-family: 'Press Start 2P', cursive;
+	margin: 0;
+    padding: 0;
+}
+
+body *, body *:before, body *:after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	image-rendering: crisp-edges;
+  	image-rendering: pixelated;
+	/* font-family: font-family: 'MedievalSharp', cursive; */
+}
+
+.hide {
+	opacity: 0!important;
+}
+.bt {
+	border: 5px solid #333;
+    background: #fff;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: -6px 5px 0 #555;
+    /* font-family: font-family: 'MedievalSharp', cursive; */
+    font-family: 'Press Start 2P', cursive;
+}
+
+.content {
+	float: left;
+	position: relative;
+	width: 320px;
+	margin-left: 50%;
+	left: -160px;
+	background-color: #fff;
+	border: none;
+	height: 100%;
+	min-height: 555px;
+	/* margin-top: 50%;
+    top: -305px; */
+}
+
+.deckPlace {
+	float: left;
+    position: absolute;
+    top: 0;
+    left:  0;
+    width: 100%;
+	height: calc(100% - 165px);
+	background-color: #2e4e95;
+	margin: 0; 
+	padding: 10px;
+	overflow: hidden;
+}
+
+.deckPlace .baseCarta {
+    position: absolute;
+	width: 176px;
+    height: 258px;
+    margin: 49px 0 0 50%;
+    left: -81px;
+    /* background-color: #ff00007a; */
+    z-index: 9999;
+    /* border: 5px solid #eee; */
+    /* border-radius: 10px; */
+    
+
+}
+
+.deckPlace .baseCartaCemiterio {
+	float: left;
+	position: relative;
+	width: 136px;
+    height: 228px;
+    margin-left: 50%;
+    left: 10px;
+	background-color: #eee;
+
+    /* background-color: #ddd; */
+	/* width: 266px;
+    height: 447px; */    
+}
+/* ESTILO GERAL DAS CARTAS */
+	.card {
+		float: left;
+		position: absolute;
+		width: 136px;
+    	height: 228px;
+		transition: 0.6s;  	
+		transform-style: preserve-3d;    	
+		box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
+		margin:  0;
+		margin-left: calc(50% - 68px);
+    	margin-top: calc(50% - 81px);
+	}
+
+	.backCard {
+		display: block;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		z-index: 2;
+		background-color: #555;
+		backface-visibility: hidden;  
+		border: 10px solid #152244;
+		/* border-radius: 10px; */
+		background-image: url(./img/fundo-da-carta.png);
+	    background-size: 240%;
+	    background-position: center -40px;
+	}
+
+	.backCard .name {
+		color: #2e4e95;
+	    text-shadow: 1px 2px 0 #152244;
+	    font-size: 1.2em;
+	    top: 81%;
+	    float: left;
+	    position: relative;
+	    margin-left: 0px;
+	    transform: rotateZ(-7deg);
+	}
+
+	.frontCard {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		background-color: #fff;
+		color:  #333;
+		/* border-radius: 10px; */
+		display: block;
+		border: 10px solid #333;
+		transform: rotateY(180deg);
+		backface-visibility: hidden;  
+		transition: all 0.3s;
+	}
+
+	.frontCard .nome {
+		float: left;
+		position: relative;
+		width: 100%;
+		height: 20px;
+		margin: 0;
+		line-height: 3em;
+		padding: 0 10px;
+		font-size: 0.55em;
+	}
+
+	.frontCard .imagem {
+		float: left;
+		position: relative;
+		width: 100%;
+		height: 100px;
+		/* -webkit-background-size: 100%;
+		background-size: 100%; */
+		background-color: #ccc;
+		background-position: -5px 0;
+	    background-size: 93%;
+	    background-repeat: no-repeat;
+	}
+
+	.frontCard .cont-stats {
+	    float: right;
+	    position: absolute;
+	    top: 20px;
+	    right: 0;
+	    width: 25px;
+	    height: 124px;
+	    display: flex;
+	    flex-direction: column;
+	}
+
+	.frontCard .cont-stats > span {
+		float: left;
+	    position: relative;
+	    width: 100%;
+	    background: #333;
+	    color: #fff;
+	    height: 20%;
+	    border-radius: 50px 0 0 50px;
+	}
+
+	.frontCard .cont-stats > span img {
+	    float: left;
+	    position: relative;
+	    width: 10px;
+	    top: 7px;
+    	left: 5px;
+	}
+
+	.frontCard .cont-stats > span .valor {
+	    float: right;
+	    width: 12px;
+	    text-align: center;
+	    line-height: 2.3em;
+	    font-size: 0.8em;
+	}
+	.frontCard .tipo {
+		float: left;
+	    position: relative;
+	    padding: 3px 10px;
+	    font-family: 'Oswald', sans-serif;
+	    font-size: 0.5em;
+	    line-height: 0.6em;
+	    width: 100%;
+	}
+
+	.frontCard .descricao {
+		float: left;
+		position: relative;
+		padding: 5px 10px 10px;
+		font-family: 'Oswald', sans-serif;
+	    font-size: 0.7em;
+	    line-height: 1.2em;
+	    float: left;
+	    position: relative;
+	    width: 100%;
+	    height: 35%;
+	   	/* color: #fff; */
+	}
+
+/* ESTADO DAS CARTAS */
+	.card.entranojogo {
+		top: -1000px;
+		left: 50%;
+	}
+
+	.card.deFrente, .card.cemiterio {
+		transform: rotateY(180deg) scale(1.6);
+	    margin-left: 50%;
+	    left: -68px!important;
+	    top: 0px!important;
+	    z-index: 1;
+	}
+
+	.card .mudandoValor {
+		transition: all 0.3s;
+		transform:  scale(3);
+		color: red;
+	}
+
+	.card.cemiterio {
+		transition: all 0.5s ease-in;
+		transform: rotateY(45deg) rotateZ(13deg);
+	    left: -150%!important;
+	}
+
+/* Estilo das cartas se tiver mais de uma na tela Máximo */
+
+	.qtd-2 .card{
+		transform: scale(0.8);
+	}
+
+	.qtd-2 .deFrente {
+		transform: rotateY(180deg) scale(1.0);
+	    margin-left: 25%;
+	    z-index: 1;
+	}
+
+	.qtd-2 .deFrente.pos-0 {
+		left: -57px!important;
+	    top: 0px!important;
+	    color:  red;
+	}
+
+	.qtd-2 .deFrente.pos-1 {
+		left: 84px!important;
+	    top: 0px!important;
+	    color:  blue;
+	}
+
+	.qtd-3 .card, 
+	.qtd-4 .card {
+		transform: scale(0.8);
+	}
+
+	.qtd-3 .deFrente, 
+	.qtd-4 .deFrente {
+		transform: rotateY(180deg) scale(0.80);
+	    margin-left: 25%;
+	    z-index: 1;
+	}
+
+	.qtd-3 .deFrente.pos-0, 
+	.qtd-4 .deFrente.pos-0 {
+		left: -57px!important;
+	    top: -94px!important;
+	}
+
+	.qtd-3 .deFrente.pos-1, 
+	.qtd-4 .deFrente.pos-1 {
+		left: 84px!important;
+	    top: -94px!important;
+	}
+
+	.qtd-3 .deFrente.pos-2, 
+	.qtd-4 .deFrente.pos-2 {
+		left: -57px!important;
+	    top: 97px!important;
+	}
+
+	.qtd-4 .deFrente.pos-3 {
+		left: 84px!important;
+	    top: 97px!important;
+	}
+
+/* STAGE */
+	.stage {
+		float: left;
+	    /* position: fixed; */
+	    position: absolute;
+	    bottom: 0;
+	    left: 0;
+	    width: 100%;
+	    height: 165px;
+	    background: #333;
+	}
+	
+
+	.showtitle {
+		float: left;
+	    position: relative;
+	    width: 100%;
+	    height: 25px;
+	    padding: 3px;
+	    background-color: #333;
+	}
+
+	.showText {
+		float: left;
+	    position: relative;
+	    width: 100%;
+	    height: 30px;
+		background-color: #333;
+		border-top: 1px solid #ccc;
+    	border-bottom: 1px solid #ccc;
+	}
+
+		.showText .texto {
+			float: left;
+		    position: relative;
+		    width: 100%;
+		    height: auto;
+		    padding: 0px 10px;
+		    font-size: 1em;
+		    line-height: 2em;
+		    color: #fff;
+		    /* background-color: #ccc; */
+		    font-family: 'Oswald', sans-serif;
+		}
+
+	.showBts {
+		float: left;
+	    position: relative;
+	    width: 100%;
+	    height: 50px;
+		padding: 0px;
+		display: flex;
+    	justify-content: center;
+	}
+
+	.showBts .bt {
+	    float: left;
+	    position: relative;
+	    font-size: 1.4em;
+	}
+
+	.heroBar {
+		float: left;
+	    position: relative;
+	    width: 100%;
+	    height: 60px;
+	    background-color: #fff;
+		padding: 0px;
+	}
+
+	.heroBar .photo {
+		float: left;
+	    position: relative;
+	    width: 60px;
+	    height: 60px;
+	    background: green;
+	}
+
+	.heroBar .barL {
+		float: left;
+	    position: relative;
+	    width: calc(100% - 60px);
+	    padding: 3px;
+	    height: 26px;
+	    background: #333;
+	}
+
+	.heroBar .nome {
+		float: left;
+	    position: relative;
+	    font-size: 1.3em;
+	    width: auto;
+	    padding-right: 10px;
+	    line-height: 1.3em;
+	}
+
+	.heroBar .classe {
+	    float: left;
+	    position: relative;
+	    font-size: 0.8em;
+	    width: auto;
+	    padding-top: 7px;
+	}
+
+	.heroBar .barR {
+	    float: left;
+	    position: relative;
+	    width: calc(100% - 60px);
+	    background-color: #333;
+	    padding: 3px;
+	}
+
+	.heroBar .barR > span {
+		float: left;
+	    position: relative;
+	    width: 23%;
+	    color: #fff;
+	    border: 1px solid #ccc;
+	    margin-right: 5px;
+	    height: 28px;
+	}
+
+	.heroBar .barR > span .img {
+		float: left;
+	    position: relative;
+	    width: 25px;
+	    height: 25px;
+	    padding:  3px;
+	    margin: 0;
+	    /* border-radius: 100%; */
+	    background-image: url('./img/forca.svg');
+	    -webkit-background-size: 75%;
+	    background-size: 75%;
+		background-repeat: no-repeat;
+    	background-position: center;
+	}
+
+	.heroBar .barR > .habilidade .img {
+		background-image: url('./img/habilidade.svg');
+	}
+	.heroBar .barR > .resistencia .img {
+		background-image: url('./img/armadura.svg');
+	}
+	.heroBar .barR > .pv .img {
+		background-image: url('./img/resistencia.svg');
+	}
+
+	.heroBar .barR .valor {
+		float: left;
+	    position: relative;
+	    width: calc(100% - 25px);
+	    font-size: 1.2em;
+	    padding: 0;
+	    text-align: center;
+	    line-height: 1.6em;
+	}
+
+	.heroBar .barR .valor.mudandoValor {
+		transition: all 0.3s;
+		transform:  scale(2.5);
+		color: red;
+	}
+
+/* MODAL */
+	#bgModal {
+		float: left;
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		background-color: rgba(0, 0, 0, 0.5);
+		z-index: 1000;
+		opacity: 0;
+		transition: all 0.3s;
+	}
+	#modal {
+	    float: left;
+	    position: fixed;
+	    left: 50%;
+	    top: 50%;    
+	    z-index: 1001;
+	    opacity: 0;
+	    transition: all 0.3s;
+	}
+
+	#bgModal.complete, #modal.complete {
+		opacity: 1;
+	}
+
+	#modal.gameover {
+		width: 300px;
+	    height: 200px;
+	    margin-top: -100px;
+	    margin-left: -150px;
+	    background-color: transparent;
+	}
+
+	span.text-gameover {
+	    display: block;
+	    margin: auto;
+	    text-align: center;
+	    font-size: 4em;
+	    line-height: 1em;
+	    text-shadow: 2px 2px 2px #000;
+	}
+
+/* Animações */
+/* @keyframes destruirCarta {
+	
+} */

@@ -88,39 +88,6 @@ const cartasJogo = [
         descricao:'Humanóides de pele verde, peludos e malvados', 
         imagem:'esqueleto.png'
     },
-
-
-
-    // {
-    //     nome:'Gnoll', 
-    //     tipo: 'Monstro',
-    //     forca: 2, 
-    //     habilidade: 1, 
-    //     resistencia: 2, 
-    //     pv: 10,
-    //     descricao:'Um guerreiro bestial armado e raivoso',
-    //     imagem:'gnoll.jpg'
-    // },
-    // {
-    //     nome:'Aranha Gigante', 
-    //     tipo: 'Monstro',
-    //     forca: 3, 
-    //     habilidade: 3, 
-    //     resistencia: 1, 
-    //     pv: 5,
-    //     descricao:'Uma aranha com terríevis garras e a imagem do mal', 
-    //     imagem:'spider.jpg'
-    // },
-    // {        
-    //     nome:'Dragão', 
-    //     tipo: 'Monstro',
-    //     forca: 3, 
-    //     habilidade: 2, 
-    //     resistencia: 4, 
-    //     pv: 20,
-    //     descricao:'Um poderoso lagarto com grandes asas, hálito de fogo e voraz, muito voraz.', 
-    //     imagem:'dragon.jpg'
-    // }
 ]
 
 const delayTime = 700;
@@ -182,10 +149,10 @@ function carta($val) {
             //'<span class="imagem" style="background-image: url('+imgSrc+$val.imagem+');"></span>'+
             '<span class="imagem" ></span>'+
             '<span class="cont-stats">'+
-                '<span class="forca"><img src="'+imgSrc+'forca.svg" alt="Força" /><span class="valor"></span></span>'+
-                '<span class="habilidade"><img src="'+imgSrc+'habilidade.svg" alt="Força" /><span class="valor"></span></span>'+
-                '<span class="resistencia"><img src="'+imgSrc+'armadura.svg" alt="Força" /><span class="valor"></span></span>'+
-                '<span class="pv"><img src="'+imgSrc+'resistencia.svg" alt="pv" /><span class="valor"></span></span>'+
+                '<span class="forca"><img src="'+imgSrc+'forca.png" alt="Força" /><span class="valor"></span></span>'+
+                '<span class="habilidade"><img src="'+imgSrc+'habilidade.png" alt="Força" /><span class="valor"></span></span>'+
+                '<span class="resistencia"><img src="'+imgSrc+'resistencia.png" alt="Força" /><span class="valor"></span></span>'+
+                '<span class="pv"><img src="'+imgSrc+'pv.png" alt="pv" /><span class="valor"></span></span>'+
             '</span>'+
             '<div class="tipo"><span class="tipo1"></span> - <span class="tipo2"></span></div>'+
             '<p class="descricao"></p>'+
@@ -487,10 +454,10 @@ function viraCartasDoDeck($deck,$qtd){
     	var este = emJogo[emJogo.length-1]
     	front.find('.nome').text(este.nome);
     	front.find('.imagem').css('background-image','url(./img/'+este.imagem+')');
-    	front.find('.cont-stats .forca').text(este.forca);
-    	front.find('.cont-stats .habilidade').text(este.habilidade);
-    	front.find('.cont-stats .resistencia').text(este.resistencia);
-    	front.find('.cont-stats .pv').text(este.pv);    	
+    	front.find('.cont-stats .forca .valor').text(este.forca);
+    	front.find('.cont-stats .habilidade .valor').text(este.habilidade);
+    	front.find('.cont-stats .resistencia .valor').text(este.resistencia);
+    	front.find('.cont-stats .pv .valor').text(este.pv);    	
     	front.find('.tipo .tipo1').text(este.tipo);
     	front.find('.tipo .tipo2').text(este.tipo2);
     	front.find('.descricao').text(este.descricao);
@@ -515,7 +482,13 @@ function interacaoComCartas($obj) {
 		}
 
 		$('.card.pos-'+i+' .frontCard').click(function(event) {
-			
+			//ao clicar na carta
+			//aparece o menu de ações.
+			//depois de escolhida a ação, 
+			//o heroi e os monstros rodam 
+			//a iniciativa.
+			//depois da iniciativa
+			//todo mundo ataca...
 		});
 
 
@@ -549,7 +522,7 @@ function jogo() {
     configuraHeroi();
     poeAsCartas(deck);
     // viraCartaDoDeck(deck);
-    viraCartasDoDeck(deck,4);
+    viraCartasDoDeck(deck,2	);
 
 } 
 $(document).ready(function($) {

@@ -142,7 +142,7 @@ function calcularJogada(variavel){
 // Cria a carta na mesa
 function carta($val) {
     var trechoHtml = 
-    '<div class="card" id="" data-id="">'+
+    '<div class="card" id="" data-pos="" data-id="">'+
         '<div class="backCard"><span class="name">Card<br/>Dungeon</span></div>'+
         '<div class="frontCard" >'+
             '<h2 class="nome"></h2>'+
@@ -218,6 +218,20 @@ function mostraOpcoes($turno) {
             exumarCartaParaDeck();
         });
 
+    }
+    else if ($turno == 'ataqueMais') {
+    	$('.showBts').html('<button class="bt ataqueMais">Ataque+</button>');
+        $('.showBts .ataqueMais').click(function(event) {
+            $('.showBts').html('');
+
+            $('.card .frontCard').click(function(event) {
+				var esteInimigo = $(this).parent().attr('data-pos');
+            	turnosdecombateMais(emJogo,esteInimigo);
+			});
+
+
+            
+        });
     }
 }
 
@@ -356,28 +370,61 @@ function combate($iniciativa,$inimigo) {
     } 
 }
 
-function jogadaIniciativa($inimigo) {
-    var inimigo = $inimigo;
-    var iniciativaInimigo = parseInt(inimigo.habilidade)+calcularJogada(6);
-    var iniciativaHeroi = parseInt(heroiGame.habilidade)+calcularJogada(6);
-    // inimigo ganha
-    if ( iniciativaInimigo > iniciativaHeroi ) {
-        logsTexto(inimigo.nome+' ganhou a iniciativa');
-        return true;
-    }
-    // heroi ganha
-    else if (iniciativaInimigo <= iniciativaHeroi) {
-        logsTexto(heroiGame.nome+' ganhou a iniciativa');
-        return false;
-    } 
-}
+// function jogadaIniciativa($inimigo) {
+//     var inimigo = $inimigo;
+//     var iniciativaInimigo = parseInt(inimigo.habilidade)+calcularJogada(6);
+//     var iniciativaHeroi = parseInt(heroiGame.habilidade)+calcularJogada(6);
+//     // inimigo ganha
+//     if ( iniciativaInimigo > iniciativaHeroi ) {
+//         logsTexto(inimigo.nome+' ganhou a iniciativa');
+//         return true;
+//     }
+//     // heroi ganha
+//     else if (iniciativaInimigo <= iniciativaHeroi) {
+//         logsTexto(heroiGame.nome+' ganhou a iniciativa');
+//         return false;
+//     } 
+// }
 //inimigoPV = parseInt($inimigo.resistencia)*5;
 
-function turnosdecombate($inimigo) {
-    var inimigo = $inimigo;
-    console.log('turnosdecombate');
-    var iniciativa = jogadaIniciativa(inimigo);    
-    combate(iniciativa,inimigo);
+// function turnosdecombate($inimigo) {
+//     var inimigo = $inimigo;
+//     console.log('turnosdecombate');
+//     var iniciativa = jogadaIniciativa(inimigo);    
+//     combate(iniciativa,inimigo);
+// }
+
+function turnosdecombateMais($inimigo, $esteInimigo) {
+	esteInimigo = $esteInimigo;
+    var iniciativaInimigo = [];
+    var ordem_de_ataque = [];
+
+    //Iniciativa de vários personagens/cartas
+    var iniciativaHeroi = parseInt(heroiGame.habilidade)+calcularJogada(6);
+	ordem_de_ataque.push({iniac: iniciativaHeroi, nome: heroiGame.nome});  
+
+    $($inimigo).each(function(i, el) {
+    	var inimigo = $inimigo[i];
+    	iniciativaInimigo = parseInt(inimigo.habilidade)+calcularJogada(6);
+    	ordem_de_ataque.push({iniac: iniciativaInimigo, nome: inimigo.nome, pos: i});    
+    });
+
+    //Ordena as iniciativas de modo crescente
+    function SortByName(a, b){
+	  var aIniac = a.iniac;
+	  var bIniac = b.iniac; 
+	  return ((aIniac < bIniac) ? -1 : ((aIniac > bIniac) ? 1 : 0));
+	}
+	ordem_de_ataque.sort(SortByName);
+
+    console.log(ordem_de_ataque);
+
+
+    //Agora eu tenho uma lista de sequencia de ataque baseado em resultado
+    //das iniciativas dos personagens. 
+    //Preciso fazer com que cada um lute com o heroi agora. Todos no mesmo turno.
+    // :)	
+    combateMais();
 }
 
 function logsTexto($texto) {
@@ -440,7 +487,7 @@ function viraCartasDoDeck($deck,$qtd){
     	$('.deckPlace').addClass('qtd-'+qtd);
 	        
         for (qtd > emJogo.length; qtd--;) { 
-        	topododeck = $('.card:nth-of-type('+deck.length+')').removeClass('nodeckcompra').addClass('pos-'+qtd);
+        	topododeck = $('.card:nth-of-type('+deck.length+')').removeClass('nodeckcompra').addClass('pos-'+qtd).attr('data-pos',qtd);
             emJogo.push(deck.pop());
 			configuraCarta(topododeck);
         }
@@ -481,15 +528,19 @@ function interacaoComCartas($obj) {
 			console.log('Não monstro');
 		}
 
-		$('.card.pos-'+i+' .frontCard').click(function(event) {
-			//ao clicar na carta
-			//aparece o menu de ações.
-			//depois de escolhida a ação, 
-			//o heroi e os monstros rodam 
-			//a iniciativa.
-			//depois da iniciativa
-			//todo mundo ataca...
-		});
+		mostraOpcoes('ataqueMais');
+
+		// $('.card.pos-'+i+' .frontCard').click(function(event) {
+		// 	//ao clicar na carta
+		// 	//aparece o menu de ações.
+		// 	//depois de escolhida a ação, 
+		// 	//o heroi e os monstros rodam 
+		// 	//a iniciativa.
+		// 	//depois da iniciativa
+		// 	//todo mundo ataca...
+		// 	mostraOpcoes('ataqueMais');
+			
+		// });
 
 
 		

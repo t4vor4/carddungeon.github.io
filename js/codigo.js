@@ -94,6 +94,7 @@ const delayTime = 700;
 
 var heroi = {nome:'Heroi', forca: 3, habilidade: 4, resistencia: 3, pv: 15}
 var heroiGame = heroi;
+heroiGame.id = 'heroi';
 var vidaHeroi = 15;
 var inimigoPV = [];
 
@@ -162,28 +163,6 @@ function carta($val) {
     return trechoHtml;
 }
 
-// function carta($val) {
-//     var trechoHtml = 
-//     '<div class="card" id="'+$val.idCarta+'" data-id="'+$val.id+'">'+
-//         '<div class="backCard"><span class="name">Card<br/>Dungeon</span></div>'+
-//         '<div class="frontCard" >'+
-//             '<h2 class="nome">'+$val.nome+'</h2>'+
-//             //'<span class="imagem" style="background-image: url('+imgSrc+$val.imagem+');"></span>'+
-//             '<span class="imagem" ></span>'+
-//             '<span class="cont-stats">'+
-//                 '<span class="forca"><img src="'+imgSrc+'forca.svg" alt="Força" /><span class="valor">'+$val.forca+'</span></span>'+
-//                 '<span class="habilidade"><img src="'+imgSrc+'habilidade.svg" alt="Força" /><span class="valor">'+$val.habilidade+'</span></span>'+
-//                 '<span class="resistencia"><img src="'+imgSrc+'armadura.svg" alt="Força" /><span class="valor">'+$val.resistencia+'</span></span>'+
-//                 '<span class="pv"><img src="'+imgSrc+'resistencia.svg" alt="pv" /><span class="valor">'+$val.pv+'</span></span>'+
-//             '</span>'+
-//             '<div class="tipo">'+$val.tipo+' - '+$val.tipo2+'</div>'+
-//             '<p class="descricao">'+$val.descricao+'</p>'+
-//         '</div>'+
-        
-//     '</div>';
-//     return trechoHtml;
-// }
-
 function configuraHeroi() {
     var barra = $('.heroBar');
     barra.find('.forca .valor').html(heroiGame.forca);
@@ -222,15 +201,20 @@ function mostraOpcoes($turno) {
     else if ($turno == 'ataqueMais') {
     	$('.showBts').html('<button class="bt ataqueMais">Ataque+</button>');
         $('.showBts .ataqueMais').click(function(event) {
-            $('.showBts').html('');
-
+        	if (emJogo.length == 1) {
+        		$('.showBts').html('Escolha a carta para atacar');	
+        	} 
+        	else {
+        		$('.showBts').html('Escolha uma carta para atacar');
+        	}          
             $('.card .frontCard').click(function(event) {
-				var esteInimigo = $(this).parent().attr('data-pos');
-            	turnosdecombateMais(emJogo,esteInimigo);
+				var inimigoSelecionado = $(this).parent().attr('data-pos');
+				var posInimigo = (emJogo.length - 1) - inimigoSelecionado;
+				// console.log(posInimigo);
+				var esteInimigo = emJogo[posInimigo];
+				// console.log(esteInimigo);
+            	turnosdecombateMais(emJogo, esteInimigo, posInimigo);
 			});
-
-
-            
         });
     }
 }
@@ -266,145 +250,17 @@ function ataque($atacante, $defensor) {
     }    
 }
 
-function combate($iniciativa,$inimigo) {
-    var iniciativa = $iniciativa;
-    var inimigo = $inimigo;
-    var cartaInimigo = verificaEmJogo();
-    //turno
-
-    if (vidaHeroi > 0 && inimigoPV > 0) {
-        //Inimigo ganha a iniciativa
-        if (iniciativa == true) {
-            turnoInimigo(iniciativa);
-        }
-        //Heroi ganha a iniciativa
-        else {
-            turnoJogador(iniciativa);
-        }     
-    }
-
-    var combateFim = 'combateFim';
-
-    return combateFim;
-
-    function turnoInimigo($iniciativa) {
-            // logsTexto(inimigo.nome+' venceu a iniciativa');
-            danoFeito = ataque(inimigo,heroiGame);
-            if (danoFeito > 0) {
-                vidaHeroi = vidaHeroi-danoFeito;
-                setTimeout(function(){
-                    $('.heroBar .pv .valor').text(vidaHeroi).addClass('mudandoValor');
-                    setTimeout(function(){
-                        $('.heroBar .pv .valor').removeClass('mudandoValor');
-                    },delayTime);
-                    if (vidaHeroi <= 0) {
-                        logsTexto(heroiGame.nome+' foi derrotado.');
-                        gameOver();                
-                    }
-                    else {
-                        if ($iniciativa == true) {
-                            setTimeout(function() {
-                                turnoJogador(iniciativa);
-                            },delayTime);    
-                        }
-                        else {
-                            mostraOpcoes('ataque');
-                        }
-                    }
-                },delayTime);
-            }  
-            else {
-                console.log('Não houve dano no heroi');
-                setTimeout(function() {
-                    if ($iniciativa == true) {
-                        setTimeout(function() {
-                            turnoJogador(iniciativa);
-                        },delayTime);    
-                    }
-                    else {
-                        mostraOpcoes('ataque');
-                    }
-                },delayTime);                
-            }
-    } 
-
-    function turnoJogador($iniciativa) {
-            // logsTexto(inimigo.nome+' venceu a iniciativa');
-            danoFeito = ataque(heroiGame, inimigo);
-            if (danoFeito > 0) {
-                inimigoPV = inimigoPV-danoFeito;
-                setTimeout(function(){
-                    cartaInimigo.find('.pv .valor').text(inimigoPV).addClass('mudandoValor');
-                    setTimeout(function(){
-                        cartaInimigo.find('.pv .valor').removeClass('mudandoValor');
-                    },delayTime);
-                    if (inimigoPV <= 0) {
-                        logsTexto(inimigo.nome+' foi derrotado.');
-                        irProCemiterio(cartaInimigo); 
-                    }
-                    else {
-                        if ($iniciativa != true) {
-                            setTimeout(function() {
-                                turnoInimigo(iniciativa);
-                            },delayTime);    
-                        }
-                        else {
-                            mostraOpcoes('ataque');
-                        }
-                    }
-                },delayTime);
-            }  
-            else {
-                console.log('Não houve dano no heroi');
-                setTimeout(function() {
-                    if ($iniciativa != true) {
-                        setTimeout(function() {
-                            turnoInimigo(iniciativa);
-                        },delayTime);    
-                    }
-                    else {
-                        mostraOpcoes('ataque');
-                    }
-                },delayTime);                
-            }
-    } 
-}
-
-// function jogadaIniciativa($inimigo) {
-//     var inimigo = $inimigo;
-//     var iniciativaInimigo = parseInt(inimigo.habilidade)+calcularJogada(6);
-//     var iniciativaHeroi = parseInt(heroiGame.habilidade)+calcularJogada(6);
-//     // inimigo ganha
-//     if ( iniciativaInimigo > iniciativaHeroi ) {
-//         logsTexto(inimigo.nome+' ganhou a iniciativa');
-//         return true;
-//     }
-//     // heroi ganha
-//     else if (iniciativaInimigo <= iniciativaHeroi) {
-//         logsTexto(heroiGame.nome+' ganhou a iniciativa');
-//         return false;
-//     } 
-// }
-//inimigoPV = parseInt($inimigo.resistencia)*5;
-
-// function turnosdecombate($inimigo) {
-//     var inimigo = $inimigo;
-//     console.log('turnosdecombate');
-//     var iniciativa = jogadaIniciativa(inimigo);    
-//     combate(iniciativa,inimigo);
-// }
-
-function turnosdecombateMais($inimigo, $esteInimigo) {
-	esteInimigo = $esteInimigo;
+function turnosdecombateMais($em_jogo, $esteInimigo, $posicao_inimigo) {
+	var esteInimigo = $esteInimigo;
     var iniciativaInimigo = [];
     var ordem_de_ataque = [];
 
     //Iniciativa de vários personagens/cartas
     var iniciativaHeroi = parseInt(heroiGame.habilidade)+calcularJogada(6);
-	ordem_de_ataque.push({iniac: iniciativaHeroi, nome: heroiGame.nome});  
+	ordem_de_ataque.push({iniac: iniciativaHeroi, nome: heroiGame.nome, pos: -1});  
 
-    $($inimigo).each(function(i, el) {
-    	var inimigo = $inimigo[i];
+    $($em_jogo).each(function(i, el) {
+    	var inimigo = $em_jogo[i];
     	iniciativaInimigo = parseInt(inimigo.habilidade)+calcularJogada(6);
     	ordem_de_ataque.push({iniac: iniciativaInimigo, nome: inimigo.nome, pos: i});    
     });
@@ -417,20 +273,189 @@ function turnosdecombateMais($inimigo, $esteInimigo) {
 	}
 	ordem_de_ataque.sort(SortByName);
 
-    console.log(ordem_de_ataque);
+    combateMais(ordem_de_ataque, $esteInimigo, $posicao_inimigo);
+}
 
+function combateMais($ordem, $esteInimigo, $posicao) {
 
-    //Agora eu tenho uma lista de sequencia de ataque baseado em resultado
-    //das iniciativas dos personagens. 
-    //Preciso fazer com que cada um lute com o heroi agora. Todos no mesmo turno.
-    // :)	
-    combateMais();
+    // console.log('$esteInimigo');
+    // console.log($esteInimigo);
+    // console.log('==================');
+    // console.log('$posicao');
+    // console.log('==================');
+	$($ordem).each(function(i, el) {
+		var index = $ordem[i].pos;
+        switch (index) {
+            case -1:
+                console.log('heroi');
+                turnoJogadorMais($esteInimigo,(emJogo.length-1)-$posicao);
+                break;
+            default:
+                console.log(emJogo[index]);
+                //turnoInimigoMais(emJogo[index]);
+                break;
+        }
+
+	});
 }
 
 function logsTexto($texto) {
     $('.showText').html('<span class="texto">'+$texto+'</span>');
     console.log($texto);
 }
+
+function turnoInimigoMais($inimigo) {
+        inimigo = $inimigo;
+        danoFeito = ataque(inimigo,heroiGame);
+        if (danoFeito > 0) {
+            vidaHeroi = vidaHeroi-danoFeito;
+            setTimeout(function(){
+                $('.heroBar .pv .valor').text(vidaHeroi).addClass('mudandoValor');
+                setTimeout(function(){
+                    $('.heroBar .pv .valor').removeClass('mudandoValor');
+                },delayTime);
+                if (vidaHeroi <= 0) {
+                    logsTexto(heroiGame.nome+' foi derrotado.');
+                    gameOver();
+                }
+                // else {
+                //     if ($iniciativa == true) {
+                //         setTimeout(function() {
+                //             turnoJogador(iniciativa);
+                //         },delayTime);    
+                //     }
+                //     else {
+                //         mostraOpcoes('ataque');
+                //     }
+                // }
+            },delayTime);
+        }  
+        else {
+            console.log('Não houve dano no heroi');
+            setTimeout(function() {
+                // if ($iniciativa == true) {
+                //     setTimeout(function() {
+                //         turnoJogador(iniciativa);
+                //     },delayTime);    
+                // }
+                // else {
+                //     mostraOpcoes('ataque');
+                // }
+            },delayTime);                
+        }
+} 
+
+function turnoJogadorMais($inimigo_atual,$posicao) {
+        // logsTexto(inimigo.nome+' venceu a iniciativa');
+        // console.log($inimigo_atual);
+        // console.log('===============');
+        // console.log(emJogo);
+        // console.log(inimigoPV[$posicao]);
+
+        var cartaInimigo = $('.card.pos-'+$posicao);
+        //danoFeito = ataque(heroiGame, inimigo);
+        console.log(inimigoPV[$posicao].pVida);
+        danoFeito = ataque(heroiGame, $inimigo_atual);
+        if (danoFeito > 0) {
+            inimigoPV[$posicao].pVida = inimigoPV[$posicao].pVida-danoFeito;
+            setTimeout(function(){
+                cartaInimigo.find('.pv .valor').text(inimigoPV[$posicao].pVida).addClass('mudandoValor');
+                setTimeout(function(){
+                    cartaInimigo.find('.pv .valor').removeClass('mudandoValor');
+                },delayTime);
+                if (inimigoPV <= 0) {
+                    logsTexto(inimigo.nome+' foi derrotado.');
+                    irProCemiterio(cartaInimigo); 
+                }
+            },delayTime);
+        }  
+        else {
+            console.log('Não houve dano no heroi');
+        }
+} 
+
+// function turnoInimigo($iniciativa) {
+//         danoFeito = ataque(inimigo,heroiGame);
+//         if (danoFeito > 0) {
+//             vidaHeroi = vidaHeroi-danoFeito;
+//             setTimeout(function(){
+//                 $('.heroBar .pv .valor').text(vidaHeroi).addClass('mudandoValor');
+//                 setTimeout(function(){
+//                     $('.heroBar .pv .valor').removeClass('mudandoValor');
+//                 },delayTime);
+//                 if (vidaHeroi <= 0) {
+//                     logsTexto(heroiGame.nome+' foi derrotado.');
+//                     gameOver();                
+//                 }
+//                 else {
+//                     if ($iniciativa == true) {
+//                         setTimeout(function() {
+//                             turnoJogador(iniciativa);
+//                         },delayTime);    
+//                     }
+//                     else {
+//                         mostraOpcoes('ataque');
+//                     }
+//                 }
+//             },delayTime);
+//         }  
+//         else {
+//             console.log('Não houve dano no heroi');
+//             setTimeout(function() {
+//                 if ($iniciativa == true) {
+//                     setTimeout(function() {
+//                         turnoJogador(iniciativa);
+//                     },delayTime);    
+//                 }
+//                 else {
+//                     mostraOpcoes('ataque');
+//                 }
+//             },delayTime);                
+//         }
+// } 
+
+function turnoJogador($inimigo_atual) {
+        // logsTexto(inimigo.nome+' venceu a iniciativa');
+        console.log('$inimigo_atual');
+        // console.log(emJogo[$inimigo_atual]);
+        //danoFeito = ataque(heroiGame, inimigo);
+        // if (danoFeito > 0) {
+        //     inimigoPV = inimigoPV-danoFeito;
+        //     setTimeout(function(){
+        //         cartaInimigo.find('.pv .valor').text(inimigoPV).addClass('mudandoValor');
+        //         setTimeout(function(){
+        //             cartaInimigo.find('.pv .valor').removeClass('mudandoValor');
+        //         },delayTime);
+        //         if (inimigoPV <= 0) {
+        //             logsTexto(inimigo.nome+' foi derrotado.');
+        //             irProCemiterio(cartaInimigo); 
+        //         }
+        //         else {
+        //             if ($iniciativa != true) {
+        //                 setTimeout(function() {
+        //                     turnoInimigo(iniciativa);
+        //                 },delayTime);    
+        //             }
+        //             else {
+        //                 mostraOpcoes('ataque');
+        //             }
+        //         }
+        //     },delayTime);
+        // }  
+        // else {
+        //     console.log('Não houve dano no heroi');
+        //     setTimeout(function() {
+        //         if ($iniciativa != true) {
+        //             setTimeout(function() {
+        //                 turnoInimigo(iniciativa);
+        //             },delayTime);    
+        //         }
+        //         else {
+        //             mostraOpcoes('ataque');
+        //         }
+        //     },delayTime);                
+        // }
+} 
 
 
 
@@ -460,24 +485,6 @@ function poeAsCartas($deck) {
     // $('head').append('<style>.card.deFrente.ativo{z-index: '+deck.length+'}</style>');
 }
 
-// function viraCartaDoDeck($deck){
-//     var topododeck = '#'+deck[deck.length-1].idCarta;
-//     $(topododeck).click(function(event) {
-//         emJogo.push(deck.pop());
-//         $('.card[data-id="'+emJogo[0].id+'"]').removeClass('nodeckcompra').addClass('deFrente');
-//         if (emJogo[0].tipo == 'Monstro') {
-//             inimigoPV = emJogo[0].pv;
-//             setTimeout(function(){
-//                 logsTexto('Um '+emJogo[0].nome+' surge!');
-//                 mostraOpcoes('ataque');
-//             },delayTime*0.5);
-//         }   
-//         else {
-//             console.log('Não era monstro');
-//         }
-//     });
-// }
-
 function viraCartasDoDeck($deck,$qtd){
     var topododeck = $('.card:nth-of-type('+deck.length+')');
 
@@ -500,6 +507,7 @@ function viraCartasDoDeck($deck,$qtd){
     	var front = $carta.find('.frontCard');
     	var este = emJogo[emJogo.length-1]
     	front.find('.nome').text(este.nome);
+    	front.find('.nome').text(este.nome);
     	front.find('.imagem').css('background-image','url(./img/'+este.imagem+')');
     	front.find('.cont-stats .forca .valor').text(este.forca);
     	front.find('.cont-stats .habilidade .valor').text(este.habilidade);
@@ -515,34 +523,22 @@ function viraCartasDoDeck($deck,$qtd){
 
 
 function interacaoComCartas($obj) {
-	console.log($obj);
+	// console.log($obj);
 	$($obj).each(function(i,el){
 		// console.log(el);
 		if (el.tipo == 'Monstro') {
 			//Estabelece o sangue de cada inimigo
 			inimigoPV.push({
 				pVida: el.pv,
-				nome: el.nome});			
+				nome: el.nome,
+                pos: i
+            });			
 		}
 		else {
 			console.log('Não monstro');
 		}
 
 		mostraOpcoes('ataqueMais');
-
-		// $('.card.pos-'+i+' .frontCard').click(function(event) {
-		// 	//ao clicar na carta
-		// 	//aparece o menu de ações.
-		// 	//depois de escolhida a ação, 
-		// 	//o heroi e os monstros rodam 
-		// 	//a iniciativa.
-		// 	//depois da iniciativa
-		// 	//todo mundo ataca...
-		// 	mostraOpcoes('ataqueMais');
-			
-		// });
-
-
 		
 	});
 	// console.log(inimigoPV);
@@ -573,7 +569,7 @@ function jogo() {
     configuraHeroi();
     poeAsCartas(deck);
     // viraCartaDoDeck(deck);
-    viraCartasDoDeck(deck,2	);
+    viraCartasDoDeck(deck, 4);
 
 } 
 $(document).ready(function($) {

@@ -288,6 +288,56 @@ body *, body *:before, body *:after {
   top: 97px !important;
 }
 
+/* Estilo das dos botoes das cartas se tiver mais de uma na tela Máximo */
+.fkCards {
+  float: left;
+  position: absolute;
+  background: red;
+  border: none;
+  opacity: 0.1;
+  z-index: 9999;
+}
+
+.qtd-2 .fkCards {
+  width: 145px;
+  height: 237px;
+}
+
+.qtd-2 .fkCards.fk-num-0 {
+  left: 19px;
+  top: 75px;
+}
+
+.qtd-2 .fkCards.fk-num-1 {
+  left: 162px;
+  top: 75px;
+}
+
+.qtd-3 .fkCards, .qtd-4 .fkCards {
+  width: 117px;
+  height: 190px;
+}
+
+.qtd-3 .fkCards.fk-num-0, .qtd-4 .fkCards.fk-num-0 {
+  left: 32px;
+  top: 5px;
+}
+
+.qtd-3 .fkCards.fk-num-1, .qtd-4 .fkCards.fk-num-1 {
+  left: 175px;
+  top: 5px;
+}
+
+.qtd-3 .fkCards.fk-num-2, .qtd-4 .fkCards.fk-num-2 {
+  left: 32px;
+  top: 196px;
+}
+
+.qtd-3 .fkCards.fk-num-3, .qtd-4 .fkCards.fk-num-3 {
+  left: 175px;
+  top: 196px;
+}
+
 /* STAGE */
 .stage {
   float: left;

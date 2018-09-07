@@ -65,6 +65,7 @@ body *, body *:before, body *:after {
   margin: 49px 0 0 50%;
   left: -81px;
   z-index: 9999;
+  background-color: rgba(0, 128, 0, 0.5);
 }
 
 /* ESTILO GERAL DAS CARTAS */
@@ -236,54 +237,54 @@ body *, body *:before, body *:after {
 }
 
 /* Estilo das cartas se tiver mais de uma na tela Máximo */
-.qtd-2 .card {
+.deckPlace[data-qtd="qtd-2"] .card {
   transform: scale(0.8);
 }
 
-.qtd-2 .deFrente {
+.deckPlace[data-qtd="qtd-2"] .deFrente {
   transform: rotateY(180deg) scale(1);
   margin-left: 25%;
   z-index: 1;
 }
 
-.qtd-2 .deFrente.pos-0 {
+.deckPlace[data-qtd="qtd-2"] .deFrente.pos-0 {
   left: -57px !important;
   top: 0px !important;
   color: red;
 }
 
-.qtd-2 .deFrente.pos-1 {
+.deckPlace[data-qtd="qtd-2"] .deFrente.pos-1 {
   left: 84px !important;
   top: 0px !important;
   color: blue;
 }
 
-.qtd-3 .card, .qtd-4 .card {
+.deckPlace[data-qtd="qtd-3"] .card, .deckPlace[data-qtd="qtd-4"] .card {
   transform: scale(0.8);
 }
 
-.qtd-3 .deFrente, .qtd-4 .deFrente {
+.deckPlace[data-qtd="qtd-3"] .deFrente, .deckPlace[data-qtd="qtd-4"] .deFrente {
   transform: rotateY(180deg) scale(0.8);
   margin-left: 25%;
   z-index: 1;
 }
 
-.qtd-3 .deFrente.pos-0, .qtd-4 .deFrente.pos-0 {
+.deckPlace[data-qtd="qtd-3"] .deFrente.pos-0, .deckPlace[data-qtd="qtd-4"] .deFrente.pos-0 {
   left: -57px !important;
   top: -94px !important;
 }
 
-.qtd-3 .deFrente.pos-1, .qtd-4 .deFrente.pos-1 {
+.deckPlace[data-qtd="qtd-3"] .deFrente.pos-1, .deckPlace[data-qtd="qtd-4"] .deFrente.pos-1 {
   left: 84px !important;
   top: -94px !important;
 }
 
-.qtd-3 .deFrente.pos-2, .qtd-4 .deFrente.pos-2 {
+.deckPlace[data-qtd="qtd-3"] .deFrente.pos-2, .deckPlace[data-qtd="qtd-4"] .deFrente.pos-2 {
   left: -57px !important;
   top: 97px !important;
 }
 
-.qtd-3 .deFrente.pos-3, .qtd-4 .deFrente.pos-3 {
+.deckPlace[data-qtd="qtd-3"] .deFrente.pos-3, .deckPlace[data-qtd="qtd-4"] .deFrente.pos-3 {
   left: 84px !important;
   top: 97px !important;
 }
@@ -298,42 +299,42 @@ body *, body *:before, body *:after {
   z-index: 9999;
 }
 
-.qtd-2 .fkCards {
+.deckPlace[data-qtd="qtd-2"] .fkCards {
   width: 145px;
   height: 237px;
 }
 
-.qtd-2 .fkCards.fk-num-0 {
+.deckPlace[data-qtd="qtd-2"] .fkCards.fk-num-0 {
   left: 19px;
   top: 75px;
 }
 
-.qtd-2 .fkCards.fk-num-1 {
+.deckPlace[data-qtd="qtd-2"] .fkCards.fk-num-1 {
   left: 162px;
   top: 75px;
 }
 
-.qtd-3 .fkCards, .qtd-4 .fkCards {
+.deckPlace[data-qtd="qtd-3"] .fkCards, .deckPlace[data-qtd="qtd-4"] .fkCards {
   width: 117px;
   height: 190px;
 }
 
-.qtd-3 .fkCards.fk-num-0, .qtd-4 .fkCards.fk-num-0 {
+.deckPlace[data-qtd="qtd-3"] .fkCards.fk-num-0, .deckPlace[data-qtd="qtd-4"] .fkCards.fk-num-0 {
   left: 32px;
   top: 5px;
 }
 
-.qtd-3 .fkCards.fk-num-1, .qtd-4 .fkCards.fk-num-1 {
+.deckPlace[data-qtd="qtd-3"] .fkCards.fk-num-1, .deckPlace[data-qtd="qtd-4"] .fkCards.fk-num-1 {
   left: 175px;
   top: 5px;
 }
 
-.qtd-3 .fkCards.fk-num-2, .qtd-4 .fkCards.fk-num-2 {
+.deckPlace[data-qtd="qtd-3"] .fkCards.fk-num-2, .deckPlace[data-qtd="qtd-4"] .fkCards.fk-num-2 {
   left: 32px;
   top: 196px;
 }
 
-.qtd-3 .fkCards.fk-num-3, .qtd-4 .fkCards.fk-num-3 {
+.deckPlace[data-qtd="qtd-3"] .fkCards.fk-num-3, .deckPlace[data-qtd="qtd-4"] .fkCards.fk-num-3 {
   left: 175px;
   top: 196px;
 }

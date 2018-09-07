@@ -203,13 +203,15 @@ function mostraOpcoes($turno) {
 
     }
     else if ($turno == 'ataqueMais') {
-        if (emJogo.length > 0) {
+        // if (emJogo.length > 0) {
             $('.showBts').html('<button class="bt ataqueMais">Ataque+</button>');    
-        }
+        // }
         
         $('.showBts .ataqueMais').click(function(event) {
             $(this).remove();
             estaPosicao = 0;
+
+            console.log('emJogo.length em mostraOpcoes = '+emJogo.length);
             
             switch (emJogo.length) {
                 case 1:
@@ -225,8 +227,7 @@ function mostraOpcoes($turno) {
                         $('.fkCards').remove();
                         var posInimigo = (emJogo.length - 1) - inimigoSelecionado;
                         estaPosicao = posInimigo;
-                        console.log('esta posicao = '+estaPosicao);
-                        // var esteInimigo = emJogo[posInimigo];
+                        // console.log('esta posicao = '+estaPosicao);
                         esteInimigo = {};
                         esteInimigo = emJogo[posInimigo];
                         turnosdecombateMais(emJogo, esteInimigo, posInimigo);
@@ -238,7 +239,7 @@ function mostraOpcoes($turno) {
 }
 
 function fakeCards($qtd) {
-    console.log($qtd);
+    // console.log($qtd);
     for (var i = $qtd - 1; i >= 0; i--) {
         $('.baseCarta').after(
             '<button class="fkCards fk-num-'+i+'" data-pos="'+i+'"></button>'
@@ -250,7 +251,7 @@ function exumarCartaParaDeck() {
     if (cemiterio.length > 0) {
         deck.push(cemiterio.pop());
         var estacarta = deck[deck.length-1];
-        console.log(estacarta);
+        // console.log(estacarta);
         $('.deckPlace').append(carta(estacarta));
         setTimeout(function(){
             $('#'+estacarta.idCarta).addClass('nodeckcompra')
@@ -285,8 +286,8 @@ function turnosdecombateMais($em_jogo, $esteInimigo, $posicao_inimigo) {
     var iniciativaHeroi = parseInt(heroiGame.habilidade)+calcularJogada(6);
 	ordem_de_ataque.push({iniac: iniciativaHeroi, nome: heroiGame.nome, pos: -1});  
 
-    $($em_jogo).each(function(i, el) {
-    	var inimigo = $em_jogo[i];
+    $(emJogo).each(function(i, el) {
+    	var inimigo = emJogo[i];
     	iniciativaInimigo = parseInt(inimigo.habilidade)+calcularJogada(6);
     	ordem_de_ataque.push({iniac: iniciativaInimigo, nome: inimigo.nome, pos: i});    
     });
@@ -303,10 +304,10 @@ function turnosdecombateMais($em_jogo, $esteInimigo, $posicao_inimigo) {
 }
 
 function combateMais($ordem, $esteInimigo, $posicao) {
-    console.log('==================');
-    console.log('$esteInimigo');
-    console.log($esteInimigo);
-    console.log('==================');
+    // console.log('==================');
+    // console.log('$esteInimigo');
+    // console.log($esteInimigo);
+    // console.log('==================');
     // console.log('$posicao');
     // console.log('==================');
 	$($ordem).each(function(i, el) {
@@ -318,19 +319,19 @@ function combateMais($ordem, $esteInimigo, $posicao) {
             case -1:
                 // console.log('heroi');
                 setTimeout(function(){
-                    // turnoJogadorMais(inimigo, posicao);
                     turnoJogadorMais(esteInimigo, estaPosicao);
                     ordem_de_ataque.shift();
-                }, delayTime);                
+                }, delayTime*i);                
                 break;
             default:
-                // console.log(emJogo[index]);
                 setTimeout(function(){
                     turnoInimigoMais(emJogo[index], posicao);
                     ordem_de_ataque.shift();
-                }, delayTime);                
+                }, delayTime*i);                
                 break;
         }
+        console.log('ordem_de_ataque');
+        console.log(ordem_de_ataque);
 	});
 }
 
@@ -342,31 +343,41 @@ function logsTexto($texto) {
 function turnoInimigoMais($inimigo, $posicao) {
         inimigo = $inimigo;
         var cartaInimigo = $('.card.pos-'+$posicao);
-        danoFeito = ataque(inimigo,heroiGame);
-        if (danoFeito > 0) {
-            vidaHeroi = vidaHeroi-danoFeito;
-            setTimeout(function(){
-                $('.heroBar .pv .valor').text(vidaHeroi).addClass('mudandoValor');
-                setTimeout(function(){
-                    $('.heroBar .pv .valor').removeClass('mudandoValor');
-                },delayTime);
-                if (vidaHeroi <= 0) {
-                    logsTexto(heroiGame.nome+' foi derrotado.');
-                    gameOver();
-                }
-            },delayTime);
+        // danoFeito = ataque(inimigo,heroiGame);
+        // danoFeito = 0;
 
-        }  
-        else {
-            setTimeout(function() {
-                console.log(inimigo.nome+' não machucou '+heroiGame.nome);
-                console.log('ordem_de_ataque');
-                console.log(ordem_de_ataque);
-                if (ordem_de_ataque.length == 0) {
-                    mostraOpcoes('ataqueMais');
+
+        switch (inimigoPV[$posicao].pVida > 0) {
+            case true:
+                danoFeito = ataque(inimigo,heroiGame);
+                switch (danoFeito > 0) {
+                    case true:
+                        vidaHeroi = vidaHeroi-danoFeito;
+                        setTimeout(function(){
+                            $('.heroBar .pv .valor').text(vidaHeroi).addClass('mudandoValor');
+                            setTimeout(function(){
+                                $('.heroBar .pv .valor').removeClass('mudandoValor');
+                            },delayTime);
+                            if (vidaHeroi <= 0) {
+                                logsTexto(heroiGame.nome+' foi derrotado.');
+                                gameOver();
+                            }
+                        },delayTime);
+                        break;
+                    default:
+                        setTimeout(function() {
+                            if (ordem_de_ataque.length == 0 && inimigoPV[$posicao].pVida > 0) {
+                                mostraOpcoes('ataqueMais');
+                            }
+                        },delayTime);
+                        break;
                 }
-            },delayTime);                
+                break;
+            default:
+                console.log('O '+inimigoPV[$posicao].nome+' esta morto');
+                break;
         }
+        
 } 
 
 function turnoJogadorMais($inimigo_atual, $posicao) {
@@ -377,36 +388,60 @@ function turnoJogadorMais($inimigo_atual, $posicao) {
     // console.log($inimigo_atual);
     // console.log('==================');
 
-    // danoFeito = ataque(heroiGame, $inimigo_atual);
-    danoFeito = 100;
-    if (danoFeito > 0) {
-        inimigoPV[$posicao].pVida = inimigoPV[$posicao].pVida-danoFeito;
-        setTimeout(function(){
-            cartaInimigo.find('.pv .valor').text(inimigoPV[$posicao].pVida).addClass('mudandoValor');
-            setTimeout(function(){
-                cartaInimigo.find('.pv .valor').removeClass('mudandoValor');
-            },delayTime);
-            if (inimigoPV[$posicao].pVida <= 0) {
-                logsTexto($inimigo_atual.nome+' foi derrotado.');
-                irProCemiterio(cartaInimigo, $posicao); 
-            }
-            if (ordem_de_ataque.length == 0) {
-                mostraOpcoes('ataqueMais');
-            }
-        },delayTime);
-    }  
-    else {
-        console.log('Não houve dano no heroi');
+    danoFeito = ataque(heroiGame, $inimigo_atual);
+    // danoFeito = 100;
 
+
+
+    // if (danoFeito > 0) {
+    //     inimigoPV[$posicao].pVida = inimigoPV[$posicao].pVida-danoFeito;
+    //     setTimeout(function(){
+    //         cartaInimigo.find('.pv .valor').text(inimigoPV[$posicao].pVida).addClass('mudandoValor');
+    //         setTimeout(function(){
+    //             cartaInimigo.find('.pv .valor').removeClass('mudandoValor');
+    //         },delayTime);
+    //         if (inimigoPV[$posicao].pVida <= 0) {
+    //             logsTexto($inimigo_atual.nome+' foi derrotado.');
+    //             irProCemiterio(cartaInimigo, $posicao); 
+    //         }
+    //         else if (ordem_de_ataque.length == 0 && emJogo.length > 1) {
+    //             // console.log('mostraOpcoes(ataqueMais); turnoJogadorMais');
+    //             mostraOpcoes('ataqueMais');
+    //         }
+    //     },delayTime);
+    // }  
+    // else {
+    //     console.log('Não houve dano no heroi');
+    // }
+
+
+
+
+    switch (danoFeito > 0) {
+        case true:
+            inimigoPV[$posicao].pVida = inimigoPV[$posicao].pVida-danoFeito;
+            setTimeout(function(){
+                cartaInimigo.find('.pv .valor').text(inimigoPV[$posicao].pVida).addClass('mudandoValor');
+                setTimeout(function(){
+                    cartaInimigo.find('.pv .valor').removeClass('mudandoValor');
+                },delayTime);
+                switch (inimigoPV[$posicao].pVida <= 0) {
+                    case true:
+                        logsTexto($inimigo_atual.nome+' foi derrotado.');
+                        irProCemiterio(cartaInimigo, $posicao);
+                        break;
+                    default:
+                        mostraOpcoes('ataqueMais');
+                        break;
+                }
+            },delayTime);
+            break;
+        default:
+            console.log('Não houve dano no heroi');
+            mostraOpcoes('ataqueMais');
+            break;
     }
 } 
-
-
-
-
-// ==========================================================
-
-
 
 function poeAsCartas($deck) {
     var i = 0;
@@ -431,26 +466,40 @@ function poeAsCartas($deck) {
 
 function viraCartasDoDeck($deck,$qtd){
     var topododeck = $('.card:nth-of-type('+deck.length+')');
+    var count = 0;
 	$('.baseCarta').show().click(function(ev) {
-        var qtd = $qtd;
-        if (deck.length < $qtd) {
-            qtd = deck.length;
+        switch (count) {
+            case 0:
+                console.log(ev);
+                var qtd = $qtd;
+                if (deck.length < $qtd) {
+                    qtd = deck.length;
+                }
+                $('.baseCarta').hide();
+
+                console.log('qtd em viraCartasDoDeck');
+                console.log(qtd);
+                
+                setTimeout(function(){
+                   // $('.deckPlace').addClass('qtd-'+qtd);
+                   $('.deckPlace').attr('data-qtd','qtd-'+qtd);
+                    // console.log('emJogo.length no Vira Cartas');
+                    // console.log(emJogo.length);
+
+                   for (qtd > emJogo.length; qtd--;) { 
+                        topododeck = $('.card:nth-of-type('+deck.length+')').removeClass('nodeckcompra').addClass('pos-'+qtd).attr('data-pos',qtd);
+                        emJogo.push(deck.pop());
+                        configuraCarta(topododeck);
+                   }
+
+                    interacaoComCartas(emJogo);    
+                },0)
+                break;
         }
-    	$('.baseCarta').hide();
 
-        console.log(qtd);
+        count++;
         
-        setTimeout(function(){
-           $('.deckPlace').addClass('qtd-'+qtd);
-            
-           for (qtd > emJogo.length; qtd--;) { 
-                topododeck = $('.card:nth-of-type('+deck.length+')').removeClass('nodeckcompra').addClass('pos-'+qtd).attr('data-pos',qtd);
-                emJogo.push(deck.pop());
-                configuraCarta(topododeck);
-           }
-
-            interacaoComCartas(emJogo);    
-        },0)
+        
         
     	
 	});	
@@ -473,7 +522,9 @@ function viraCartasDoDeck($deck,$qtd){
 }
 
 function interacaoComCartas($obj) {
-	// console.log($obj);
+    inimigoPV = [];
+	console.log('$obj em interacaoComCartas');
+    console.log($obj);
 	$($obj).each(function(i,el){
 		// console.log(el);
 		if (el.tipo == 'Monstro') {
@@ -500,39 +551,64 @@ function irProCemiterio($estacarta, $posicao) {
         $estacarta.remove();
     },delayTime/2);
 
-    if (deck.length > 0) {
-        switch (emJogo.length) {
-            case 1:
-                cemiterio.push(emJogo.pop());
-                viraCartasDoDeck(deck, 1);
-                 $('.deckPlace').removeClass('qtd-1');
-                break;
-            default:
-                var invertePos = (emJogo.length - 1) - estaPosicao;
-                cemiterio.push(emJogo[estaPosicao]);
-                emJogo.splice(estaPosicao, 1);
+    switch (deck.length < 1) {
+        case true:
+            setTimeout(function(){
+                gameOver();    
+            }, delayTime);
+            break;
+        default:
+            console.log('emJogo.length no swith delicia');
+            console.log(emJogo.length);
+            switch (emJogo.length) {
+                case 1:
+                    cemiterio.push(emJogo.pop());
+                    $('.deckPlace').attr('data-qtd','');
+                    setTimeout(function(){
+                        // console.log('emJogo.length no swith delicia case 1');
+                        // console.log(emJogo.length);
+                        viraCartasDoDeck(deck, 1);
+                    },0);
+                    break;
+                default:
+                    console.log('emJogo.length no swith delicia case default');
+                    console.log(emJogo.length);
+                    var invertePos = (emJogo.length - 1) - estaPosicao;
+                    cemiterio.push(emJogo[estaPosicao]);
+                    emJogo.splice(estaPosicao, 1);
+                    $('.deckPlace').attr('data-qtd','');
+                    $('.deckPlace').attr('data-qtd','qtd-'+emJogo.length);
+                    for (var i = 3; i >= 0; i--) {
+                        $('.deckPlace .pos-'+i).removeClass('pos-'+i);
+                        // console.log(i);
+                    }
+                    setTimeout(function(){
+                        $('.deckPlace .deFrente').each(function(i, el) {
+                            $(this).addClass('pos-'+i);
+                            $(this).data('pos',i);
+                        });
+                        mostraOpcoes('ataqueMais');
+                        console.log('mostraOpcoes(ataqueMais) em irProCemiterio');
+                    }, delayTime/2);
+                    break;
+            }
+    }
 
-                $('.deckPlace').removeClass('qtd-'+(emJogo.length + 1));
-                $('.deckPlace').addClass('qtd-'+emJogo.length);
-                for (var i = 3; i >= 0; i--) {
-                    $('.deckPlace .pos-'+i).removeClass('pos-'+i);
-                    console.log(i);
-                }
-                setTimeout(function(){
-                    $('.deckPlace .deFrente').each(function(i, el) {
-                        $(this).addClass('pos-'+i);
-                        $(this).data('pos',i);
-                    });
-                    mostraOpcoes('ataqueMais');
-                }, delayTime/2);
-                break;
-        }
-    }
-    if (deck.length == 0 && emJogo.length == 0) {
-        setTimeout(function(){
-            gameOver();    
-        }, delayTime);
-    }
+    // console.log('Teste amigo');
+
+    // console.log('deck');
+    // console.log(deck);
+    // console.log('cemiterio');
+    // console.log(cemiterio);
+    // console.log('emJogo');
+    // console.log(emJogo);
+
+    
+        
+   
+   
+
+
 }
 
 

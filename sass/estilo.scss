@@ -22,7 +22,7 @@ $vermelho-3: #3e0001;
 
 // //VERDE
 // $verde-1: #8ce382;
-// $verde-2: #18ee00;
+$verde-2: #18ee00;
 // $verde-3: #539251
 
 // //AZUL
@@ -111,7 +111,7 @@ body *, body *:before, body *:after {
 		    margin: 49px 0 0 50%;
 		    left: -81px;
 		    z-index: 9999;
-		    background-color: rgba(green, 0.5);
+		    background-color: rgba(green, 0.0);
 		}
 	}
 }
@@ -181,8 +181,8 @@ body *, body *:before, body *:after {
 			width: 100%;
 			height: 30px;
 			margin: 0;
-			line-height: 3em;
-			padding: 0 10px;
+			line-height: 1.5em;
+			padding: 4px 10px 0;
 			font-size: 0.55em;
 		}
 
@@ -195,7 +195,12 @@ body *, body *:before, body *:after {
 			background-position: center;
 		    background-size: 100%;
 		    background-repeat: no-repeat;
+		    &.grande {
+		    	width: 116px;
+		    }
 		}
+
+
 
 		.cont-stats {
 		    float: right;
@@ -423,6 +428,9 @@ body *, body *:before, body *:after {
 			background-color: $cinza-1;
 			border-top: 1px solid $cinza-3;
 	    	border-bottom: 1px solid $cinza-3;
+	    	font-size: 0.6em;
+		    line-height: 1.5em;
+		    padding: 2px 10px 0;
 
 	    	&.texto {
 				float: left;
@@ -490,6 +498,7 @@ body *, body *:before, body *:after {
 			padding: 0px;
 			display: flex;
 	    	justify-content: center;
+	    	font-size: 0.6em;
 	    	.bt {
 			    float: left;
 			    position: relative;
@@ -552,7 +561,12 @@ body *, body *:before, body *:after {
 				    &.mudandoValor {
 						transition: all 0.3s;
 						transform:  scale(2.5);
-						color: red;
+						color: $vermelho-2;
+					}
+					&.mudandoValorPositivo {
+						transition: all 0.3s;
+						transform:  scale(2.5);
+						color: $verde-2;	
 					}
 				}
 			}

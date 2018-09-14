@@ -1,6 +1,42 @@
 @charset "UTF-8";
 @import url("https://fonts.googleapis.com/css?family=Oswald");
 @import url("https://fonts.googleapis.com/css?family=Press+Start+2P");
+@keyframes shake {
+  10%, 90% {
+    transform: rotateY(180deg) scale(1.6) translate3d(-1px, 0, 0);
+  }
+  20%, 80% {
+    transform: rotateY(180deg) scale(1.6) translate3d(2px, 0, 0);
+  }
+  30%, 50%, 70% {
+    transform: rotateY(180deg) scale(1.6) translate3d(-4px, 0, 0);
+  }
+  40%, 60% {
+    transform: rotateY(180deg) scale(1.6) translate3d(4px, 0, 0);
+  }
+}
+
+@keyframes hitMe {
+  10%, 90% {
+    box-shadow: inset 0 0 0px #b4241c;
+  }
+  30%, 70% {
+    box-shadow: inset 0 0 100px #b4241c;
+  }
+  40%, 60% {
+    box-shadow: inset 0 0 10px #b4241c;
+  }
+}
+
+@keyframes holy {
+  0%, 100% {
+    box-shadow: inset 0 0 0px #8ce382;
+  }
+  45%, 55% {
+    box-shadow: inset 0 0 50px #8ce382;
+  }
+}
+
 body {
   font-size: 14px;
   box-sizing: border-box;
@@ -56,6 +92,15 @@ body *, body *:before, body *:after {
   margin: 0;
   padding: 10px;
   overflow: hidden;
+  transition: background 1s;
+}
+
+.content .deckPlace.atingido {
+  animation: hitMe 1s;
+}
+
+.content .deckPlace.bencao {
+  animation: holy 2s;
 }
 
 .content .deckPlace .baseCarta {
@@ -234,6 +279,10 @@ body *, body *:before, body *:after {
   transition: all 0.5s ease-in;
 }
 
+.card.atacando {
+  animation: shake 0.82s;
+}
+
 .card .mudandoValor {
   transition: all 0.3s;
   transform: scale(3);
@@ -403,6 +452,8 @@ body *, body *:before, body *:after {
   width: 60px;
   height: 60px;
   background: green;
+  background-image: url(./img/heroi.png);
+  background-size: 100%;
 }
 
 .stage .heroBar .barL {
@@ -452,7 +503,7 @@ body *, body *:before, body *:after {
   float: left;
   position: relative;
   width: calc(100% - 60px);
-  background-color: #ccc;
+  background-color: #333;
   padding: 3px;
 }
 
@@ -473,42 +524,42 @@ body *, body *:before, body *:after {
   height: 25px;
   padding: 3px;
   margin: 0;
-  background-image: url("./img/forca.svg");
+  background-image: url("./img/forca.png");
   -webkit-background-size: 75%;
   background-size: 75%;
   background-repeat: no-repeat;
   background-position: center;
 }
 
-.heroBar .barR > span > .habilidade .img {
-  background-image: url("./img/habilidade.svg");
+.heroBar .barR > span .img.habilidade {
+  background-image: url("./img/habilidade.png");
 }
 
-.heroBar .barR > span > .resistencia .img {
-  background-image: url("./img/armadura.svg");
+.heroBar .barR > span .img.resistencia {
+  background-image: url("./img/resistencia.png");
 }
 
-.heroBar .barR > span > .pv .img {
-  background-image: url("./img/resistencia.svg");
+.heroBar .barR > span .img.pv {
+  background-image: url("./img/pv.png");
 }
 
-.heroBar .barR > span > .pv .valor {
+.heroBar .barR > span .valor {
   float: left;
   position: relative;
   width: calc(100% - 25px);
-  font-size: 1.2em;
+  font-size: 1em;
   padding: 0;
   text-align: center;
-  line-height: 1.6em;
+  line-height: 1.85em;
 }
 
-.heroBar .barR > span > .pv .valor.mudandoValor {
+.heroBar .barR > span .valor.mudandoValor {
   transition: all 0.3s;
   transform: scale(2.5);
   color: #b4241c;
 }
 
-.heroBar .barR > span > .pv .valor.mudandoValorPositivo {
+.heroBar .barR > span .valor.mudandoValorPositivo {
   transition: all 0.3s;
   transform: scale(2.5);
   color: #18ee00;

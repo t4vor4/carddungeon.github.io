@@ -30,7 +30,7 @@ const cartasJogo = [
     {   id: 0003,
         nome:'Necromante Acolito', //Caster
         tipo: 'Monstro',
-        tipo2: 'Morto-vivo',
+        tipo2: 'Necromante',
         forca: 2, 
         habilidade: 1, 
         resistencia: 1,
@@ -52,7 +52,7 @@ const cartasJogo = [
     {   id: 0005,
         nome:'Necromante Ancião', //Buffer
         tipo: 'Monstro',
-        tipo2: 'Morto-vivo',
+        tipo2: 'Necromante',
         forca: 2, 
         habilidade: 1, 
         resistencia: 1,
@@ -61,26 +61,26 @@ const cartasJogo = [
         imagem:'velho-necromante.png',
     },
     {   id: 0006,
-        nome:'Debuffer', 
+        nome:'Necromante Morto-vivo',//Debuffer
         tipo: 'Monstro',
-        tipo2: 'Morto-vivo',
+        tipo2: 'Necromante',
         forca: 2, 
         habilidade: 1, 
         resistencia: 1,
         pv: 1,
-        descricao:'Um monstro que tira habilidades do Heroi', 
-        imagem:'esqueleto.png'
+        descricao:'Um poderoso necromante que voltou da morte. Pode ressucitar três mortos-vivos do cemiterio.', 
+        imagem:'necromante-morto-vivo.png'
     },
     {   id: 0007,
-        nome:'Boss', 
+        nome:'O Rei Maldito', //Boss
         tipo: 'Monstro',
         tipo2: 'Morto-vivo',
         forca: 2, 
         habilidade: 1, 
         resistencia: 1,
         pv: 1,
-        descricao:'Monstro poderoso e lider da masmorra.', 
-        imagem:'esqueleto.png'
+        descricao:'Este rei perdido entre a vida e a morte é o senhor desta masmorra.', 
+        imagem:'rei-maldito.png'
     },
 ]
 
@@ -90,29 +90,29 @@ const cartasBonus = [
         nome:'Arena do Poder', //Buff
         tipo: 'buff',
         tipo2: 'forca',
-        descricao:'Heroi ganha +1 de força', 
-        imagem: 'none.png'
+        descricao:'Teste sua habilidade. Em caso de sucesso, você ganha 1 ponto de força', 
+        imagem: 'green--potion.png'
     },
     {   id: 0009,
         nome:'Caminho da Habilidade', //Buff
         tipo: 'buff',
         tipo2: 'habilidade',
-        descricao:'Heroi ganha +1 de Habilidade', 
-        imagem: 'none.png'
+        descricao:'Teste sua habilidade. Em caso de sucesso, você ganha 1 ponto de Habilidade', 
+        imagem: 'green--potion.png'
     },
     {   id: 0010,
         nome:'Area da Resistencia', //Buff
         tipo: 'buff',
         tipo2: 'resistencia',
-        descricao:'Heroi ganha +1 de Resistencia', 
-        imagem: 'none.png'
+        descricao:'Teste sua habilidade. Em caso de sucesso, você ganha 1 ponto de Resistencia', 
+        imagem: 'green--potion.png'
     },
     {   id: 0011,
         nome:'Fonte da Vida', //Buff
         tipo: 'buff',
         tipo2: 'pv',
-        descricao:'Heroi ganha +1d6 de Pontos de vida', 
-        imagem: 'none.png'
+        descricao:'Teste sua habilidade. Em caso de sucesso, você ganha 1d6 ponto de Pontos de vida', 
+        imagem: 'green--potion.png'
     },
 
     //Bonus Negativo
@@ -120,33 +120,33 @@ const cartasBonus = [
         nome:'Aura de Cansaço', //Buff
         tipo: 'debuff',
         tipo2: 'forca',
-        descricao:'Heroi perde 1 de força', 
-        imagem: 'none.png'
+        descricao:'Teste sua habilidade. Em caso de falha, o Heroi perde 1 de força', 
+        imagem: 'armadilha.png'
     },
     {   id: 0013,
         nome:'Chão de espinhos', //Buff
         tipo: 'debuff',
         tipo2: 'habilidade',
-        descricao:'Heroi perde 1 de Habilidade', 
-        imagem: 'none.png'
+        descricao:'Teste sua habilidade. Em caso de falha, o Heroi perde 1 de Habilidade', 
+        imagem: 'armadilha.png'
     },
     {   id: 0014,
         nome:'Correntes da Corrupção', //Buff
         tipo: 'debuff',
         tipo2: 'resistencia',
-        descricao:'Heroi perde 1 de Resistencia', 
-        imagem: 'none.png'
+        descricao:'Teste sua habilidade. Em caso de falha, o Heroi perde 1 de Resistencia', 
+        imagem: 'armadilha.png'
     },
     {   id: 0015,
         nome:'Vapores Venenosos', //Buff
         tipo: 'debuff',
         tipo2: 'pv',
-        descricao:'Heroi perde +1d6 de Pontos de vida', 
-        imagem: 'none.png'
+        descricao:'Teste sua habilidade. Em caso de falha, o Heroi perde +1d6 de Pontos de vida', 
+        imagem: 'armadilha.png'
     },
 ]
 
-const delayTime = 3000;
+const delayTime = 2000;
 
 var heroi = {nome:'Heroi', forca: 3, habilidade: 4, resistencia: 3, pv: 15}
 
@@ -161,12 +161,16 @@ var esteInimigo = {};
 var estaPosicao = 0;
 
 //Estados basicos das cartas
-// var deck = embaralhaCartas(cartasJogo);
-//var deck = embaralhaCartas(cartasBonus);
-
 var deck = cartasJogo;
+// deck = cartasBonus;
 $.merge(deck, cartasBonus);
 deck = embaralhaCartas(deck);
+console.log('deck');
+setTimeout(function(){
+    deck = embaralhaCartas(deck);
+    console.log('deck');
+},0);
+
 
 var emJogo = [];
 var cemiterio = [];
@@ -197,60 +201,129 @@ function cLog($text) {
 function bonus($atributo, $bonus) {
     var bonus = $bonus;
     var classe;
-    switch (bonus) {
-        case 1:
-            classe = 'mudandoValorPositivo'
-            break;
-        default:
-            classe = 'mudandoValor'
-            break;
+
+    if (bonus == 1) {
+        classe = 'mudandoValorPositivo';
+        $('.showBts').html('<button class="bt testar1">Testar habilidade</button>');
+        $('.showBts .testar1').click(function(event) {
+            $(this).remove();
+            setTimeout(function(){
+                var jogada = calcularJogada(6);
+                jogada = 1;
+                if (jogada <= heroiGame.habilidade) {
+                    //conseguiu a benção
+                    $('.deckPlace').addClass('bencao');
+                    atualizaAtributo($atributo, classe, $bonus);
+                    logsTexto(textoDescritivo($atributo, $bonus));
+                    setTimeout(function(){
+                        $('.deckPlace').removeClass('bencao');
+                        irProCemiterio($('.card.pos-0'), 0);
+                    },delayTime);
+                }
+                else {
+                    //conseguiu a benção
+                    logsTexto('O heroi não conseguiu...'); 
+                    setTimeout(function(){
+                        irProCemiterio($('.card.pos-0'), 0);
+                    },delayTime);
+                }
+            },0);
+        });
+        
     }
-    switch ($atributo) {
-        case 'forca':
-            if ($bonus > 0) {
-                $texto = 'Heroi sente suas forças revigoradas';
-            }
-            else {
-                $texto = 'Heroi sente suas forças se esvaindo';
-            }
-            break;
-        case 'habilidade':
-            if ($bonus > 0) {
-                $texto = 'Heroi sente suas habilidades aumentando';
-            }
-            else {
-                $texto = 'Heroi sente suas habilidades diminuindo';
-            }
-            break;
-        case 'resistencia':
-            if ($bonus > 0) {
-                $texto = 'Heroi sente sua resistencia crescendo';
-            }
-            else {
-                $texto = 'Heroi sente sua resistencia diminuindo';
-            }
-            break;
-        case 'pv':
-            if ($bonus > 0) {
-                $texto = 'Heroi sente sua vida revigorada';
-                bonus = calcularJogada(6);
-            }
-            else {
-                $texto = 'Heroi sente suas feridas';
-                bonus = -1*calcularJogada(6);
-            }
-            break;
+    else {
+        classe = 'mudandoValor';
+        $('.showBts').html('<button class="bt testar">Testar habilidade</button>');
+        $('.showBts .testar').click(function(event) {
+            $(this).remove();
+            setTimeout(function(){
+                var jogada = calcularJogada(6);
+                console.log('jogada  ='+jogada);
+                if (jogada > heroiGame.habilidade) {
+                    $('.deckPlace').addClass('atingido');
+                    atualizaAtributo($atributo, classe, $bonus);
+                    logsTexto(textoDescritivo($atributo, $bonus));
+                    setTimeout(function(){
+                        $('.deckPlace').removeClass('atingido');
+                        irProCemiterio($('.card.pos-0'), 0);
+                    },delayTime);
+                }
+                else {
+                    logsTexto('O heroi passou pela armadilha');   
+                    setTimeout(function(){
+                        irProCemiterio($('.card.pos-0'), 0);
+                    },delayTime);
+                }
+            },0);
+        });
+
+        
     }
 
-    heroiGame[$atributo] = heroiGame[$atributo]+bonus;
-    $('.heroBar .barR .'+$atributo+' .valor').text(heroiGame[$atributo]);
 
-    $('.heroBar .barR .'+$atributo+' .valor').text(heroiGame[$atributo]).addClass(classe);
-    setTimeout(function(){
-        $('.heroBar .barR .'+$atributo+' .valor').removeClass(classe);
-    },delayTime);
+    
 
-    logsTexto($texto);
+    //textoDescritivo($atributo, $bonus);
+    function textoDescritivo($atributo, $bonus) {
+        var $texto;
+        switch ($atributo) {
+            case 'forca':
+                if ($bonus > 0) {
+                    $texto = 'Heroi sente suas forças revigoradas';
+                }
+                else {
+                    $texto = 'Heroi sente suas forças se esvaindo';
+                }
+                break;
+            case 'habilidade':
+                if ($bonus > 0) {
+                    $texto = 'Heroi sente suas habilidades aumentando';
+                }
+                else {
+                    $texto = 'Heroi sente suas habilidades diminuindo';
+                }
+                break;
+            case 'resistencia':
+                if ($bonus > 0) {
+                    $texto = 'Heroi sente sua resistencia crescendo';
+                }
+                else {
+                    $texto = 'Heroi sente sua resistencia diminuindo';
+                }
+                break;
+            case 'pv':
+                if ($bonus > 0) {
+                    $texto = 'Heroi sente sua vida revigorada';
+                }
+                else {
+                    $texto = 'Heroi sente suas feridas';
+                }
+                break;
+        }
+        return $texto;
+    }
+
+    function atualizaAtributo($atributo, $classe, $bonus) {
+        switch ($atributo) {
+            case 'pv':
+                var valor = calcularJogada(6);
+                if ($bonus != 1) {
+                    valor = valor*-1;
+                }
+                heroiGame[$atributo] = heroiGame[$atributo]+valor;                
+                break;
+            default:
+                heroiGame[$atributo] = heroiGame[$atributo]+$bonus;
+                break;
+        }
+        $('.heroBar .barR .'+$atributo+' .valor').text(heroiGame[$atributo]).addClass($classe);
+        setTimeout(function(){
+            $('.heroBar .barR .'+$atributo+' .valor').removeClass($classe);
+        },delayTime);    
+    }
+    
+
+    
 }
 
 //game over 
@@ -467,9 +540,13 @@ function turnoInimigoMais($inimigo, $posicao) {
                 switch (danoFeito > 0) {
                     case true:
                         heroiPV = heroiPV-danoFeito;
-                        setTimeout(function(){
+                        cartaInimigo.addClass('atacando');
+                        $('.deckPlace').addClass('atingido');
+                        setTimeout(function(){                            
+                            $('.deckPlace').removeClass('atingido');
                             $('.heroBar .pv .valor').text(heroiPV).addClass('mudandoValor');
                             setTimeout(function(){
+                                cartaInimigo.removeClass('atacando');                                
                                 $('.heroBar .pv .valor').removeClass('mudandoValor');
                             },delayTime);
                             if (heroiPV <= 0) {
@@ -511,14 +588,18 @@ function turnoJogadorMais($inimigo_atual, $posicao) {
                         irProCemiterio(cartaInimigo, $posicao);
                         break;
                     default:
-                        mostraOpcoes('ataqueMais');
+                        setTimeout(function(){
+                            mostraOpcoes('ataqueMais');    
+                        },delayTime);                        
                         break;
                 }
             },delayTime);
             break;
         default:
             console.log('Não houve dano no heroi');
-            mostraOpcoes('ataqueMais');
+            setTimeout(function(){
+                mostraOpcoes('ataqueMais');    
+            },delayTime);
             break;
     }
 } 
@@ -537,7 +618,7 @@ function poeAsCartas($deck) {
                 .css('left',i*2+'px')
                 .removeClass('entranojogo');
             },i*($deck.length*10));
-        });   
+        });        
     },500);
 }
 
@@ -545,6 +626,7 @@ function viraCartasDoDeck($deck,$qtd){
     var topododeck = $('.card:nth-of-type('+deck.length+')');
     var count = 0;
 	$('.baseCarta').show().click(function(ev) {
+        $('.showText').text('');
         switch (count) {
             case 0:
                 var qtd = $qtd;
@@ -611,12 +693,12 @@ function interacaoComCartas($obj) {
             case 'buff':
                 cLog('buff');
                 bonus(el.tipo2,1);
-                mostraOpcoes('continuar');
+                // mostraOpcoes('continuar');
                 break;
             case 'debuff':
                 cLog('debuff');
                 bonus(el.tipo2,-1);
-                mostraOpcoes('continuar');
+                // mostraOpcoes('continuar');
                 break;
             default:
                 console.log('Não monstro');
@@ -638,19 +720,20 @@ function irProCemiterio($estacarta, $posicao) {
             }, delayTime);
             break;
         default:
-            console.log('emJogo.length no swith delicia');
-            console.log(emJogo.length);
+            // console.log('emJogo.length no swith delicia');
+            // console.log(emJogo.length);
             switch (emJogo.length) {
                 case 1:
                     cemiterio.push(emJogo.pop());
                     $('.deckPlace').attr('data-qtd','');
                     setTimeout(function(){
+                        logsTexto('Clique na carta para jogar');
                         viraCartasDoDeck(deck, 1);
                     },0);
                     break;
                 default:
-                    console.log('emJogo.length no swith delicia case default');
-                    console.log(emJogo.length);
+                    // console.log('emJogo.length no swith delicia case default');
+                    // console.log(emJogo.length);
                     var invertePos = (emJogo.length - 1) - estaPosicao;
                     cemiterio.push(emJogo[estaPosicao]);
                     emJogo.splice(estaPosicao, 1);

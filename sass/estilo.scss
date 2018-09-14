@@ -21,7 +21,7 @@ $vermelho-3: #3e0001;
 // $amarelo-3: #7b8250;
 
 // //VERDE
-// $verde-1: #8ce382;
+$verde-1: #8ce382;
 $verde-2: #18ee00;
 // $verde-3: #539251
 
@@ -50,6 +50,59 @@ $cinza-3: #ccc;
 $font-1: 'Press Start 2P', cursive;
 //$font-1: 'MedievalSharp', cursive;
 $font-2: 'Oswald', sans-serif;
+
+// ANIMAÇÕES
+// ===================================================================
+@keyframes shake {
+  10%, 90% {
+    transform: rotateY(180deg) scale(1.6) translate3d(-1px, 0, 0);
+  }
+  
+  20%, 80% {
+    transform: rotateY(180deg) scale(1.6) translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: rotateY(180deg) scale(1.6) translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: rotateY(180deg) scale(1.6) translate3d(4px, 0, 0);
+  }
+}
+
+@keyframes hitMe {
+	10%, 90% {
+		box-shadow: inset 0 0 0px $vermelho-2;
+	}
+
+	30%, 70% {
+		box-shadow: inset 0 0 100px $vermelho-2;
+	}
+
+	40%,60% {
+		box-shadow: inset 0 0 10px $vermelho-2;
+	}
+}
+
+@keyframes holy {
+	0%, 100% {
+		box-shadow: inset 0 0 0px #8ce382;
+	}
+
+	45%, 55% {
+		box-shadow: inset 0 0 50px #8ce382;
+	}
+
+	// 40%,60% {
+	// 	box-shadow: inset 0 0 10px #8ce382;
+	// }
+}
+
+
+// CODIGO
+// ===================================================================
+
 
 body {
 	font-size: 14px;
@@ -104,6 +157,13 @@ body *, body *:before, body *:after {
 		margin: 0; 
 		padding: 10px;
 		overflow: hidden;
+		transition: background 1s;
+		&.atingido {
+			animation: hitMe 1s;
+		}
+		&.bencao {
+			animation: holy 2s;
+		}
 		.baseCarta {
 		    position: absolute;
 			width: 176px;
@@ -255,7 +315,7 @@ body *, body *:before, body *:after {
 			float: left;
 			position: relative;
 			padding: 5px 10px 10px;
-			font-family: $font-2;;
+			font-family: $font-2;
 		    font-size: 0.7em;
 		    line-height: 1.2em;
 		    float: left;
@@ -286,6 +346,12 @@ body *, body *:before, body *:after {
 			left: -150%!important;
 			top: 0px!important;
 			transition: all 0.5s ease-in;
+		}
+		&.atacando {
+		  animation: shake 0.82s;
+		  // transform: translate3d(0, 0, 0);
+		  // backface-visibility: hidden;
+		  // perspective: 1000px;
 		}
 		.mudandoValor {
 			transition: all 0.3s;
@@ -459,6 +525,8 @@ body *, body *:before, body *:after {
 			    width: 60px;
 			    height: 60px;
 			    background: green;
+			    background-image: url(./img/heroi.png);
+			    background-size: 100%;
 			}
 
 			.barL {
@@ -511,7 +579,7 @@ body *, body *:before, body *:after {
 	    float: left;
 	    position: relative;
 	    width: calc(100% - 60px);
-	    background-color: $cinza-3;
+	    background-color: $cinza-1;
 	    padding: 3px;
 
 		    > span {
@@ -530,44 +598,41 @@ body *, body *:before, body *:after {
 			    height: 25px;
 			    padding:  3px;
 			    margin: 0;
-			    background-image: url('./img/forca.svg');
+			    background-image: url('./img/forca.png');
 			    -webkit-background-size: 75%;
 			    background-size: 75%;
 				background-repeat: no-repeat;
 		    	background-position: center;
-			}
-
-			> .habilidade .img {
-				background-image: url('./img/habilidade.svg');
-			}
-
-			> .resistencia .img {
-				background-image: url('./img/armadura.svg');
-			}
-
-			> .pv {
-				.img {
-					background-image: url('./img/resistencia.svg');
+		    	&.habilidade {
+					background-image: url('./img/habilidade.png');
 				}
 
-				.valor {
-					float: left;
-				    position: relative;
-				    width: calc(100% - 25px);
-				    font-size: 1.2em;
-				    padding: 0;
-				    text-align: center;
-				    line-height: 1.6em;
-				    &.mudandoValor {
-						transition: all 0.3s;
-						transform:  scale(2.5);
-						color: $vermelho-2;
-					}
-					&.mudandoValorPositivo {
-						transition: all 0.3s;
-						transform:  scale(2.5);
-						color: $verde-2;	
-					}
+				&.resistencia {
+					background-image: url('./img/resistencia.png');
+				}
+
+				&.pv {
+					background-image: url('./img/pv.png');
+				}
+			}
+
+			.valor {
+				float: left;
+			    position: relative;
+			    width: calc(100% - 25px);
+			    font-size: 1em;
+			    padding: 0;
+			    text-align: center;
+			    line-height: 1.85em;
+			    &.mudandoValor {
+					transition: all 0.3s;
+					transform:  scale(2.5);
+					color: $vermelho-2;
+				}
+				&.mudandoValorPositivo {
+					transition: all 0.3s;
+					transform:  scale(2.5);
+					color: $verde-2;	
 				}
 			}
 		}

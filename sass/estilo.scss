@@ -99,7 +99,6 @@ $font-2: 'Oswald', sans-serif;
 	// }
 }
 
-
 // CODIGO
 // ===================================================================
 
@@ -348,10 +347,10 @@ body *, body *:before, body *:after {
 			transition: all 0.5s ease-in;
 		}
 		&.atacando {
-		  animation: shake 0.82s;
-		  // transform: translate3d(0, 0, 0);
-		  // backface-visibility: hidden;
-		  // perspective: 1000px;
+		  	animation: shake 0.82s;
+		}
+		&.chamando-cartas {
+			transform: rotateY(90deg) scale(1.6);
 		}
 		.mudandoValor {
 			transition: all 0.3s;

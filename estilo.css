@@ -283,6 +283,10 @@ body *, body *:before, body *:after {
   animation: shake 0.82s;
 }
 
+.card.chamando-cartas {
+  transform: rotateY(90deg) scale(1.6);
+}
+
 .card .mudandoValor {
   transition: all 0.3s;
   transform: scale(3);

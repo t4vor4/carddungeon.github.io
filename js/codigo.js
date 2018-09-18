@@ -14,6 +14,7 @@ const cartasJogo = [
         resistencia: 0, 
         pv: 1,
         descricao:'Um morto vivo animado por magia', 
+        poder: 0,
         imagem: 'esqueleto.png'
     },
     {   id: 0002,
@@ -25,6 +26,7 @@ const cartasJogo = [
         resistencia: 1,
         pv: 1,
         descricao:'Um morto-vivo extremamente violento', 
+        poder: 0,
         imagem:'zumbi-agressivo.png'
     },
     {   id: 0003,
@@ -36,6 +38,7 @@ const cartasJogo = [
         resistencia: 1,
         pv: 1,
         descricao:'Um jovem Necromante. Quando em jogo, pode ressucitar um morto-vivo do cemiterio', 
+        poder: 1,
         imagem:'jovem-necromante.png'
     },
     {   id: 0004,
@@ -47,6 +50,7 @@ const cartasJogo = [
         resistencia: 1,
         pv: 1,
         descricao:'Um poderoso cavaleiro morto-vivo', 
+        poder: 0,
         imagem:'cavaleiro-da-morte.png'
     },
     {   id: 0005,
@@ -58,6 +62,7 @@ const cartasJogo = [
         resistencia: 1,
         pv: 2,
         descricao:'Um velho necromante. Quando em jogo, pode ressucitar dois mortos-vivos do cemiterio.', 
+        poder: 2,
         imagem:'velho-necromante.png',
     },
     {   id: 0006,
@@ -69,6 +74,7 @@ const cartasJogo = [
         resistencia: 1,
         pv: 1,
         descricao:'Um poderoso necromante que voltou da morte. Pode ressucitar três mortos-vivos do cemiterio.', 
+        poder: 3,
         imagem:'necromante-morto-vivo.png'
     },
     {   id: 0007,
@@ -80,6 +86,70 @@ const cartasJogo = [
         resistencia: 1,
         pv: 1,
         descricao:'Este rei perdido entre a vida e a morte é o senhor desta masmorra.', 
+        poder: 0,
+        imagem:'rei-maldito.png'
+    },
+]
+
+const cartasJogoTeste = [
+    {   id: 0006,
+        nome:'Necromante Morto-vivo',//Debuffer
+        tipo: 'Monstro',
+        tipo2: 'Necromante',
+        forca: 2, 
+        habilidade: 1, 
+        resistencia: 1,
+        pv: 1,
+        descricao:'Um poderoso necromante que voltou da morte. Pode ressucitar três mortos-vivos do cemiterio.', 
+        poder: 3,
+        imagem:'necromante-morto-vivo.png'
+    },
+    {   id: 0001,
+        nome:'Esqueleto', //filler
+        tipo: 'Monstro',
+        tipo2: 'Morto-vivo',
+        forca: 1, 
+        habilidade: 0, 
+        resistencia: 0, 
+        pv: 1,
+        descricao:'Um morto vivo animado por magia', 
+        poder: 0,
+        imagem: 'esqueleto.png'
+    },
+    {   id: 0002,
+        nome:'Zumbi Raivoso', //attacker
+        tipo: 'Monstro',
+        tipo2: 'Morto-vivo',
+        forca: 1, 
+        habilidade: 1, 
+        resistencia: 1,
+        pv: 1,
+        descricao:'Um morto-vivo extremamente violento', 
+        poder: 0,
+        imagem:'zumbi-agressivo.png'
+    },   
+    {   id: 0004,
+        nome:'Cavaleiro da Morte',  //Defender
+        tipo: 'Monstro',
+        tipo2: 'Morto-vivo',
+        forca: 2, 
+        habilidade: 1, 
+        resistencia: 1,
+        pv: 1,
+        descricao:'Um poderoso cavaleiro morto-vivo', 
+        poder: 0,
+        imagem:'cavaleiro-da-morte.png'
+    },       
+    {   id: 0007,
+        nome:'O Rei Maldito', //Boss
+        tipo: 'Monstro',
+        tipo2: 'Morto-vivo',
+        forca: 2, 
+        habilidade: 1, 
+        resistencia: 1,
+        pv: 1,
+        descricao:'Este rei perdido entre a vida e a morte é o senhor desta masmorra.', 
+        poder: 0,
         imagem:'rei-maldito.png'
     },
 ]
@@ -162,13 +232,13 @@ var estaPosicao = 0;
 
 //Estados basicos das cartas
 var deck = cartasJogo;
-// deck = cartasBonus;
+
 $.merge(deck, cartasBonus);
 deck = embaralhaCartas(deck);
 console.log('deck');
 setTimeout(function(){
     deck = embaralhaCartas(deck);
-    console.log('deck');
+    // console.log('deck');
 },0);
 
 
@@ -369,8 +439,7 @@ function carta($val) {
             '</span>'+
             '<div class="tipo"><span class="tipo1"></span> - <span class="tipo2"></span></div>'+
             '<p class="descricao"></p>'+
-        '</div>'+
-        
+        '</div>'+        
     '</div>';
     return trechoHtml;
 }
@@ -537,6 +606,7 @@ function turnoInimigoMais($inimigo, $posicao) {
         switch (inimigoPV[$posicao].pVida > 0) {
             case true:
                 danoFeito = ataque(inimigo,heroiGame);
+                // danoFeito = 0;
                 switch (danoFeito > 0) {
                     case true:
                         heroiPV = heroiPV-danoFeito;
@@ -574,6 +644,7 @@ function turnoJogadorMais($inimigo_atual, $posicao) {
     var invertePos = (emJogo.length - 1) - estaPosicao;
     var cartaInimigo = $('.card.pos-'+ invertePos);
     danoFeito = ataque(heroiGame, $inimigo_atual);
+    // danoFeito = 10;
     switch (danoFeito > 0) {
         case true:
             inimigoPV[$posicao].pVida = inimigoPV[$posicao].pVida-danoFeito;
@@ -605,19 +676,27 @@ function turnoJogadorMais($inimigo_atual, $posicao) {
 } 
 
 function poeAsCartas($deck) {
-    var i = 0;
+    // var i = 0;
     $($deck).each(function(i, el) {
         $('.deckPlace').append(carta());
         $('.card').addClass('entranojogo').addClass('nodeckcompra');
     });
     setTimeout(function(){
         $($deck).each(function(i, el) {
-           setTimeout(function(){
+            var t_carta_na_mesa = i*((delayTime/$deck.length)/5);
+            setTimeout(function(){
                 $('.card:nth-of-type('+(i+1)+')')
                 .css('top',i*-1+'px')
                 .css('left',i*2+'px')
                 .removeClass('entranojogo');
-            },i*($deck.length*10));
+                switch (i == $deck.length-1) {
+                case true:
+                    setTimeout(function(){
+                        logsTexto('Começando o jogo');
+                    },500);                    
+                    break;
+                }
+            },t_carta_na_mesa);                  
         });        
     },500);
 }
@@ -647,35 +726,35 @@ function viraCartasDoDeck($deck,$qtd){
         }
         count++;
 	});	
+}
 
-    function configuraCarta($carta) {
-    	var front = $carta.find('.frontCard');
-    	var este = emJogo[emJogo.length-1];
-        console.log(este.tipo);
-    	front.find('.nome').text(este.nome);
-    	front.find('.nome').text(este.nome);
-    	front.find('.tipo .tipo1').text(este.tipo);
-    	front.find('.tipo .tipo2').text(este.tipo2);
-    	front.find('.descricao').text(este.descricao);
-        switch (este.tipo) {
-            case 'buff':
-                front.find('.imagem').css('background-image','url(./img/'+este.imagem+')').addClass('grande');
-                front.find('.cont-stats').remove();
-                break;
-            case 'debuff':
-                front.find('.imagem').css('background-image','url(./img/'+este.imagem+')').addClass('grande');
-                front.find('.cont-stats').remove();
-                break;
-            default:
-                front.find('.imagem').css('background-image','url(./img/'+este.imagem+')');
-                front.find('.cont-stats .forca .valor').text(este.forca);
-                front.find('.cont-stats .habilidade .valor').text(este.habilidade);
-                front.find('.cont-stats .resistencia .valor').text(este.resistencia);
-                front.find('.cont-stats .pv .valor').text(este.pv);
-                break;
-        }
-    	$carta.addClass('deFrente');
+function configuraCarta($carta) {
+    var front = $carta.find('.frontCard');
+    var este = emJogo[emJogo.length-1];
+    console.log(este.tipo);
+    front.find('.nome').text(este.nome);
+    front.find('.nome').text(este.nome);
+    front.find('.tipo .tipo1').text(este.tipo);
+    front.find('.tipo .tipo2').text(este.tipo2);
+    front.find('.descricao').text(este.descricao);
+    switch (este.tipo) {
+        case 'buff':
+            front.find('.imagem').css('background-image','url(./img/'+este.imagem+')').addClass('grande');
+            front.find('.cont-stats').remove();
+            break;
+        case 'debuff':
+            front.find('.imagem').css('background-image','url(./img/'+este.imagem+')').addClass('grande');
+            front.find('.cont-stats').remove();
+            break;
+        default:
+            front.find('.imagem').css('background-image','url(./img/'+este.imagem+')');
+            front.find('.cont-stats .forca .valor').text(este.forca);
+            front.find('.cont-stats .habilidade .valor').text(este.habilidade);
+            front.find('.cont-stats .resistencia .valor').text(este.resistencia);
+            front.find('.cont-stats .pv .valor').text(este.pv);
+            break;
     }
+    $carta.addClass('deFrente');
 }
 
 function interacaoComCartas($obj) {
@@ -688,7 +767,8 @@ function interacaoComCartas($obj) {
                     nome: el.nome,
                     pos: i
                 });
-                mostraOpcoes('ataqueMais');
+                poderesDeMonstro(el);
+                // mostraOpcoes('ataqueMais');
                 break;
             case 'buff':
                 cLog('buff');
@@ -707,22 +787,95 @@ function interacaoComCartas($obj) {
 	});
 }
 
+function poderesDeMonstro($el) {
+    console.log('poderesDeMonstro');
+    switch ($el.tipo2) {
+        case 'Necromante':
+            console.log(cemiterio);
+            var delay_do_poder = delayTime*0.5;
+            var temp_arr = [];
+            var i;
+            var count = 0;
+            var y = $el.poder;
+
+            for (var i = cemiterio.length; i > 0; ) {                    
+                switch (y > 0) {
+                    case true:
+                        switch (cemiterio[i-1].tipo2) {
+                            case 'Morto-vivo':
+                                deck.push(cemiterio[i-1]);
+                                cemiterio.splice(cemiterio[i-1], 1);
+                                y--;
+                                count++;
+                                break;
+                        }
+                    break;
+                    case false: 
+                        i = 0;
+                        break;
+                }
+                i--;
+            }
+
+            switch (count > 0) {
+                case true:
+                    emJogo[0].tipo2 = 'Necromante Ativo';
+                    deck.push(emJogo.pop());
+                    count++;
+                    var poder = count;
+                    while (count > 0) {
+                        $('.deckPlace').append(carta());
+                        $('.card:last-of-type').addClass('nodeckcompra josias');
+                        count--;
+                    }
+                    setTimeout(function(){
+                        $('.card.pos-0').addClass('chamando-cartas');
+                        setTimeout(function(){
+                            $('.card.pos-0').remove();
+                            viraCartasDoDeck(deck, poder);
+                            $('.baseCarta').click();
+                        },delay_do_poder*3);
+                    },delay_do_poder*2);
+                    break;
+                default: 
+                    mostraOpcoes('ataqueMais');
+                    break;
+            }
+            break;
+
+        default: 
+            mostraOpcoes('ataqueMais');
+            break;
+    }
+}
+
 function irProCemiterio($estacarta, $posicao) {
     $estacarta.addClass('cemiterio');
     setTimeout(function(){
         $estacarta.remove();
-    },delayTime/2);
+    },delayTime*0.5);
 
     switch (deck.length < 1) {
         case true:
-            setTimeout(function(){
-                gameOver();    
-            }, delayTime);
+            switch (emJogo.length == 1) {
+                case true:
+                    setTimeout(function(){
+                        gameOver();    
+                    }, delayTime*0.5);
+                    break;
+                default: 
+                    mandando_pra_cova();
+                    break;
+            }            
             break;
         default:
-            // console.log('emJogo.length no swith delicia');
-            // console.log(emJogo.length);
-            switch (emJogo.length) {
+         mandando_pra_cova();
+            break;
+            
+    }
+
+    function mandando_pra_cova() {
+        switch (emJogo.length) {
                 case 1:
                     cemiterio.push(emJogo.pop());
                     $('.deckPlace').attr('data-qtd','');
@@ -732,8 +885,6 @@ function irProCemiterio($estacarta, $posicao) {
                     },0);
                     break;
                 default:
-                    // console.log('emJogo.length no swith delicia case default');
-                    // console.log(emJogo.length);
                     var invertePos = (emJogo.length - 1) - estaPosicao;
                     cemiterio.push(emJogo[estaPosicao]);
                     emJogo.splice(estaPosicao, 1);

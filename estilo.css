@@ -264,7 +264,7 @@ body *, body *:before, body *:after {
 }
 
 .card.deFrente {
-  transform: rotateY(180deg) scale(1.6);
+  transform: rotateY(180deg) scale(1.4);
   margin-left: 50%;
   left: -68px !important;
   top: 0px !important;
@@ -281,6 +281,7 @@ body *, body *:before, body *:after {
 
 .card.atacando {
   animation: shake 0.82s;
+  z-index: 50;
 }
 
 .card.chamando-cartas {

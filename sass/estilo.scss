@@ -333,7 +333,7 @@ body *, body *:before, body *:after {
 			left: 50%;
 		}	
 		&.deFrente {
-			transform: rotateY(180deg) scale(1.6);
+			transform: rotateY(180deg) scale(1.4);
 		    margin-left: 50%;
 		    left: -68px!important;
 		    top: 0px!important;
@@ -348,6 +348,7 @@ body *, body *:before, body *:after {
 		}
 		&.atacando {
 		  	animation: shake 0.82s;
+		  	z-index: 50;
 		}
 		&.chamando-cartas {
 			transform: rotateY(90deg) scale(1.6);

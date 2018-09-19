@@ -216,7 +216,7 @@ const cartasBonus = [
     },
 ]
 
-const delayTime = 2000;
+const delayTime = 3000;
 
 var heroi = {nome:'Heroi', forca: 3, habilidade: 4, resistencia: 3, pv: 15}
 
@@ -239,6 +239,7 @@ console.log('deck');
 setTimeout(function(){
     deck = embaralhaCartas(deck);
     // console.log('deck');
+    // deck = cartasJogoTeste;
 },0);
 
 
@@ -288,14 +289,14 @@ function bonus($atributo, $bonus) {
                     setTimeout(function(){
                         $('.deckPlace').removeClass('bencao');
                         irProCemiterio($('.card.pos-0'), 0);
-                    },delayTime);
+                    },delayTime/3);
                 }
                 else {
                     //conseguiu a benção
                     logsTexto('O heroi não conseguiu...'); 
                     setTimeout(function(){
                         irProCemiterio($('.card.pos-0'), 0);
-                    },delayTime);
+                    },delayTime/3);
                 }
             },0);
         });
@@ -316,13 +317,13 @@ function bonus($atributo, $bonus) {
                     setTimeout(function(){
                         $('.deckPlace').removeClass('atingido');
                         irProCemiterio($('.card.pos-0'), 0);
-                    },delayTime);
+                    },delayTime/3);
                 }
                 else {
                     logsTexto('O heroi passou pela armadilha');   
                     setTimeout(function(){
                         irProCemiterio($('.card.pos-0'), 0);
-                    },delayTime);
+                    },delayTime/3);
                 }
             },0);
         });
@@ -389,13 +390,16 @@ function bonus($atributo, $bonus) {
         $('.heroBar .barR .'+$atributo+' .valor').text(heroiGame[$atributo]).addClass($classe);
         setTimeout(function(){
             $('.heroBar .barR .'+$atributo+' .valor').removeClass($classe);
-        },delayTime);    
+        },delayTime/3);    
     }
     
 
     
 }
 
+// ==========================================================
+// FINS DE JOGO
+// ==========================================================
 //game over 
 function gameOver() {
     cLog('gameover');
@@ -403,7 +407,16 @@ function gameOver() {
     $('body').append('<div id="modal" class="gameover"><span class="text-gameover">Fim de Jogo</div>');
     setTimeout(function(){
         $('#bgModal, #modal').addClass('complete');
-    },1000);
+    },delayTime/10);
+}
+
+function muito__bem() {
+    cLog('gameover');
+    $('body').append('<span id="bgModal"></span>');
+    $('body').append('<div id="modal" class="gameover"><span class="text-gameover">Parabéns!<small>Você venceu a masmorra.</small></div>');
+    setTimeout(function(){
+        $('#bgModal, #modal').addClass('complete');
+    },delayTime/10);
 }
     
 // Embaralha aleatóriamente as cartas
@@ -618,19 +631,19 @@ function turnoInimigoMais($inimigo, $posicao) {
                             setTimeout(function(){
                                 cartaInimigo.removeClass('atacando');                                
                                 $('.heroBar .pv .valor').removeClass('mudandoValor');
-                            },delayTime);
+                            },delayTime/4);
                             if (heroiPV <= 0) {
                                 logsTexto(heroiGame.nome+' foi derrotado.');
                                 gameOver();
                             }
-                        },delayTime);
+                        },delayTime/5);
                         break;
                     default:
                         setTimeout(function() {
                             if (ordem_de_ataque.length == 0 && inimigoPV[$posicao].pVida > 0) {
                                 mostraOpcoes('ataqueMais');
                             }
-                        },delayTime);
+                        },delayTime/4);
                         break;
                 }
                 break;
@@ -652,7 +665,7 @@ function turnoJogadorMais($inimigo_atual, $posicao) {
                 cartaInimigo.find('.pv .valor').text(inimigoPV[$posicao].pVida).addClass('mudandoValor');
                 setTimeout(function(){
                     cartaInimigo.find('.pv .valor').removeClass('mudandoValor');
-                },delayTime);
+                },delayTime/3);
                 switch (inimigoPV[$posicao].pVida <= 0) {
                     case true:
                         logsTexto($inimigo_atual.nome+' foi derrotado.');
@@ -664,13 +677,13 @@ function turnoJogadorMais($inimigo_atual, $posicao) {
                         },delayTime);                        
                         break;
                 }
-            },delayTime);
+            },delayTime/4);
             break;
         default:
             console.log('Não houve dano no heroi');
             setTimeout(function(){
                 mostraOpcoes('ataqueMais');    
-            },delayTime);
+            },delayTime/4);
             break;
     }
 } 
@@ -692,7 +705,7 @@ function poeAsCartas($deck) {
                 switch (i == $deck.length-1) {
                 case true:
                     setTimeout(function(){
-                        logsTexto('Começando o jogo');
+                        logsTexto('Clique em uma carta para iniciar.');
                     },500);                    
                     break;
                 }
@@ -791,34 +804,41 @@ function poderesDeMonstro($el) {
     console.log('poderesDeMonstro');
     switch ($el.tipo2) {
         case 'Necromante':
-            console.log(cemiterio);
-            var delay_do_poder = delayTime*0.5;
+            var delay_do_poder = delayTime/3;
             var temp_arr = [];
-            var i;
+            var ripley = 0;
             var count = 0;
             var y = $el.poder;
 
-            for (var i = cemiterio.length; i > 0; ) {                    
-                switch (y > 0) {
-                    case true:
-                        switch (cemiterio[i-1].tipo2) {
-                            case 'Morto-vivo':
-                                deck.push(cemiterio[i-1]);
-                                cemiterio.splice(cemiterio[i-1], 1);
-                                y--;
-                                count++;
-                                break;
+            for (var i = cemiterio.length; i > 0; ) {
+                //setTimeout(function(){
+                    var index = i-1;
+                    if (y > 0) {
+                        if (cemiterio[index].tipo2 == 'Morto-vivo') {
+                            deck.push(cemiterio[index]);
+                            cemiterio.splice(index, 1);
+                            y--;
+                            count++;
                         }
-                    break;
-                    case false: 
+                        i--;
+                    }
+                    else {
                         i = 0;
-                        break;
-                }
-                i--;
+                    }               
+                    ripley++;
+                //},1*ripley)
             }
 
-            switch (count > 0) {
-                case true:
+            // console.log('ripley = '+ripley);
+            // console.log('=========================');
+            // console.log('count = '+count);
+            // console.log('=========================');
+            // console.log('temp_arr');
+            // console.log(temp_arr);
+            // console.log('=========================');
+
+            // setTimeout(function(){
+                if (count > 0) {
                     emJogo[0].tipo2 = 'Necromante Ativo';
                     deck.push(emJogo.pop());
                     count++;
@@ -834,13 +854,16 @@ function poderesDeMonstro($el) {
                             $('.card.pos-0').remove();
                             viraCartasDoDeck(deck, poder);
                             $('.baseCarta').click();
-                        },delay_do_poder*3);
-                    },delay_do_poder*2);
-                    break;
-                default: 
+                        },delay_do_poder*2);
+                    },delay_do_poder);
+                }
+                else {
                     mostraOpcoes('ataqueMais');
-                    break;
-            }
+                }
+                
+            // },ripley+5);
+
+            
             break;
 
         default: 
@@ -860,7 +883,7 @@ function irProCemiterio($estacarta, $posicao) {
             switch (emJogo.length == 1) {
                 case true:
                     setTimeout(function(){
-                        gameOver();    
+                        muito__bem();    
                     }, delayTime*0.5);
                     break;
                 default: 

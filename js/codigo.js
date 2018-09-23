@@ -238,8 +238,6 @@ deck = embaralhaCartas(deck);
 console.log('deck');
 setTimeout(function(){
     deck = embaralhaCartas(deck);
-    // console.log('deck');
-    // deck = cartasJogoTeste;
 },0);
 
 

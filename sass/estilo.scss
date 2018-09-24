@@ -140,7 +140,8 @@ body *, body *:before, body *:after {
 	width: 320px;
 	margin-left: 50%;
 	left: -160px;
-	background-color: #fff;
+	//background-color: $cinza-3;
+	background-color: $cinza-1;
 	border: none;
 	height: 100%;
 	min-height: 555px;
@@ -175,8 +176,38 @@ body *, body *:before, body *:after {
 	}
 }
 
+/* INTRO DO JOGO */
+.texto-intro {
+    float: left;
+    position: absolute;
+    width: 100%;
+    padding: 0 50px;
+    top: 50%;
+    margin-top: -25px;
+	text-align: center;
+	line-height: 1.6em;
+	display: none;
+}
 
+.titleGame {
+	float: left;
+	position: absolute;
+	top: 40%;
+	width: 217px;
+	font-size: 2.2em;
+	transform: rotateZ(-10deg);
+	margin-left: 50%;
+	left: -109px;
+	text-shadow: -4px 3px 0 #000;
+}
 
+.bt-inicio-jogo {
+    float: left;
+    position: absolute;
+    bottom: 40px;
+    margin-left: 50%;
+    left: -62px;
+}
 
 
 

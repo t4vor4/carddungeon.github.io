@@ -15,7 +15,8 @@ const cartasJogo = [
         pv: 1,
         descricao:'Um morto vivo animado por magia', 
         poder: 0,
-        imagem: 'esqueleto.png'
+        imagem: 'esqueleto.png',
+        alt: 'Um esqueleto humano, com ossos velhos cobertos de musgo, reanimado por magia. Usa botas e luvas de couro muito deterioradas. No braço direito carrega um escudo de madeira podre e no braço esquerdo uma espada enferrujada que ha muito tempo perdeu o fio.'
     },
     {   id: 0002,
         nome:'Zumbi Raivoso', //attacker
@@ -27,7 +28,8 @@ const cartasJogo = [
         pv: 1,
         descricao:'Um morto-vivo extremamente violento', 
         poder: 0,
-        imagem:'zumbi-agressivo.png'
+        imagem:'zumbi-agressivo.png',
+        alt: 'O Zumbi raivoso é um cadaver reanimado por magia aspecto brutal. Seus olhos tem orbitas brancas e sua pele esta coberta de chagas. Usa uma bermuda de tecido grosso e rasgado e seus punhos estão cobertos pelo sangue de suas vítimas'
     },
     {   id: 0003,
         nome:'Necromante Acolito', //Caster
@@ -39,7 +41,8 @@ const cartasJogo = [
         pv: 1,
         descricao:'Um jovem Necromante. Quando em jogo, pode ressucitar um morto-vivo do cemiterio', 
         poder: 1,
-        imagem:'jovem-necromante.png'
+        imagem:'jovem-necromante.png',
+        alt: 'Um jovem aprendiz de necromância que esbanja poder, que lhe escapa pelas mãos na forma de duas pequenas chamas. Paira ameaçadoramente no ar, usando uma túnica com pares de espinhos nos ombros e uma corrente amarrada a um crânio humano na cintura.'
     },
     {   id: 0004,
         nome:'Cavaleiro da Morte',  //Defender
@@ -51,7 +54,8 @@ const cartasJogo = [
         pv: 1,
         descricao:'Um poderoso cavaleiro morto-vivo', 
         poder: 0,
-        imagem:'cavaleiro-da-morte.png'
+        imagem:'cavaleiro-da-morte.png',
+        alt: 'Um esqueleto reanimado por magia trajando uma velha e pesada armadura negra com elmo. Seu elmo possui um par de asas nas laterais, suas costas são cobertas por uma capa que quase toca o chão, de sua cintura desce um tecido que cobre parte de suas pernas, sendo que estes itens todos tem a cor do sangue humano. Carrega duas espadas que gotejam sangue fresco no chão.'
     },
     {   id: 0005,
         nome:'Necromante Ancião', //Buffer
@@ -64,6 +68,7 @@ const cartasJogo = [
         descricao:'Um velho necromante. Quando em jogo, pode ressucitar dois mortos-vivos do cemiterio.', 
         poder: 2,
         imagem:'velho-necromante.png',
+        alt: 'Um mago necromante idoso que se apoia em um cajado. De suas mãos saem uma grande chama de poder. Sua cabeça esta coberta por um capuz e seu rosto esta sob as sombras, mas seus olhos brilham com o poder mágico. Em seu pescoço, um pequeno crânio humano esta pendurado em uma corrente. No topo de seu cajado há um crânio semi-humano com chifres curvos e chamas intensas de poder envolvem todo esta caveira demoníaca.'
     },
     {   id: 0006,
         nome:'Necromante Morto-vivo',//Debuffer
@@ -75,7 +80,8 @@ const cartasJogo = [
         pv: 1,
         descricao:'Um poderoso necromante que voltou da morte. Pode ressucitar três mortos-vivos do cemiterio.', 
         poder: 3,
-        imagem:'necromante-morto-vivo.png'
+        imagem:'necromante-morto-vivo.png',
+        alt: 'Um poderoso esqueleto envolto por chamas mágicas flutua a meio metro do chão. Uma grande labareda mágica se projeta do chão até seu corpo, envolvendo e soltando fagulhas no ar. Usa apenas uma túnica púida sobre a caixa toráxica que brilha pela intensidade de seu poder.'
     },
     {   id: 0007,
         nome:'O Rei Maldito', //Boss
@@ -87,7 +93,8 @@ const cartasJogo = [
         pv: 1,
         descricao:'Este rei perdido entre a vida e a morte é o senhor desta masmorra.', 
         poder: 0,
-        imagem:'rei-maldito.png'
+        imagem:'rei-maldito.png',
+        alt: 'Um rei cadaver, com uma barba longa e cinzenta como teias de aranha, usando uma armadura prateada por cima de uma malha negra. Sobre sua cabeça esta uma coroa dourada cravejada de diamentes. Suas costas estão cobertas por uma capa da cor da realeza, e de sua cintura desce uma faixa do mesmo tecido. Em sua mão direita segura um escudo prateado e em sua mão esquerda esta uma espada brilhante de aspecto mágico.'
     },
 ]
 
@@ -161,28 +168,32 @@ const cartasBonus = [
         tipo: 'buff',
         tipo2: 'forca',
         descricao:'Teste sua habilidade. Em caso de sucesso, você ganha 1 ponto de força', 
-        imagem: 'green--potion.png'
+        imagem: 'green--potion.png',
+        alt: 'Uma sala circular com uma estátua no centro. Essa estatua representa um homem de pé, segurando um leão com o braço esquerdo e levantando sua espada aos céus como braço direito. É a representação de uma antiga divindade relacionada a força.'
     },
     {   id: 0009,
         nome:'Caminho da Habilidade', //Buff
         tipo: 'buff',
         tipo2: 'habilidade',
         descricao:'Teste sua habilidade. Em caso de sucesso, você ganha 1 ponto de Habilidade', 
-        imagem: 'green--potion.png'
+        imagem: 'green--potion.png',
+        alt: 'Um corredor se projeta a frente com esculturas em alto-relevo de raposas, coelhos e outros animais silvestres na parede. Aparentemente, essas imagens estão ligadas aos espíritos da floresta que circula a masmorra.'
     },
     {   id: 0010,
         nome:'Area da Resistencia', //Buff
         tipo: 'buff',
         tipo2: 'resistencia',
         descricao:'Teste sua habilidade. Em caso de sucesso, você ganha 1 ponto de Resistencia', 
-        imagem: 'green--potion.png'
+        imagem: 'green--potion.png',
+        alt: 'Um salão a estatua de uma jovem segurando um touro pelos chifres. A imagem representa uma divindade local ligada a resistência física e mental.'
     },
     {   id: 0011,
         nome:'Fonte da Vida', //Buff
         tipo: 'buff',
         tipo2: 'pv',
         descricao:'Teste sua habilidade. Em caso de sucesso, você ganha 1d6 ponto de Pontos de vida', 
-        imagem: 'green--potion.png'
+        imagem: 'green--potion.png',
+        alt: 'No centro desta sala se encontra uma fonte de águas cristalinas. No topo da fonte há uma estatua de uma mulher com as mãos espalmadas na altura da cintura. De suas mãos descem fios de águas claras e de aspecto revigorante.'
     },
 
     //Bonus Negativo
@@ -191,28 +202,32 @@ const cartasBonus = [
         tipo: 'debuff',
         tipo2: 'forca',
         descricao:'Teste sua habilidade. Em caso de falha, o Heroi perde 1 de força', 
-        imagem: 'armadilha.png'
+        imagem: 'armadilha.png',
+        alt: 'Esta área exala um aroma putrido e nauseante.'
     },
     {   id: 0013,
         nome:'Chão de espinhos', //Buff
         tipo: 'debuff',
         tipo2: 'habilidade',
         descricao:'Teste sua habilidade. Em caso de falha, o Heroi perde 1 de Habilidade', 
-        imagem: 'armadilha.png'
+        imagem: 'armadilha.png',
+        alt: 'O chão desse aposento está coberto de pequenos buracos que, ao detectarem a aproximação de alguém, projetam lâminas de quarenta centímetros em grande velocidade.'
     },
     {   id: 0014,
         nome:'Correntes da Corrupção', //Buff
         tipo: 'debuff',
         tipo2: 'resistencia',
         descricao:'Teste sua habilidade. Em caso de falha, o Heroi perde 1 de Resistencia', 
-        imagem: 'armadilha.png'
+        imagem: 'armadilha.png',
+        alt: 'As paredes dessa sala possuem sulcos profundos de onde são projetadas correntes de brilho mágico. Ao encostarem em seu alvo, as correntes emitem um brilho e desaparecem, mas seu peso ainda é sentido pela vítima.'
     },
     {   id: 0015,
         nome:'Vapores Venenosos', //Buff
         tipo: 'debuff',
         tipo2: 'pv',
         descricao:'Teste sua habilidade. Em caso de falha, o Heroi perde +1d6 de Pontos de vida', 
-        imagem: 'armadilha.png'
+        imagem: 'armadilha.png',
+        alt: 'Vapores pesados sobem de maneira sinuosa do chão deste recinto. O ar tem um cheiro ocre e pungente e pelos cantos pequenos roedores jazem mortos.'
     },
 ]
 
@@ -438,15 +453,15 @@ function calcularJogada(variavel){
 function carta($val) {
     var trechoHtml = 
     '<div class="card" id="" data-pos="" data-id="">'+
-        '<div class="backCard"><span class="name">Card<br/>Dungeon</span></div>'+
+        '<div class="backCard" title="O verso da carta possui uma imagem que representa a masmorra"><span class="name">Card<br/>Dungeon</span></div>'+
         '<div class="frontCard" >'+
             '<h2 class="nome"></h2>'+
-            '<span class="imagem" ></span>'+
+            '<span class="imagem" title=""></span>'+
             '<span class="cont-stats">'+
-                '<span class="forca"><img src="'+imgSrc+'forca.png" alt="Força" /><span class="valor"></span></span>'+
-                '<span class="habilidade"><img src="'+imgSrc+'habilidade.png" alt="Força" /><span class="valor"></span></span>'+
-                '<span class="resistencia"><img src="'+imgSrc+'resistencia.png" alt="Força" /><span class="valor"></span></span>'+
-                '<span class="pv"><img src="'+imgSrc+'pv.png" alt="pv" /><span class="valor"></span></span>'+
+                '<span class="forca"><img src="'+imgSrc+'forca.png" alt="Força" /><span class="valor" title="Valor do atributo Força da carta"></span></span>'+
+                '<span class="habilidade"><img src="'+imgSrc+'Habilidade.png" alt="Atributo Habilidade" /><span class="valor" title="Valor do atributo Habilidade da carta"></span></span>'+
+                '<span class="resistencia"><img src="'+imgSrc+'Resistencia.png" alt="Atributo resistencia" /><span class="valor" title="Valor do atributo  Resistencia da carta"></span></span>'+
+                '<span class="pv"><img src="'+imgSrc+'pv.png" alt="Atributo Pontos de Vida" /><span class="valor" title="Valor do atributo Pontos de vida da carta"></span></span>'+
             '</span>'+
             '<div class="tipo"><span class="tipo1"></span> - <span class="tipo2"></span></div>'+
             '<p class="descricao"></p>'+
@@ -750,15 +765,15 @@ function configuraCarta($carta) {
     front.find('.descricao').text(este.descricao);
     switch (este.tipo) {
         case 'buff':
-            front.find('.imagem').css('background-image','url(./img/'+este.imagem+')').addClass('grande');
+            front.find('.imagem').css('background-image','url(./img/'+este.imagem+')').addClass('grande').attr('title',este.alt);
             front.find('.cont-stats').remove();
             break;
         case 'debuff':
-            front.find('.imagem').css('background-image','url(./img/'+este.imagem+')').addClass('grande');
+            front.find('.imagem').css('background-image','url(./img/'+este.imagem+')').addClass('grande').attr('title',este.alt);
             front.find('.cont-stats').remove();
             break;
         default:
-            front.find('.imagem').css('background-image','url(./img/'+este.imagem+')');
+            front.find('.imagem').attr('title',este.alt).css('background-image','url(./img/'+este.imagem+')');
             front.find('.cont-stats .forca .valor').text(este.forca);
             front.find('.cont-stats .habilidade .valor').text(este.habilidade);
             front.find('.cont-stats .resistencia .valor').text(este.resistencia);

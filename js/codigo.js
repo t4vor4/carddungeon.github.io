@@ -248,8 +248,8 @@ var estaPosicao = 0;
 //Estados basicos das cartas
 var deck = cartasJogo;
 
-$.merge(deck, cartasBonus);
-deck = embaralhaCartas(deck);
+// $.merge(deck, cartasBonus);
+deck = embaralhaCartas(cartasBonus);
 console.log('deck');
 setTimeout(function(){
     deck = embaralhaCartas(deck);
@@ -271,7 +271,8 @@ var ordem_de_ataque = [];
 // FUNÇÕES DE INICIO
 // ==========================================================
 $(document).ready(function($) {
-  jogo();  
+  jogo();
+  console.log('Rola')  
 });
 
 // ==========================================================
@@ -288,58 +289,15 @@ function bonus($atributo, $bonus) {
 
     if (bonus == 1) {
         classe = 'mudandoValorPositivo';
-        $('.showBts').html('<button class="bt testar1">Testar habilidade</button>');
-        $('.showBts .testar1').click(function(event) {
-            $(this).remove();
-            setTimeout(function(){
-                var jogada = calcularJogada(6);
-                jogada = 1;
-                if (jogada <= heroiGame.habilidade) {
-                    //conseguiu a benção
-                    $('.deckPlace').addClass('bencao');
-                    atualizaAtributo($atributo, classe, $bonus);
-                    logsTexto(textoDescritivo($atributo, $bonus));
-                    setTimeout(function(){
-                        $('.deckPlace').removeClass('bencao');
-                        irProCemiterio($('.card.pos-0'), 0);
-                    },delayTime/3);
-                }
-                else {
-                    //conseguiu a benção
-                    logsTexto('O heroi não conseguiu...'); 
-                    setTimeout(function(){
-                        irProCemiterio($('.card.pos-0'), 0);
-                    },delayTime/3);
-                }
-            },0);
-        });
+        $('.showBts').html(`${buttonTemplate('Testar Habilidade', 'testar1')}`);
+        // $('.showBts').html('<button class="bt testar1">Testar habilidade</button>');
+        
         
     }
     else {
         classe = 'mudandoValor';
-        $('.showBts').html('<button class="bt testar">Testar habilidade</button>');
-        $('.showBts .testar').click(function(event) {
-            $(this).remove();
-            setTimeout(function(){
-                var jogada = calcularJogada(6);
-                console.log('jogada  ='+jogada);
-                if (jogada > heroiGame.habilidade) {
-                    $('.deckPlace').addClass('atingido');
-                    atualizaAtributo($atributo, classe, $bonus);
-                    logsTexto(textoDescritivo($atributo, $bonus));
-                    setTimeout(function(){
-                        $('.deckPlace').removeClass('atingido');
-                        irProCemiterio($('.card.pos-0'), 0);
-                    },delayTime/3);
-                }
-                else {
-                    logsTexto('O heroi passou pela armadilha');   
-                    setTimeout(function(){
-                        irProCemiterio($('.card.pos-0'), 0);
-                    },delayTime/3);
-                }
-            },0);
-        });
+        $('.showBts').html(`${buttonTemplate('Testar Habilidade', 'testar')}`);
+       
 
         
     }
@@ -452,21 +410,21 @@ function calcularJogada(variavel){
 // Cria a carta na mesa
 function carta($val) {
     var trechoHtml = 
-    '<div class="card" id="" data-pos="" data-id="">'+
-        '<div class="backCard" title="O verso da carta possui uma imagem que representa a masmorra"><span class="name">Card<br/>Dungeon</span></div>'+
-        '<div class="frontCard" >'+
-            '<h2 class="nome"></h2>'+
-            '<span class="imagem" title=""></span>'+
-            '<span class="cont-stats">'+
-                '<span class="forca"><img src="'+imgSrc+'forca.png" alt="Força" /><span class="valor" title="Valor do atributo Força da carta"></span></span>'+
-                '<span class="habilidade"><img src="'+imgSrc+'Habilidade.png" alt="Atributo Habilidade" /><span class="valor" title="Valor do atributo Habilidade da carta"></span></span>'+
-                '<span class="resistencia"><img src="'+imgSrc+'Resistencia.png" alt="Atributo resistencia" /><span class="valor" title="Valor do atributo  Resistencia da carta"></span></span>'+
-                '<span class="pv"><img src="'+imgSrc+'pv.png" alt="Atributo Pontos de Vida" /><span class="valor" title="Valor do atributo Pontos de vida da carta"></span></span>'+
-            '</span>'+
-            '<div class="tipo"><span class="tipo1"></span> - <span class="tipo2"></span></div>'+
-            '<p class="descricao"></p>'+
-        '</div>'+        
-    '</div>';
+    `<div class="card" id="" data-pos="" data-id="">
+        <div class="backCard" title="O verso da carta possui uma imagem que representa a masmorra"><span class="name">Card<br/>Dungeon</span></div>
+        <div class="frontCard" >'+
+            <h2 class="nome"></h2>
+            <span class="imagem" title=""></span>
+            <span class="cont-stats">
+                <span class="forca"><img src="${imgSrc}forca.png" alt="Força" /><span class="valor" title="Valor do atributo Força da carta"></span></span>
+                <span class="habilidade"><img src="${imgSrc}Habilidade.png" alt="Atributo Habilidade" /><span class="valor" title="Valor do atributo Habilidade da carta"></span></span>
+                <span class="resistencia"><img src="${imgSrc}Resistencia.png" alt="Atributo resistencia" /><span class="valor" title="Valor do atributo  Resistencia da carta"></span></span>
+                <span class="pv"><img src="${imgSrc}pv.png" alt="Atributo Pontos de Vida" /><span class="valor" title="Valor do atributo Pontos de vida da carta"></span></span>
+            </span>
+            <div class="tipo"><span class="tipo1"></span> - <span class="tipo2"></span></div>
+            <p class="descricao"></p>
+        </div>
+    </div>`;
     return trechoHtml;
 }
 
@@ -479,52 +437,22 @@ function configuraHeroi() {
     barra.find('.pv .valor').html(heroiGame.pv);
 }
 
+function buttonTemplate (name, id) {
+    return `<button class="bt ${id}" data-action='${id}'>${name}</button>`;
+}
+
 function mostraOpcoes($turno) {
-    if ($turno == 'limpa') {
+    if ($turno === 'limpa') {
         $('.showBts').html('');
     }
-
-    else if ($turno == 'ataque') {
-        $('.showBts').html('<button class="bt ataque">Ataque</button><button class="bt exumar">Exumar</button>');
-        $('.showBts .ataque').click(function(event) {
-            $('.showBts').html('');
-            turnosdecombate(emJogo[0]);
-        });
-        $('.showBts .exumar').click(function(event) {
-            exumarCartaParaDeck();
-        });
-
+    
+    if ($turno === 'ataque') {
+        $('.showBts').html(`${buttonTemplate('Ataque', 'ataque')} ${buttonTemplate('Exumar', 'exumar')}`);
     }
-    else if ($turno == 'ataqueMais') {
-        $('.showBts').html('<button class="bt ataqueMais">Ataque+</button>');    
+    
+    if ($turno == 'ataqueMais') {        
+        $('.showBts').html(`${buttonTemplate('Ataque Mais', 'ataquemais')}`);       
         
-        $('.showBts .ataqueMais').click(function(event) {
-            $(this).remove();
-            estaPosicao = 0;
-
-            console.log('emJogo.length em mostraOpcoes = '+emJogo.length);
-            
-            switch (emJogo.length) {
-                case 1:
-                        esteInimigo = {};
-                        esteInimigo = emJogo[estaPosicao];
-                        turnosdecombateMais(emJogo, emJogo[estaPosicao], estaPosicao);
-                    break;
-                default:
-                    $('.showBts').html('Escolha uma carta para atacar');
-                    fakeCards(emJogo.length);
-                    $('.fkCards').click(function(event) {
-                        var inimigoSelecionado = $(this).attr('data-pos');
-                        $('.fkCards').remove();
-                        var posInimigo = (emJogo.length - 1) - inimigoSelecionado;
-                        estaPosicao = posInimigo;
-                        esteInimigo = {};
-                        esteInimigo = emJogo[posInimigo];
-                        turnosdecombateMais(emJogo, esteInimigo, posInimigo);
-                    });
-                    break;
-            }
-        });
     }
     else if ($turno == 'continuar') {
         $('.showBts').html('<button class="bt continuar">Continuar</button>'); 
@@ -948,6 +876,109 @@ function jogo() {
     poeAsCartas(deck);
     viraCartasDoDeck(deck, 1);
 } 
+
+// ==========================================================
+// AÇÕES BOTÕES
+// ==========================================================
+
+$(document).on('click', '.bt', (e) => {
+    console.log($(this));
+    console.log('e.target', e.target)
+    const $action = $(e.target).attr('data-action');
+    console.log('click', $action)
+
+    // if ($action === 'className') {
+
+    // }
+
+    if ($action === 'ataque') {
+        $('.showBts').html('');
+        turnosdecombate(emJogo[0]);
+    }
+
+    if ($action === 'exumar') {
+        exumarCartaParaDeck();
+    }
+
+    if ($action === 'ataquemais') {
+        $(this).remove();
+    
+        estaPosicao = 0;
+        console.log('emJogo.length em mostraOpcoes = '+emJogo.length);
+
+        if(emJogo.length) {
+            esteInimigo = {};
+            esteInimigo = emJogo[estaPosicao];
+            turnosdecombateMais(emJogo, emJogo[estaPosicao], estaPosicao);
+            return;
+        } else {
+            $('.showBts').html('Escolha uma carta para atacar');
+            fakeCards(emJogo.length);
+            $('.fkCards').click(function(event) {
+                var inimigoSelecionado = $(this).attr('data-pos');
+                $('.fkCards').remove();
+                var posInimigo = (emJogo.length - 1) - inimigoSelecionado;
+                estaPosicao = posInimigo;
+                esteInimigo = {};
+                esteInimigo = emJogo[posInimigo];
+                turnosdecombateMais(emJogo, esteInimigo, posInimigo);
+            });
+        }
+    }
+    
+    if ($action === 'testar') {
+        $(this).remove();
+
+        setTimeout(function(){
+            var jogada = calcularJogada(6);
+            console.log('jogada  ='+jogada);
+            if (jogada > heroiGame.habilidade) {
+                $('.deckPlace').addClass('atingido');
+                bonus.atualizaAtributo($atributo, classe, $bonus);
+                logsTexto(textoDescritivo($atributo, $bonus));
+                setTimeout(function(){
+                    $('.deckPlace').removeClass('atingido');
+                    irProCemiterio($('.card.pos-0'), 0);
+                },delayTime/3);
+            }
+            else {
+                logsTexto('O heroi passou pela armadilha');   
+                setTimeout(function(){
+                    irProCemiterio($('.card.pos-0'), 0);
+                },delayTime/3);
+            }
+        },0);
+    }
+
+    if ($action === 'testar1') {
+        $(this).remove();
+
+        setTimeout(function(){
+            var jogada = calcularJogada(6);
+            jogada = 1;
+            if (jogada <= heroiGame.habilidade) {
+                //conseguiu a benção
+                $('.deckPlace').addClass('bencao');
+                bonus.atualizaAtributo($atributo, classe, $bonus);
+                logsTexto(textoDescritivo($atributo, $bonus));
+                setTimeout(function(){
+                    $('.deckPlace').removeClass('bencao');
+                    irProCemiterio($('.card.pos-0'), 0);
+                },delayTime/3);
+            }
+            else {
+                //conseguiu a benção
+                logsTexto('O heroi não conseguiu...'); 
+                setTimeout(function(){
+                    irProCemiterio($('.card.pos-0'), 0);
+                },delayTime/3);
+            }
+        },0);
+    }
+    
+
+
+});
 
 // ==========================================================
 // FUNÇÕES DE FRONT-END 

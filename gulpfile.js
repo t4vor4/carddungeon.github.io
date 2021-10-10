@@ -80,7 +80,7 @@ const javascriptBuild = async _ => {
             // Turn it into a buffer!
             .pipe(buffer())
             // And uglify
-            .pipe(uglify())
+            // .pipe(uglify())
             // Then write the resulting files to a folder
             .pipe(dest(`${path.dest}/js`))
     );

@@ -1,20 +1,20 @@
 import cards from "./json/cards.json";
-import helpers from "./components/helpers";
 import BonusEffects from "./components/BonusEffects";
 import ControlFront from "./components/controleFront";
-import CoreRules from "./components/CoreRules";
+
+import helpers from "./components/helpers";
+import coreRules from "./components/CoreRules";
 
 // ==========================================================
 // Invocando Classes
 // ==========================================================
 const controleFront = new ControlFront();
 
-const coreRules = new CoreRules();
+// const coreRules = new CoreRules();
 
 const {
     embaralhaCartas,
     calcularJogada,
-    buttonTemplate
 } = helpers;
 
 
@@ -52,7 +52,8 @@ var gameInfo = {
     cartas: {
         emJogo: [],
         cemiterio: [],
-        deck: embaralhaCartas(cartasJogo)
+        deck: embaralhaCartas(cartasJogo),
+        qtd: 0
     },
     apoio: {
         cartaAtual: '',
@@ -83,14 +84,7 @@ function jogo() {
 }
 
 
-$(document).on('click', '.baseCarta', (e) => {
-    gameInfo = controleFront.viraCartasDoDeck(gameInfo, 1);
-    setTimeout(() => {
-        console.log('gameInfo basecartaX: ', gameInfo.inimigos);
-        gameInfo = controleFront.interacaoComCartas(gameInfo);        
-        controleFront.mostraOpcoes(gameInfo);
-    }, 0);
-});
+
 
 
 // ==========================================================
@@ -582,15 +576,16 @@ function irProCemiterio($estacarta, $posicao) {
 // AÇÕES BOTÕES
 // ==========================================================
 
+$(document).on('click', '.baseCarta', (e) => {
+    // Base carta é um botão escondido...
+    gameInfo = coreRules.viraCartasBack(gameInfo, 1);
+
+    controleFront.viraCartasFront(gameInfo);
+    controleFront.mostraOpcoes(gameInfo);
+});
+
 $(document).on('click', '.bt', (e) => {
-    console.log($(this));
-    console.log('e.target', e.target)
     const $action = $(e.target).attr('data-action');
-    console.log('click', $action)
-
-    // if ($action === 'className') {
-
-    // }
 
     if ($action === 'ataque') {
         $('.showBts').html('');

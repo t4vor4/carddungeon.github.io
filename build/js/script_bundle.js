@@ -184,22 +184,33 @@ exports["default"] = bonusEffects;
 },{"./helpers":7,"@babel/runtime/helpers/classCallCheck":1,"@babel/runtime/helpers/createClass":2,"@babel/runtime/helpers/interopRequireDefault":3}],5:[function(require,module,exports){
 "use strict";
 
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
+var _default = {
+  viraCartasBack: function viraCartasBack(info, $qtd) {
+    var cartas = info.cartas; // console.log(cartas);
 
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+    var qtd = $qtd;
+    var opcoesAtuais = '';
 
-var CoreRules = function CoreRules() {
-  (0, _classCallCheck2["default"])(this, CoreRules);
+    if (cartas.deck.length < $qtd) {
+      qtd = cartas.deck.length;
+    }
+
+    for (qtd > cartas.emJogo.length; qtd--;) {
+      cartas.emJogo.push(cartas.deck.pop());
+    }
+
+    info.cartas = cartas;
+    console.log('infoZ: ', info);
+    return info;
+  }
 };
+exports["default"] = _default;
 
-exports["default"] = CoreRules;
-
-},{"@babel/runtime/helpers/classCallCheck":1,"@babel/runtime/helpers/interopRequireDefault":3}],6:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -266,39 +277,72 @@ var ControlFront = /*#__PURE__*/function () {
       return "<div class=\"card\" id=\"\" data-pos=\"\" data-id=\"\">\n            <div class=\"backCard\" title=\"O verso da carta possui uma imagem que representa a masmorra\"><span class=\"name\">Card<br/>Dungeon</span></div>\n            <div class=\"frontCard\" >\n                <h2 class=\"nome\"></h2>\n                <span class=\"imagem\" title=\"\"></span>\n                <span class=\"cont-stats\">\n                    <span class=\"forca\"><img src=\"".concat(imgType.forca, "\" alt=\"For\xE7a\" /><span class=\"valor\" title=\"Valor do atributo For\xE7a da carta\"></span></span>\n                    <span class=\"habilidade\"><img src=\"").concat(imgType.habilidade, "\" alt=\"Atributo Habilidade\" /><span class=\"valor\" title=\"Valor do atributo Habilidade da carta\"></span></span>\n                    <span class=\"resistencia\"><img src=\"").concat(imgType.resistencia, "\" alt=\"Atributo resistencia\" /><span class=\"valor\" title=\"Valor do atributo  Resistencia da carta\"></span></span>\n                    <span class=\"pv\"><img src=\"").concat(imgType.pv, "\" alt=\"Atributo Pontos de Vida\" /><span class=\"valor\" title=\"Valor do atributo Pontos de vida da carta\"></span></span>\n                </span>\n                <div class=\"tipo\"><span class=\"tipo1\"></span> - <span class=\"tipo2\"></span></div>\n                <p class=\"descricao\"></p>\n            </div>\n        </div>");
     }
   }, {
-    key: "viraCartasDoDeck",
-    value: function viraCartasDoDeck(info, $qtd) {
+    key: "viraCartasFront",
+    value: function viraCartasFront(info) {
       var configuraCarta = this.configuraCarta;
       var cartas = info.cartas;
-      var topododeck = $('.card:nth-of-type(' + cartas.deck.length + ')');
-      var count = 0;
+      var qtd = cartas.emJogo.length;
+      var topododeck = $(".card:nth-of-type(".concat(cartas.deck.length, ")"));
       $('.showText').text('');
+      $('.baseCarta').hide();
+      $('.deckPlace').data('qtd', 'qtd-' + qtd);
 
-      if (count === 0) {
-        var qtd = $qtd;
-
-        if (cartas.deck.length < $qtd) {
-          qtd = cartas.deck.length;
-        }
-
-        $('.baseCarta').hide();
-        setTimeout(function () {
-          $('.deckPlace').attr('data-qtd', 'qtd-' + qtd);
-
-          for (qtd > cartas.emJogo.length; qtd--;) {
-            topododeck = $('.card:nth-of-type(' + cartas.deck.length + ')').removeClass('nodeckcompra').addClass('pos-' + qtd).attr('data-pos', qtd);
-            cartas.emJogo.push(cartas.deck.pop());
-            console.log('beleçelç: ', topododeck);
-            configuraCarta(topododeck, info);
-          } //interacaoComCartas(info);
-
-        }, 0);
+      for (qtd > cartas.emJogo.length; qtd--;) {
+        topododeck = $('.card:nth-of-type(' + cartas.deck.length + ')').removeClass('nodeckcompra').addClass('pos-' + qtd).data('pos', qtd);
+        cartas.emJogo.push(cartas.deck.pop());
+        configuraCarta(topododeck, info);
       }
-
-      info.cartas = cartas;
-      count++;
-      return info;
     }
+  }, {
+    key: "removeDuplos",
+    value: function removeDuplos(array) {
+      return array.filter(function (elem, index, array) {
+        return array.indexOf(elem) === index;
+      });
+    }
+  }, {
+    key: "mapTipos1",
+    value: function mapTipos1(arr) {
+      var tipos = arr.map(function (el) {
+        return el.tipo;
+      });
+      return tipos;
+    }
+  }, {
+    key: "calculaOpcoes",
+    value: function calculaOpcoes(info) {
+      var removeDuplos = this.removeDuplos;
+      var mapTipos1 = this.mapTipos1;
+      var emJogo = info.cartas.emJogo;
+      return removeDuplos(mapTipos1(emJogo));
+    } // viraCartasDoDeck(info, $qtd){
+    //     var configuraCarta = this.configuraCarta;
+    //     const cartas = info.cartas;
+    //     var topododeck = $('.card:nth-of-type('+cartas.deck.length+')');
+    //     var count = 0;
+    //     $('.showText').text('');
+    //     if (count === 0){
+    //         var qtd = $qtd;
+    //         if (cartas.deck.length < $qtd) {
+    //             qtd = cartas.deck.length;
+    //         }
+    //         $('.baseCarta').hide();
+    //         setTimeout(function(){
+    //             $('.deckPlace').attr('data-qtd','qtd-'+qtd);
+    //             for (qtd > cartas.emJogo.length; qtd--;) { 
+    //                 topododeck = $('.card:nth-of-type('+cartas.deck.length+')').removeClass('nodeckcompra').addClass('pos-'+qtd).attr('data-pos',qtd);
+    //                 cartas.emJogo.push(cartas.deck.pop());
+    //                 console.log('beleçelç: ', topododeck);
+    //                 configuraCarta(topododeck, info);
+    //             }
+    //             //interacaoComCartas(info);
+    //         },0)
+    //     }
+    //     info.cartas = cartas;
+    //     count++;
+    //     return info;
+    // }
+
   }, {
     key: "configuraCarta",
     value: function configuraCarta($carta, info) {
@@ -380,13 +424,28 @@ var ControlFront = /*#__PURE__*/function () {
       console.log('testeDoido', inimigos, cartas, opcoesAtuais);
     }
   }, {
+    key: "filtraOpcoes",
+    value: function filtraOpcoes(info) {
+      var opcoes = this.calculaOpcoes(info);
+      var novasOpcoes = [];
+
+      for (var i = 0; i < opcoes.length; i++) {
+        if (opcoes[i] === 'Monstro') {
+          novasOpcoes.push('ataqueMais');
+        }
+      }
+
+      return novasOpcoes;
+    }
+  }, {
     key: "mostraOpcoes",
     value: function mostraOpcoes(info) {
       var buttonTemplate = _helpers["default"].buttonTemplate;
+      var opcoes = this.filtraOpcoes(info);
       var $html = '';
 
-      for (var i = 0; i < info.opcoesAtuais.length; i++) {
-        var $turno = info.opcoesAtuais[i];
+      for (var i = 0; i < opcoes.length; i++) {
+        var $turno = opcoes[i];
 
         if ($turno === 'limpa') {
           $html = '';
@@ -404,6 +463,7 @@ var ControlFront = /*#__PURE__*/function () {
         }
       }
 
+      console.log('$html: ', $html);
       $('.showBts').html($html);
     }
   }]);
@@ -636,11 +696,11 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 
 var _cards = _interopRequireDefault(require("./json/cards.json"));
 
-var _helpers = _interopRequireDefault(require("./components/helpers"));
-
 var _BonusEffects = _interopRequireDefault(require("./components/BonusEffects"));
 
 var _controleFront = _interopRequireDefault(require("./components/controleFront"));
+
+var _helpers = _interopRequireDefault(require("./components/helpers"));
 
 var _CoreRules = _interopRequireDefault(require("./components/CoreRules"));
 
@@ -649,11 +709,10 @@ var _this = void 0;
 // ==========================================================
 // Invocando Classes
 // ==========================================================
-var controleFront = new _controleFront["default"]();
-var coreRules = new _CoreRules["default"]();
+var controleFront = new _controleFront["default"](); // const coreRules = new CoreRules();
+
 var embaralhaCartas = _helpers["default"].embaralhaCartas,
-    calcularJogada = _helpers["default"].calcularJogada,
-    buttonTemplate = _helpers["default"].buttonTemplate; // ==========================================================
+    calcularJogada = _helpers["default"].calcularJogada; // ==========================================================
 // CONSTANTES
 // ==========================================================
 
@@ -684,7 +743,8 @@ var gameInfo = {
   cartas: {
     emJogo: [],
     cemiterio: [],
-    deck: embaralhaCartas(cartasJogo)
+    deck: embaralhaCartas(cartasJogo),
+    qtd: 0
   },
   apoio: {
     cartaAtual: '',
@@ -708,16 +768,7 @@ function jogo() {
   controleFront.configuraHeroi(gameInfo);
   controleFront.poeAsCartas(gameInfo);
   console.log('gameInfo start: ', gameInfo);
-}
-
-$(document).on('click', '.baseCarta', function (e) {
-  gameInfo = controleFront.viraCartasDoDeck(gameInfo, 1);
-  setTimeout(function () {
-    console.log('gameInfo basecartaX: ', gameInfo.inimigos);
-    gameInfo = controleFront.interacaoComCartas(gameInfo);
-    controleFront.mostraOpcoes(gameInfo);
-  }, 0);
-}); // ==========================================================
+} // ==========================================================
 // FUNÇÕES DE APOIO
 // ==========================================================
 // function bonus($atributo, $bonus) {
@@ -840,6 +891,7 @@ $(document).on('click', '.baseCarta', function (e) {
 // FINS DE JOGO
 // ==========================================================
 //game over 
+
 
 function gameOver() {
   console.log('gameover');
@@ -1197,12 +1249,14 @@ function irProCemiterio($estacarta, $posicao) {
 // ==========================================================
 
 
+$(document).on('click', '.baseCarta', function (e) {
+  // Base carta é um botão escondido...
+  gameInfo = _CoreRules["default"].viraCartasBack(gameInfo, 1);
+  controleFront.viraCartasFront(gameInfo);
+  controleFront.mostraOpcoes(gameInfo);
+});
 $(document).on('click', '.bt', function (e) {
-  console.log($(_this));
-  console.log('e.target', e.target);
   var $action = $(e.target).attr('data-action');
-  console.log('click', $action); // if ($action === 'className') {
-  // }
 
   if ($action === 'ataque') {
     $('.showBts').html('');

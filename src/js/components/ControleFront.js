@@ -63,48 +63,94 @@ export default class ControlFront {
             </div>
         </div>`;
     }
-    
-    viraCartasDoDeck(info, $qtd){
-        var configuraCarta = this.configuraCarta;
 
-        const cartas = info.cartas;
+    viraCartasFront(info) {
+        const configuraCarta = this.configuraCarta;
+
+        const {cartas} = info;
+
+        let qtd = cartas.emJogo.length;
         
-        var topododeck = $('.card:nth-of-type('+cartas.deck.length+')');
-        
-        var count = 0;
+        let topododeck = $(`.card:nth-of-type(${cartas.deck.length})`);
 
         $('.showText').text('');
-        
-        if (count === 0){
-            var qtd = $qtd;
 
-            if (cartas.deck.length < $qtd) {
-                qtd = cartas.deck.length;
-            }
+        $('.baseCarta').hide();
 
-            $('.baseCarta').hide();
+        $('.deckPlace').data('qtd','qtd-'+qtd);
 
-            setTimeout(function(){
-                $('.deckPlace').attr('data-qtd','qtd-'+qtd);
+        for (qtd > cartas.emJogo.length; qtd--;) { 
+            topododeck = $('.card:nth-of-type('+cartas.deck.length+')').removeClass('nodeckcompra').addClass('pos-'+qtd).data('pos',qtd);
 
-                for (qtd > cartas.emJogo.length; qtd--;) { 
-                    topododeck = $('.card:nth-of-type('+cartas.deck.length+')').removeClass('nodeckcompra').addClass('pos-'+qtd).attr('data-pos',qtd);
+            cartas.emJogo.push(cartas.deck.pop());
 
-                    cartas.emJogo.push(cartas.deck.pop());
-
-                    console.log('beleçelç: ', topododeck);
-                    configuraCarta(topododeck, info);
-
-                }
-                //interacaoComCartas(info);
-            },0)
+            configuraCarta(topododeck, info);
+            
         }
-
-        info.cartas = cartas;
-
-        count++;
-        return info;
     }
+
+    
+    removeDuplos(array) {
+       return array.filter( ( elem, index, array ) => {
+           return array.indexOf( elem ) === index;
+       });
+    }
+
+    mapTipos1(arr) {
+        const tipos = arr.map((el) => el.tipo);
+        return tipos;
+    }
+
+    calculaOpcoes(info) {
+        const removeDuplos =  this.removeDuplos;
+        const mapTipos1 = this.mapTipos1;
+
+        let {emJogo} = info.cartas;
+
+        return removeDuplos(mapTipos1(emJogo));
+    }
+    
+    // viraCartasDoDeck(info, $qtd){
+    //     var configuraCarta = this.configuraCarta;
+
+    //     const cartas = info.cartas;
+        
+    //     var topododeck = $('.card:nth-of-type('+cartas.deck.length+')');
+        
+    //     var count = 0;
+
+    //     $('.showText').text('');
+        
+    //     if (count === 0){
+    //         var qtd = $qtd;
+
+    //         if (cartas.deck.length < $qtd) {
+    //             qtd = cartas.deck.length;
+    //         }
+
+    //         $('.baseCarta').hide();
+
+    //         setTimeout(function(){
+    //             $('.deckPlace').attr('data-qtd','qtd-'+qtd);
+
+    //             for (qtd > cartas.emJogo.length; qtd--;) { 
+    //                 topododeck = $('.card:nth-of-type('+cartas.deck.length+')').removeClass('nodeckcompra').addClass('pos-'+qtd).attr('data-pos',qtd);
+
+    //                 cartas.emJogo.push(cartas.deck.pop());
+
+    //                 console.log('beleçelç: ', topododeck);
+    //                 configuraCarta(topododeck, info);
+
+    //             }
+    //             //interacaoComCartas(info);
+    //         },0)
+    //     }
+
+    //     info.cartas = cartas;
+
+    //     count++;
+    //     return info;
+    // }
     
     configuraCarta($carta, info) {
         var front = $carta.find('.frontCard');
@@ -192,13 +238,29 @@ export default class ControlFront {
         console.log('testeDoido', inimigos, cartas, opcoesAtuais);
     }
 
+    filtraOpcoes(info) {
+        const opcoes = this.calculaOpcoes(info);
+
+        let novasOpcoes = [];
+        
+        for (let i = 0; i < opcoes.length; i++) {            
+            if (opcoes[i] === 'Monstro') {
+                novasOpcoes.push('ataqueMais');
+            }
+        }
+
+        return novasOpcoes;
+    }
+
     mostraOpcoes(info) {
         const buttonTemplate = helpers.buttonTemplate;
 
+        const opcoes = this.filtraOpcoes(info);
+
         let $html = '';
 
-        for (let i = 0; i < info.opcoesAtuais.length; i++) {
-            const $turno = info.opcoesAtuais[i];
+        for (let i = 0; i < opcoes.length; i++) {
+            const $turno = opcoes[i];
             
             if ($turno === 'limpa') {
                 $html = '';
@@ -217,6 +279,8 @@ export default class ControlFront {
                 $html += `${buttonTemplate('Continuar', 'continuar')}`;
             }
         }
+
+        console.log('$html: ',$html)
 
         $('.showBts').html($html);
     }

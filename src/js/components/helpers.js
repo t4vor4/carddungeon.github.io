@@ -7,6 +7,11 @@ export default  {
     rollDice(max) {
         return 1 + Math.floor(Math.random()*max)
     }, 
+    sortByName(a, b){
+        var aIniac = a.iniac;
+        var bIniac = b.iniac; 
+        return ((aIniac < bIniac) ? -1 : ((aIniac > bIniac) ? 1 : 0));
+    },
     // Embaralha aleatóriamente as cartas
     embaralhaCartas(a) {
         console.log('embaralhaCartas');

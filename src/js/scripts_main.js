@@ -575,11 +575,13 @@ function irProCemiterio($estacarta, $posicao) {
 // ==========================================================
 // AÇÕES BOTÕES
 // ==========================================================
-
+var $count = 0;
 $(document).on('click', '.baseCarta', (e) => {
     // Base carta é um botão escondido...
     gameInfo = coreRules.viraCartasBack(gameInfo, 1);
-
+    
+    console.log('bugHunt', gameInfo);
+    
     controleFront.viraCartasFront(gameInfo);
     controleFront.mostraOpcoes(gameInfo);
 });
@@ -597,29 +599,38 @@ $(document).on('click', '.bt', (e) => {
     }
 
     if ($action === 'ataquemais') {
-        $(this).remove();
-    
-        estaPosicao = 0;
-        console.log('emJogo.length em mostraOpcoes = '+emJogo.length);
+        gameInfo = gameInfo.cartas.emJogo.length ? coreRules.ataqueComUmInimigo(gameInfo) : ataqueComVariosInimigos(gameInfo);
+        
+        gameInfo = coreRules.jogadaDeIniciativa(gameInfo);
 
-        if(emJogo.length) {
-            esteInimigo = {};
-            esteInimigo = emJogo[estaPosicao];
-            turnosdecombateMais(emJogo, emJogo[estaPosicao], estaPosicao);
-            return;
-        } else {
-            $('.showBts').html('Escolha uma carta para atacar');
-            fakeCards(emJogo.length);
-            $('.fkCards').click(function(event) {
-                var inimigoSelecionado = $(this).attr('data-pos');
-                $('.fkCards').remove();
-                var posInimigo = (emJogo.length - 1) - inimigoSelecionado;
-                estaPosicao = posInimigo;
-                esteInimigo = {};
-                esteInimigo = emJogo[posInimigo];
-                turnosdecombateMais(emJogo, esteInimigo, posInimigo);
-            });
-        }
+        coreRules.combateMais(gameInfo);
+
+        
+
+        console.log('ataquemaisclick: ', gameInfo);
+        // $(this).remove();
+    
+        // estaPosicao = 0;
+        // console.log('emJogo.length em mostraOpcoes = '+emJogo.length);
+
+        // if(emJogo.length) {
+        //     esteInimigo = {};
+        //     esteInimigo = emJogo[estaPosicao];
+        //     turnosdecombateMais(emJogo, emJogo[estaPosicao], estaPosicao);
+        //     return;
+        // } else {
+        //     $('.showBts').html('Escolha uma carta para atacar');
+        //     fakeCards(emJogo.length);
+        //     $('.fkCards').click(function(event) {
+        //         var inimigoSelecionado = $(this).attr('data-pos');
+        //         $('.fkCards').remove();
+        //         var posInimigo = (emJogo.length - 1) - inimigoSelecionado;
+        //         estaPosicao = posInimigo;
+        //         esteInimigo = {};
+        //         esteInimigo = emJogo[posInimigo];
+        //         turnosdecombateMais(emJogo, esteInimigo, posInimigo);
+        //     });
+        // }
     }
 
     if ($action === 'continuar') {

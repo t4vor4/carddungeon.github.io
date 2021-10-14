@@ -82,8 +82,6 @@ export default class ControlFront {
         for (qtd > cartas.emJogo.length; qtd--;) { 
             topododeck = $('.card:nth-of-type('+cartas.deck.length+')').removeClass('nodeckcompra').addClass('pos-'+qtd).data('pos',qtd);
 
-            cartas.emJogo.push(cartas.deck.pop());
-
             configuraCarta(topododeck, info);
             
         }

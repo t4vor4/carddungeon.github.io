@@ -184,16 +184,19 @@ exports["default"] = bonusEffects;
 },{"./helpers":7,"@babel/runtime/helpers/classCallCheck":1,"@babel/runtime/helpers/createClass":2,"@babel/runtime/helpers/interopRequireDefault":3}],5:[function(require,module,exports){
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
+
+var _helpers = _interopRequireDefault(require("./helpers"));
+
 var _default = {
   viraCartasBack: function viraCartasBack(info, $qtd) {
-    var cartas = info.cartas; // console.log(cartas);
-
+    var cartas = info.cartas;
     var qtd = $qtd;
-    var opcoesAtuais = '';
 
     if (cartas.deck.length < $qtd) {
       qtd = cartas.deck.length;
@@ -204,13 +207,94 @@ var _default = {
     }
 
     info.cartas = cartas;
-    console.log('infoZ: ', info);
     return info;
+  },
+  ataqueComUmInimigo: function ataqueComUmInimigo(info) {
+    var cartas = info.cartas,
+        inimigos = info.inimigos;
+    inimigos.esteInimigo = {};
+    inimigos.esteInimigo = cartas.emJogo[0];
+    info.inimigos = inimigos;
+    return info; // this.inicioDoTurnoDeCombate(info, 0);
+    // return info;
+  },
+  ataqueComVariosInimigos: function ataqueComVariosInimigos(info) {
+    console.log('Preciso montar a luta com mais de 1 inimigo');
+    return info; // let {cartas, inimigos} = info;
+    // let estaPosicao = 0;
+    // $('.showBts').html('Escolha uma carta para atacar');
+    // fakeCards(emJogo.length);
+    // $('.fkCards').click(function(event) {
+    //     var inimigoSelecionado = $(this).attr('data-pos');
+    //     $('.fkCards').remove();
+    //     var posInimigo = (emJogo.length - 1) - inimigoSelecionado;
+    //     estaPosicao = posInimigo;
+    //     esteInimigo = {};
+    //     esteInimigo = emJogo[posInimigo];
+    //     turnosdecombateMais(emJogo, esteInimigo, posInimigo);
+    // });
+  },
+  jogadaDeIniciativa: function jogadaDeIniciativa(info) {
+    var heroi = info.heroi,
+        cartas = info.cartas,
+        apoio = info.apoio;
+
+    var iniciativaHeroi = heroi.habilidade + _helpers["default"].calcularJogada(6);
+
+    apoio.ordem_de_ataque.push({
+      iniac: iniciativaHeroi,
+      nome: heroi.nome,
+      pos: -1
+    });
+
+    for (var i = 0; i < cartas.emJogo.length; i++) {
+      var inimigo = cartas.emJogo[i];
+
+      var iniciativaInimigo = inimigo.habilidade + _helpers["default"].calcularJogada(6);
+
+      apoio.ordem_de_ataque.push({
+        iniac: iniciativaInimigo,
+        nome: inimigo.nome,
+        pos: i
+      });
+    }
+
+    info.apoio.ordem_de_ataque = apoio.ordem_de_ataque.sort(_helpers["default"].sortByName);
+    return info; // this.combateMais(info);
+  },
+  combateMais: function combateMais(info) {
+    var _this = this;
+
+    // $ordem, $esteInimigo, $posicao
+    var apoio = info.apoio,
+        cartas = info.cartas,
+        inimigos = info.inimigos,
+        estaPosicao = info.estaPosicao;
+    apoio.ordem_de_ataque.forEach(function (inimigo) {
+      var index = inimigo.pos;
+      var posicao = cartas.emJogo.length - 1 - estaPosicao; // setTimeout(function(){
+
+      if (index === -1) {
+        _this.turnoJogadorMais(inimigos.esteInimigo, estaPosicao);
+      } else {
+        _this.turnoInimigoMais(cartas.emJogo[index], posicao);
+      }
+
+      apoio.ordem_de_ataque.shift(); // }, info.delayTime * i);
+    });
+    info.apoio = apoio;
+    return info;
+  },
+  turnoJogadorMais: function turnoJogadorMais(a, b) {
+    console.log('turnoJogadorMais', a, b);
+  },
+  turnoInimigoMais: function turnoInimigoMais(a, b) {
+    console.log('turnoInimigoMais', a, b);
   }
 };
 exports["default"] = _default;
 
-},{}],6:[function(require,module,exports){
+},{"./helpers":7,"@babel/runtime/helpers/interopRequireDefault":3}],6:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -289,7 +373,6 @@ var ControlFront = /*#__PURE__*/function () {
 
       for (qtd > cartas.emJogo.length; qtd--;) {
         topododeck = $('.card:nth-of-type(' + cartas.deck.length + ')').removeClass('nodeckcompra').addClass('pos-' + qtd).data('pos', qtd);
-        cartas.emJogo.push(cartas.deck.pop());
         configuraCarta(topododeck, info);
       }
     }
@@ -488,6 +571,11 @@ var _default = {
   },
   rollDice: function rollDice(max) {
     return 1 + Math.floor(Math.random() * max);
+  },
+  sortByName: function sortByName(a, b) {
+    var aIniac = a.iniac;
+    var bIniac = b.iniac;
+    return aIniac < bIniac ? -1 : aIniac > bIniac ? 1 : 0;
   },
   // Embaralha aleatóriamente as cartas
   embaralhaCartas: function embaralhaCartas(a) {
@@ -1249,9 +1337,11 @@ function irProCemiterio($estacarta, $posicao) {
 // ==========================================================
 
 
+var $count = 0;
 $(document).on('click', '.baseCarta', function (e) {
   // Base carta é um botão escondido...
   gameInfo = _CoreRules["default"].viraCartasBack(gameInfo, 1);
+  console.log('bugHunt', gameInfo);
   controleFront.viraCartasFront(gameInfo);
   controleFront.mostraOpcoes(gameInfo);
 });
@@ -1268,28 +1358,32 @@ $(document).on('click', '.bt', function (e) {
   }
 
   if ($action === 'ataquemais') {
-    $(_this).remove();
-    estaPosicao = 0;
-    console.log('emJogo.length em mostraOpcoes = ' + emJogo.length);
+    gameInfo = gameInfo.cartas.emJogo.length ? _CoreRules["default"].ataqueComUmInimigo(gameInfo) : ataqueComVariosInimigos(gameInfo);
+    gameInfo = _CoreRules["default"].jogadaDeIniciativa(gameInfo);
 
-    if (emJogo.length) {
-      esteInimigo = {};
-      esteInimigo = emJogo[estaPosicao];
-      turnosdecombateMais(emJogo, emJogo[estaPosicao], estaPosicao);
-      return;
-    } else {
-      $('.showBts').html('Escolha uma carta para atacar');
-      fakeCards(emJogo.length);
-      $('.fkCards').click(function (event) {
-        var inimigoSelecionado = $(this).attr('data-pos');
-        $('.fkCards').remove();
-        var posInimigo = emJogo.length - 1 - inimigoSelecionado;
-        estaPosicao = posInimigo;
-        esteInimigo = {};
-        esteInimigo = emJogo[posInimigo];
-        turnosdecombateMais(emJogo, esteInimigo, posInimigo);
-      });
-    }
+    _CoreRules["default"].combateMais(gameInfo);
+
+    console.log('ataquemaisclick: ', gameInfo); // $(this).remove();
+    // estaPosicao = 0;
+    // console.log('emJogo.length em mostraOpcoes = '+emJogo.length);
+    // if(emJogo.length) {
+    //     esteInimigo = {};
+    //     esteInimigo = emJogo[estaPosicao];
+    //     turnosdecombateMais(emJogo, emJogo[estaPosicao], estaPosicao);
+    //     return;
+    // } else {
+    //     $('.showBts').html('Escolha uma carta para atacar');
+    //     fakeCards(emJogo.length);
+    //     $('.fkCards').click(function(event) {
+    //         var inimigoSelecionado = $(this).attr('data-pos');
+    //         $('.fkCards').remove();
+    //         var posInimigo = (emJogo.length - 1) - inimigoSelecionado;
+    //         estaPosicao = posInimigo;
+    //         esteInimigo = {};
+    //         esteInimigo = emJogo[posInimigo];
+    //         turnosdecombateMais(emJogo, esteInimigo, posInimigo);
+    //     });
+    // }
   }
 
   if ($action === 'continuar') {

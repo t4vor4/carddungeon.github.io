@@ -56,6 +56,7 @@ var gameInfo = {
         qtd: 0
     },
     apoio: {
+        atacanteAtual: '',
         cartaAtual: '',
         topodoCemiterioLocais: '',
         topododeck: 0,
@@ -603,11 +604,19 @@ $(document).on('click', '.bt', (e) => {
         
         gameInfo = coreRules.jogadaDeIniciativa(gameInfo);
 
-        coreRules.combateMais(gameInfo);
+        gameInfo = coreRules.combateMais(gameInfo);
 
-        
+        if (gameInfo.apoio.atacanteAtual === 'jogador') {
+            console.log('jogador rola o ataque');
+        } else {
+            console.log('inimigo rola o ataque');
+        }
 
-        console.log('ataquemaisclick: ', gameInfo);
+        // this.turnoJogadorMais(inimigos.esteInimigo, estaPosicao);
+        // this.turnoInimigoMais(cartas.emJogo[index], posicao);
+
+        // console.log('ataqueMaisClick: ', gameInfo);
+
         // $(this).remove();
     
         // estaPosicao = 0;

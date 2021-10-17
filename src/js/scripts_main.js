@@ -1,6 +1,6 @@
 import cards from "./json/cards.json";
 import BonusEffects from "./components/BonusEffects";
-import ControlFront from "./components/controleFront";
+import controleFront from "./components/controleFront";
 
 import helpers from "./components/helpers";
 import coreRules from "./components/CoreRules";
@@ -8,7 +8,7 @@ import coreRules from "./components/CoreRules";
 // ==========================================================
 // Invocando Classes
 // ==========================================================
-const controleFront = new ControlFront();
+// const controleFront = new ControlFront();
 
 // const coreRules = new CoreRules();
 
@@ -513,70 +513,72 @@ function poderesDeMonstro($el) {
     }
 }
 
-function irProCemiterio($estacarta, $posicao) {
-    $estacarta.addClass('cemiterio');
-    setTimeout(function(){
-        $estacarta.remove();
-    },delayTime*0.5);
+// function irProCemiterio($estacarta, $posicao) {
+//     $estacarta.addClass('cemiterio');
+//     setTimeout(function(){
+//         $estacarta.remove();
+//     },delayTime*0.5);
 
-    switch (deck.length < 1) {
-        case true:
-            switch (emJogo.length == 1) {
-                case true:
-                    setTimeout(function(){
-                        muito__bem();    
-                    }, delayTime*0.5);
-                    break;
-                default: 
-                    mandando_pra_cova();
-                    break;
-            }            
-            break;
-        default:
-         mandando_pra_cova();
-            break;
+//     switch (deck.length < 1) {
+//         case true:
+//             switch (emJogo.length == 1) {
+//                 case true:
+//                     setTimeout(function(){
+//                         muito__bem();    
+//                     }, delayTime*0.5);
+//                     break;
+//                 default: 
+//                     mandando_pra_cova();
+//                     break;
+//             }            
+//             break;
+//         default:
+//          mandando_pra_cova();
+//             break;
             
-    }
+//     }
 
-    function mandando_pra_cova() {
-        switch (emJogo.length) {
-                case 1:
-                    cemiterio.push(emJogo.pop());
-                    $('.deckPlace').attr('data-qtd','');
-                    setTimeout(function(){
-                        logsTexto('Clique na carta para jogar');
-                        viraCartasDoDeck(deck, 1);
-                    },0);
-                    break;
-                default:
-                    var invertePos = (emJogo.length - 1) - estaPosicao;
-                    cemiterio.push(emJogo[estaPosicao]);
-                    emJogo.splice(estaPosicao, 1);
-                    $('.deckPlace').attr('data-qtd','');
-                    $('.deckPlace').attr('data-qtd','qtd-'+emJogo.length);
-                    for (var i = 3; i >= 0; i--) {
-                        $('.deckPlace .pos-'+i).removeClass('pos-'+i);
-                        // console.log(i);
-                    }
-                    setTimeout(function(){
-                        $('.deckPlace .deFrente').each(function(i, el) {
-                            $(this).addClass('pos-'+i);
-                            $(this).data('pos',i);
-                        });
-                        mostraOpcoes('ataqueMais');
-                        console.log('mostraOpcoes(ataqueMais) em irProCemiterio');
-                    }, delayTime/2);
-                    break;
-            }
-    }
-}
+//     function mandando_pra_cova() {
+//         switch (emJogo.length) {
+//                 case 1:
+//                     cemiterio.push(emJogo.pop());
+//                     $('.deckPlace').attr('data-qtd','');
+//                     setTimeout(function(){
+//                         logsTexto('Clique na carta para jogar');
+//                         viraCartasDoDeck(deck, 1);
+//                     },0);
+//                     break;
+//                 default:
+//                     var invertePos = (emJogo.length - 1) - estaPosicao;
+//                     cemiterio.push(emJogo[estaPosicao]);
+//                     emJogo.splice(estaPosicao, 1);
+//                     $('.deckPlace').attr('data-qtd','');
+//                     $('.deckPlace').attr('data-qtd','qtd-'+emJogo.length);
+//                     for (var i = 3; i >= 0; i--) {
+//                         $('.deckPlace .pos-'+i).removeClass('pos-'+i);
+//                         // console.log(i);
+//                     }
+//                     setTimeout(function(){
+//                         $('.deckPlace .deFrente').each(function(i, el) {
+//                             $(this).addClass('pos-'+i);
+//                             $(this).data('pos',i);
+//                         });
+//                         mostraOpcoes('ataqueMais');
+//                         console.log('mostraOpcoes(ataqueMais) em irProCemiterio');
+//                     }, delayTime/2);
+//                     break;
+//             }
+//     }
+// }
 
 
 
 // ==========================================================
 // AÇÕES BOTÕES
 // ==========================================================
+
 var $count = 0;
+
 $(document).on('click', '.baseCarta', (e) => {
     // Base carta é um botão escondido...
     gameInfo = coreRules.viraCartasBack(gameInfo, 1);
@@ -588,10 +590,16 @@ $(document).on('click', '.baseCarta', (e) => {
 });
 
 $(document).on('click', '.bt', (e) => {
-    const $action = $(e.target).attr('data-action');
+    const $this = $(e.target);
+    const $action = $this.attr('data-action');
+
+    coreRules.debounce(() => {
+
+    });
+    $('.showBts').empty();
 
     if ($action === 'ataque') {
-        $('.showBts').html('');
+        // $('.showBts').html('');
         turnosdecombate(emJogo[0]);
     }
 
@@ -600,51 +608,18 @@ $(document).on('click', '.bt', (e) => {
     }
 
     if ($action === 'ataquemais') {
+        // $('.showBts').html('');
+        $this.remove();
+
         gameInfo = gameInfo.cartas.emJogo.length ? coreRules.ataqueComUmInimigo(gameInfo) : ataqueComVariosInimigos(gameInfo);
-        
-        gameInfo = coreRules.jogadaDeIniciativa(gameInfo);
 
-        gameInfo = coreRules.combateMais(gameInfo);
+        gameInfo = coreRules.novoCombate(gameInfo);
 
-        if (gameInfo.apoio.atacanteAtual === 'jogador') {
-            console.log('jogador rola o ataque');
-        } else {
-            console.log('inimigo rola o ataque');
-        }
-
-        // this.turnoJogadorMais(inimigos.esteInimigo, estaPosicao);
-        // this.turnoInimigoMais(cartas.emJogo[index], posicao);
-
-        // console.log('ataqueMaisClick: ', gameInfo);
-
-        // $(this).remove();
-    
-        // estaPosicao = 0;
-        // console.log('emJogo.length em mostraOpcoes = '+emJogo.length);
-
-        // if(emJogo.length) {
-        //     esteInimigo = {};
-        //     esteInimigo = emJogo[estaPosicao];
-        //     turnosdecombateMais(emJogo, emJogo[estaPosicao], estaPosicao);
-        //     return;
-        // } else {
-        //     $('.showBts').html('Escolha uma carta para atacar');
-        //     fakeCards(emJogo.length);
-        //     $('.fkCards').click(function(event) {
-        //         var inimigoSelecionado = $(this).attr('data-pos');
-        //         $('.fkCards').remove();
-        //         var posInimigo = (emJogo.length - 1) - inimigoSelecionado;
-        //         estaPosicao = posInimigo;
-        //         esteInimigo = {};
-        //         esteInimigo = emJogo[posInimigo];
-        //         turnosdecombateMais(emJogo, esteInimigo, posInimigo);
-        //     });
-        // }
     }
 
     if ($action === 'continuar') {
-        $(this).remove();
-        irProCemiterio($('.card.pos-0'), 0);
+        // $(this).remove();
+        retiraDoTopoDaMesa();
     }
     
     if ($action === 'testar') {

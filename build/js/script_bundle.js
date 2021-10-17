@@ -193,6 +193,8 @@ exports["default"] = void 0;
 
 var _helpers = _interopRequireDefault(require("./helpers"));
 
+var _controleFront = _interopRequireDefault(require("./controleFront"));
+
 var _default = {
   viraCartasBack: function viraCartasBack(info, $qtd) {
     var cartas = info.cartas;
@@ -218,6 +220,26 @@ var _default = {
     return info; // this.inicioDoTurnoDeCombate(info, 0);
     // return info;
   },
+  debounce: function debounce(func) {
+    var _this = this;
+
+    var timeout = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 300;
+    var timer;
+    return function () {
+      if (!timer) {
+        for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+          args[_key] = arguments[_key];
+        }
+
+        func.apply(_this, args);
+      }
+
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        timer = undefined;
+      }, timeout);
+    };
+  },
   ataqueComVariosInimigos: function ataqueComVariosInimigos(info) {
     console.log('Preciso montar a luta com mais de 1 inimigo');
     return info; // let {cartas, inimigos} = info;
@@ -233,6 +255,49 @@ var _default = {
     //     esteInimigo = emJogo[posInimigo];
     //     turnosdecombateMais(emJogo, esteInimigo, posInimigo);
     // });
+  },
+  novoCombate: function novoCombate(info) {
+    var ataque = this.ataque;
+    var heroi = info.heroi,
+        inimigos = info.inimigos,
+        cartas = info.cartas;
+    var dano;
+    var jogadaHeroi = 10; //heroi.habilidade + helpers.rollDice(6);
+
+    var jogadaInimigo = 1; //inimigos.esteInimigo.habilidade + helpers.rollDice(6);
+
+    if (jogadaHeroi >= jogadaInimigo) {
+      // O heroi ataca o monstro
+      dano = ataque(heroi, inimigos.esteInimigo);
+
+      if (!dano) {
+        inimigos.esteInimigo.pv = this.danoMortal(inimigos.esteInimigo.pv, dano);
+      } else {
+        _controleFront["default"].inimigoDefende(info);
+      }
+
+      info.inimigos = inimigos;
+
+      if (inimigos.esteInimigo.pv) {
+        _controleFront["default"].danoEmInimigo(info, dano);
+
+        _controleFront["default"].mostraOpcoes(info);
+      } else {
+        cartas.cemiterio.push(cartas.emJogo.pop());
+        info.cartas = cartas;
+
+        _controleFront["default"].retiraDoTopoDaMesa();
+
+        _controleFront["default"].escolhaCarta();
+      }
+    } else {
+      // O mostro ataca o heroi
+      dano = ataque(inimigos.esteInimigo, heroi);
+      heroi.pv = this.danoMortal(heroi.pv, dano);
+      info.heroi = heroi;
+    }
+
+    return info;
   },
   jogadaDeIniciativa: function jogadaDeIniciativa(info) {
     var heroi = info.heroi,
@@ -322,20 +387,27 @@ var _default = {
     console.log('turnoInimigoMais', a, b);
   },
   ataque: function ataque($atacante, $defensor) {
-    var forcaAtaque = $atacante.forca + _helpers["default"].calcularJogada(6);
+    var atk = $atacante.forca;
+    var def = $defensor.resistencia;
 
-    var forcaDefesa = $defensor.resistencia + _helpers["default"].calcularJogada(6);
+    var forcaAtaque = atk + _helpers["default"].calcularJogada(6);
+
+    var forcaDefesa = def + _helpers["default"].calcularJogada(6);
 
     if (forcaDefesa >= forcaAtaque) {
       return 0;
     } else {
       return forcaAtaque - forcaDefesa;
     }
+  },
+  danoMortal: function danoMortal(pv, dano) {
+    pv -= dano;
+    return pv >= 0 ? pv : 0;
   }
 };
 exports["default"] = _default;
 
-},{"./helpers":7,"@babel/runtime/helpers/interopRequireDefault":3}],6:[function(require,module,exports){
+},{"./controleFront":6,"./helpers":7,"@babel/runtime/helpers/interopRequireDefault":3}],6:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -345,258 +417,254 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
-
 var _helpers = _interopRequireDefault(require("./helpers"));
 
-var ControlFront = /*#__PURE__*/function () {
+var _default = {
   // Mais pra frente deve receber o objeto principal
-  function ControlFront() {
-    (0, _classCallCheck2["default"])(this, ControlFront);
-  }
-
-  (0, _createClass2["default"])(ControlFront, [{
-    key: "configuraHeroi",
-    value: function configuraHeroi(info) {
-      var barra = $('.heroBar');
-      barra.find('.forca .valor').html(info.heroi.forca);
-      barra.find('.habilidade .valor').html(info.heroi.habilidade);
-      barra.find('.resistencia .valor').html(info.heroi.resistencia);
-      barra.find('.pv .valor').html(info.heroi.pv);
-      return;
-    }
-  }, {
-    key: "poeAsCartas",
-    value: function poeAsCartas(info) {
-      var carta = this.carta;
+  configuraHeroi: function configuraHeroi(info) {
+    var barra = $('.heroBar');
+    barra.find('.forca .valor').html(info.heroi.forca);
+    barra.find('.habilidade .valor').html(info.heroi.habilidade);
+    barra.find('.resistencia .valor').html(info.heroi.resistencia);
+    barra.find('.pv .valor').html(info.heroi.pv);
+    return;
+  },
+  poeAsCartas: function poeAsCartas(info) {
+    var carta = this.carta;
+    $(info.cartas.deck).each(function (i, el) {
+      $('.deckPlace').append(carta(info));
+      $('.card').addClass('entranojogo').addClass('nodeckcompra');
+    });
+    setTimeout(function () {
       $(info.cartas.deck).each(function (i, el) {
-        $('.deckPlace').append(carta(info));
-        $('.card').addClass('entranojogo').addClass('nodeckcompra');
-      });
-      setTimeout(function () {
-        $(info.cartas.deck).each(function (i, el) {
-          var tempoCartaNaMesa = i * (info.delayTime / info.cartas.deck.length / 5);
-          setTimeout(function () {
-            $(".card:nth-of-type(".concat(i + 1, ")")).css('top', i * -1 + 'px').css('left', i * 2 + 'px').removeClass('entranojogo');
+        var tempoCartaNaMesa = i * (info.delayTime / info.cartas.deck.length / 5);
+        setTimeout(function () {
+          $(".card:nth-of-type(".concat(i + 1, ")")).css('top', i * -1 + 'px').css('left', i * 2 + 'px').removeClass('entranojogo');
 
-            if (i === info.cartas.deck.length - 1) {
-              setTimeout(function () {
-                console.log('Clique em uma carta para iniciar.');
-              }, 500);
-            }
-          }, tempoCartaNaMesa);
-        });
-      }, 500);
+          if (i === info.cartas.deck.length - 1) {
+            setTimeout(function () {
+              console.log('Clique em uma carta para iniciar.');
+            }, 500);
+          }
+        }, tempoCartaNaMesa);
+      });
+    }, 500);
+  },
+  carta: function carta(info) {
+    var imgType = {
+      forca: "".concat(info.imgSrc, "/forca.png"),
+      habilidade: "".concat(info.imgSrc, "/Habilidade.png"),
+      resistencia: "".concat(info.imgSrc, "/Resistencia.png"),
+      pv: "".concat(info.imgSrc, "/pv.png")
+    };
+    return "<div class=\"card\" id=\"\" data-pos=\"\" data-id=\"\">\n            <div class=\"backCard\" title=\"O verso da carta possui uma imagem que representa a masmorra\"><span class=\"name\">Card<br/>Dungeon</span></div>\n            <div class=\"frontCard\" >\n                <h2 class=\"nome\"></h2>\n                <span class=\"imagem\" title=\"\"></span>\n                <span class=\"cont-stats\">\n                    <span class=\"forca\"><img src=\"".concat(imgType.forca, "\" alt=\"For\xE7a\" /><span class=\"valor\" title=\"Valor do atributo For\xE7a da carta\"></span></span>\n                    <span class=\"habilidade\"><img src=\"").concat(imgType.habilidade, "\" alt=\"Atributo Habilidade\" /><span class=\"valor\" title=\"Valor do atributo Habilidade da carta\"></span></span>\n                    <span class=\"resistencia\"><img src=\"").concat(imgType.resistencia, "\" alt=\"Atributo resistencia\" /><span class=\"valor\" title=\"Valor do atributo  Resistencia da carta\"></span></span>\n                    <span class=\"pv\"><img src=\"").concat(imgType.pv, "\" alt=\"Atributo Pontos de Vida\" /><span class=\"valor\" title=\"Valor do atributo Pontos de vida da carta\"></span></span>\n                </span>\n                <div class=\"tipo\"><span class=\"tipo1\"></span> - <span class=\"tipo2\"></span></div>\n                <p class=\"descricao\"></p>\n            </div>\n        </div>");
+  },
+  viraCartasFront: function viraCartasFront(info) {
+    var configuraCarta = this.configuraCarta;
+    var cartas = info.cartas;
+    var qtd = cartas.emJogo.length;
+    var topododeck = $(".card:nth-of-type(".concat(cartas.deck.length, ")"));
+    $('.showText').text('');
+    $('.baseCarta').hide();
+    $('.deckPlace').data('qtd', 'qtd-' + qtd);
+
+    for (qtd > cartas.emJogo.length; qtd--;) {
+      topododeck = $('.card:nth-of-type(' + cartas.deck.length + ')').removeClass('nodeckcompra').addClass('pos-' + qtd).data('pos', qtd);
+      configuraCarta(topododeck, info);
     }
-  }, {
-    key: "carta",
-    value: function carta(info) {
-      var imgType = {
-        forca: "".concat(info.imgSrc, "/forca.png"),
-        habilidade: "".concat(info.imgSrc, "/Habilidade.png"),
-        resistencia: "".concat(info.imgSrc, "/Resistencia.png"),
-        pv: "".concat(info.imgSrc, "/pv.png")
-      };
-      return "<div class=\"card\" id=\"\" data-pos=\"\" data-id=\"\">\n            <div class=\"backCard\" title=\"O verso da carta possui uma imagem que representa a masmorra\"><span class=\"name\">Card<br/>Dungeon</span></div>\n            <div class=\"frontCard\" >\n                <h2 class=\"nome\"></h2>\n                <span class=\"imagem\" title=\"\"></span>\n                <span class=\"cont-stats\">\n                    <span class=\"forca\"><img src=\"".concat(imgType.forca, "\" alt=\"For\xE7a\" /><span class=\"valor\" title=\"Valor do atributo For\xE7a da carta\"></span></span>\n                    <span class=\"habilidade\"><img src=\"").concat(imgType.habilidade, "\" alt=\"Atributo Habilidade\" /><span class=\"valor\" title=\"Valor do atributo Habilidade da carta\"></span></span>\n                    <span class=\"resistencia\"><img src=\"").concat(imgType.resistencia, "\" alt=\"Atributo resistencia\" /><span class=\"valor\" title=\"Valor do atributo  Resistencia da carta\"></span></span>\n                    <span class=\"pv\"><img src=\"").concat(imgType.pv, "\" alt=\"Atributo Pontos de Vida\" /><span class=\"valor\" title=\"Valor do atributo Pontos de vida da carta\"></span></span>\n                </span>\n                <div class=\"tipo\"><span class=\"tipo1\"></span> - <span class=\"tipo2\"></span></div>\n                <p class=\"descricao\"></p>\n            </div>\n        </div>");
+  },
+  removeDuplos: function removeDuplos(array) {
+    return array.filter(function (elem, index, array) {
+      return array.indexOf(elem) === index;
+    });
+  },
+  mapTipos1: function mapTipos1(arr) {
+    var tipos = arr.map(function (el) {
+      return el.tipo;
+    });
+    return tipos;
+  },
+  calculaOpcoes: function calculaOpcoes(info) {
+    var removeDuplos = this.removeDuplos;
+    var mapTipos1 = this.mapTipos1;
+    var emJogo = info.cartas.emJogo;
+    return removeDuplos(mapTipos1(emJogo));
+  },
+  configuraCarta: function configuraCarta($carta, info) {
+    var front = $carta.find('.frontCard');
+    var este = info.cartas.emJogo[info.cartas.emJogo.length - 1];
+    console.log(este.tipo);
+    front.find('.nome').text(este.nome);
+    front.find('.nome').text(este.nome);
+    front.find('.tipo .tipo1').text(este.tipo);
+    front.find('.tipo .tipo2').text(este.tipo2);
+    front.find('.descricao').text(este.descricao);
+
+    if (este.tipo === 'buff') {
+      front.find('.imagem').css('background-image', 'url(./img/' + este.imagem + ')').addClass('grande').attr('title', este.alt);
+      front.find('.cont-stats').remove();
     }
-  }, {
-    key: "viraCartasFront",
-    value: function viraCartasFront(info) {
-      var configuraCarta = this.configuraCarta;
-      var cartas = info.cartas;
-      var qtd = cartas.emJogo.length;
-      var topododeck = $(".card:nth-of-type(".concat(cartas.deck.length, ")"));
+
+    if (este.tipo === 'debuff') {
+      front.find('.imagem').css('background-image', 'url(./img/' + este.imagem + ')').addClass('grande').attr('title', este.alt);
+      front.find('.cont-stats').remove();
+    }
+
+    if (este.tipo === 'Monstro') {
+      front.find('.imagem').attr('title', este.alt).css('background-image', 'url(./img/' + este.imagem + ')');
+      front.find('.cont-stats .forca .valor').text(este.forca);
+      front.find('.cont-stats .habilidade .valor').text(este.habilidade);
+      front.find('.cont-stats .resistencia .valor').text(este.resistencia);
+      front.find('.cont-stats .pv .valor').text(este.pv);
+    }
+
+    $carta.addClass('deFrente');
+  },
+  inimigoDefende: function inimigoDefende(info) {
+    var _this = this;
+
+    var inimigos = info.inimigos,
+        delayTime = info.delayTime;
+    var $text = "".concat(inimigos.esteInimigo.nome, " defende o golpe.");
+    this.displayTextAutoErase($text, delayTime);
+    setTimeout(function () {
+      _this.mostraOpcoes('ataqueMais');
+    }, delayTime * 2);
+  },
+  displayTextAutoErase: function displayTextAutoErase(string, delayTime) {
+    $('.showText').text(string);
+    setTimeout(function () {
       $('.showText').text('');
-      $('.baseCarta').hide();
-      $('.deckPlace').data('qtd', 'qtd-' + qtd);
+    }, delayTime * 3);
+  },
+  interacaoComCartas: function interacaoComCartas(info) {
+    var inimigos = info.inimigos;
+    var cartas = info.cartas;
+    var opcoesAtuais = info.opcoesAtuais;
+    inimigos.inimigoPV = [];
+    $(info.cartas.emJogo).each(function (i, el) {
+      console.log('el: ', el);
 
-      for (qtd > cartas.emJogo.length; qtd--;) {
-        topododeck = $('.card:nth-of-type(' + cartas.deck.length + ')').removeClass('nodeckcompra').addClass('pos-' + qtd).data('pos', qtd);
-        configuraCarta(topododeck, info);
+      if (el.tipo === 'Monstro') {
+        info.inimigos.inimigoPV.push({
+          pVida: el.pv,
+          nome: el.nome,
+          pos: i
+        });
+        info.opcoesAtuais.push('ataqueMais');
+      } // switch (el.tipo) {
+      //     case 'Monstro':
+      //         inimigoPV.push({
+      //             pVida: el.pv,
+      //             nome: el.nome,
+      //             pos: i
+      //         });
+      //         poderesDeMonstro(el);
+      //         // mostraOpcoes('ataqueMais');
+      //         break;
+      //     case 'buff':
+      //         console.log('buff');
+      //         const buffBonus = new BonusEffects(el.tipo2,1);
+      //         // mostraOpcoes('continuar');
+      //         break;
+      //     case 'debuff':
+      //         console.log('debuff');
+      //         const debuffBonus = new BonusEffects(el.tipo2,-1);
+      //         // mostraOpcoes('continuar');
+      //         break;
+      //     default:
+      //         console.log('Não monstro');
+      //         break;
+      // }		
+
+    });
+    return info;
+  },
+  filtraOpcoes: function filtraOpcoes(info) {
+    var opcoes = this.calculaOpcoes(info);
+    var novasOpcoes = [];
+
+    for (var i = 0; i < opcoes.length; i++) {
+      if (opcoes[i] === 'Monstro') {
+        novasOpcoes.push('ataqueMais');
       }
     }
-  }, {
-    key: "removeDuplos",
-    value: function removeDuplos(array) {
-      return array.filter(function (elem, index, array) {
-        return array.indexOf(elem) === index;
-      });
-    }
-  }, {
-    key: "mapTipos1",
-    value: function mapTipos1(arr) {
-      var tipos = arr.map(function (el) {
-        return el.tipo;
-      });
-      return tipos;
-    }
-  }, {
-    key: "calculaOpcoes",
-    value: function calculaOpcoes(info) {
-      var removeDuplos = this.removeDuplos;
-      var mapTipos1 = this.mapTipos1;
-      var emJogo = info.cartas.emJogo;
-      return removeDuplos(mapTipos1(emJogo));
-    } // viraCartasDoDeck(info, $qtd){
-    //     var configuraCarta = this.configuraCarta;
-    //     const cartas = info.cartas;
-    //     var topododeck = $('.card:nth-of-type('+cartas.deck.length+')');
-    //     var count = 0;
-    //     $('.showText').text('');
-    //     if (count === 0){
-    //         var qtd = $qtd;
-    //         if (cartas.deck.length < $qtd) {
-    //             qtd = cartas.deck.length;
-    //         }
-    //         $('.baseCarta').hide();
-    //         setTimeout(function(){
-    //             $('.deckPlace').attr('data-qtd','qtd-'+qtd);
-    //             for (qtd > cartas.emJogo.length; qtd--;) { 
-    //                 topododeck = $('.card:nth-of-type('+cartas.deck.length+')').removeClass('nodeckcompra').addClass('pos-'+qtd).attr('data-pos',qtd);
-    //                 cartas.emJogo.push(cartas.deck.pop());
-    //                 console.log('beleçelç: ', topododeck);
-    //                 configuraCarta(topododeck, info);
-    //             }
-    //             //interacaoComCartas(info);
-    //         },0)
-    //     }
-    //     info.cartas = cartas;
-    //     count++;
-    //     return info;
-    // }
 
-  }, {
-    key: "configuraCarta",
-    value: function configuraCarta($carta, info) {
-      var front = $carta.find('.frontCard');
-      var este = info.cartas.emJogo[info.cartas.emJogo.length - 1];
-      console.log(este.tipo);
-      front.find('.nome').text(este.nome);
-      front.find('.nome').text(este.nome);
-      front.find('.tipo .tipo1').text(este.tipo);
-      front.find('.tipo .tipo2').text(este.tipo2);
-      front.find('.descricao').text(este.descricao);
+    return novasOpcoes;
+  },
+  mostraOpcoes: function mostraOpcoes(info) {
+    var buttonTemplate = _helpers["default"].buttonTemplate;
+    var opcoes = typeof info !== 'string' ? this.filtraOpcoes(info) : info;
+    var $html = '';
 
-      if (este.tipo === 'buff') {
-        front.find('.imagem').css('background-image', 'url(./img/' + este.imagem + ')').addClass('grande').attr('title', este.alt);
-        front.find('.cont-stats').remove();
+    for (var i = 0; i < opcoes.length; i++) {
+      var $turno = opcoes[i];
+
+      if ($turno === 'limpa') {
+        $html = '';
+        break;
       }
 
-      if (este.tipo === 'debuff') {
-        front.find('.imagem').css('background-image', 'url(./img/' + este.imagem + ')').addClass('grande').attr('title', este.alt);
-        front.find('.cont-stats').remove();
+      if ($turno === 'ataque') {
+        $html += "".concat(buttonTemplate('Ataque', 'ataque'), " ").concat(buttonTemplate('Exumar', 'exumar'));
       }
 
-      if (este.tipo === 'Monstro') {
-        front.find('.imagem').attr('title', este.alt).css('background-image', 'url(./img/' + este.imagem + ')');
-        front.find('.cont-stats .forca .valor').text(este.forca);
-        front.find('.cont-stats .habilidade .valor').text(este.habilidade);
-        front.find('.cont-stats .resistencia .valor').text(este.resistencia);
-        front.find('.cont-stats .pv .valor').text(este.pv);
+      if ($turno === 'ataqueMais') {
+        $html += "".concat(buttonTemplate('Ataque Mais', 'ataquemais'));
+      } else if ($turno === 'continuar') {
+        $html += "".concat(buttonTemplate('Continuar', 'continuar'));
       }
-
-      $carta.addClass('deFrente');
     }
-  }, {
-    key: "interacaoComCartas",
-    value: function interacaoComCartas(info) {
-      var inimigos = info.inimigos;
-      var cartas = info.cartas;
-      var opcoesAtuais = info.opcoesAtuais;
-      inimigos.inimigoPV = [];
-      console.log('cartas.emJogoDoido: ', info.cartas.emJogo);
-      $(info.cartas.emJogo).each(function (i, el) {
-        console.log('el: ', el);
 
-        if (el.tipo === 'Monstro') {
-          info.inimigos.inimigoPV.push({
-            pVida: el.pv,
-            nome: el.nome,
-            pos: i
-          });
-          info.opcoesAtuais.push('ataqueMais'); // poderesDeMonstro(el); // esse aqui deve ir para o "Backend"
-          // mostraOpcoes(info);
-        } // switch (el.tipo) {
-        //     case 'Monstro':
-        //         inimigoPV.push({
-        //             pVida: el.pv,
-        //             nome: el.nome,
-        //             pos: i
-        //         });
-        //         poderesDeMonstro(el);
-        //         // mostraOpcoes('ataqueMais');
-        //         break;
-        //     case 'buff':
-        //         console.log('buff');
-        //         const buffBonus = new BonusEffects(el.tipo2,1);
-        //         // mostraOpcoes('continuar');
-        //         break;
-        //     case 'debuff':
-        //         console.log('debuff');
-        //         const debuffBonus = new BonusEffects(el.tipo2,-1);
-        //         // mostraOpcoes('continuar');
-        //         break;
-        //     default:
-        //         console.log('Não monstro');
-        //         break;
-        // }		
+    console.log('$html: ', $html);
+    $('.showBts').html($html);
+  },
+  danoEmInimigo: function danoEmInimigo(info, dano) {
+    var inimigos = info.inimigos,
+        delayTime = info.delayTime;
+    var cartaInimigo = $('.card.pos-0');
+    cartaInimigo.find('.pv .valor').text(inimigos.esteInimigo.pv).addClass('mudandoValor');
+    setTimeout(function () {
+      cartaInimigo.find('.pv .valor').removeClass('mudandoValor');
+    }, delayTime / 3);
+  },
+  retiraDoTopoDaMesa: function retiraDoTopoDaMesa() {
+    var $estacarta = $('.card.pos-0');
+    $estacarta.addClass('cemiterio');
+    setTimeout(function () {
+      $estacarta.remove();
+    }, 1000);
+  },
+  escolhaCarta: function escolhaCarta() {
+    $('.showText').text('Clique na carta para continuar');
+    $('.baseCarta').show();
+  },
+  fimDeJogo: function fimDeJogo() {
+    switch (deck.length < 1) {
+      case true:
+        switch (emJogo.length == 1) {
+          case true:
+            setTimeout(function () {
+              muito__bem();
+            }, delayTime * 0.5);
+            break;
 
-      });
-      return info;
-      console.log('testeDoido', inimigos, cartas, opcoesAtuais);
-    }
-  }, {
-    key: "filtraOpcoes",
-    value: function filtraOpcoes(info) {
-      var opcoes = this.calculaOpcoes(info);
-      var novasOpcoes = [];
-
-      for (var i = 0; i < opcoes.length; i++) {
-        if (opcoes[i] === 'Monstro') {
-          novasOpcoes.push('ataqueMais');
-        }
-      }
-
-      return novasOpcoes;
-    }
-  }, {
-    key: "mostraOpcoes",
-    value: function mostraOpcoes(info) {
-      var buttonTemplate = _helpers["default"].buttonTemplate;
-      var opcoes = this.filtraOpcoes(info);
-      var $html = '';
-
-      for (var i = 0; i < opcoes.length; i++) {
-        var $turno = opcoes[i];
-
-        if ($turno === 'limpa') {
-          $html = '';
-          break;
+          default:
+            mandando_pra_cova();
+            break;
         }
 
-        if ($turno === 'ataque') {
-          $html += "".concat(buttonTemplate('Ataque', 'ataque'), " ").concat(buttonTemplate('Exumar', 'exumar'));
-        }
+        break;
 
-        if ($turno === 'ataqueMais') {
-          $html += "".concat(buttonTemplate('Ataque Mais', 'ataquemais'));
-        } else if ($turno === 'continuar') {
-          $html += "".concat(buttonTemplate('Continuar', 'continuar'));
-        }
-      }
-
-      console.log('$html: ', $html);
-      $('.showBts').html($html);
+      default:
+        mandando_pra_cova();
+        break;
     }
-  }]);
-  return ControlFront;
-}();
+  }
+};
+exports["default"] = _default;
 
-exports["default"] = ControlFront;
-
-},{"./helpers":7,"@babel/runtime/helpers/classCallCheck":1,"@babel/runtime/helpers/createClass":2,"@babel/runtime/helpers/interopRequireDefault":3}],7:[function(require,module,exports){
+},{"./helpers":7,"@babel/runtime/helpers/interopRequireDefault":3}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -838,8 +906,8 @@ var _this = void 0;
 // ==========================================================
 // Invocando Classes
 // ==========================================================
-var controleFront = new _controleFront["default"](); // const coreRules = new CoreRules();
-
+// const controleFront = new ControlFront();
+// const coreRules = new CoreRules();
 var embaralhaCartas = _helpers["default"].embaralhaCartas,
     calcularJogada = _helpers["default"].calcularJogada; // ==========================================================
 // CONSTANTES
@@ -895,8 +963,10 @@ $(document).ready(function ($) {
 });
 
 function jogo() {
-  controleFront.configuraHeroi(gameInfo);
-  controleFront.poeAsCartas(gameInfo);
+  _controleFront["default"].configuraHeroi(gameInfo);
+
+  _controleFront["default"].poeAsCartas(gameInfo);
+
   console.log('gameInfo start: ', gameInfo);
 } // ==========================================================
 // FUNÇÕES DE APOIO
@@ -1312,69 +1382,61 @@ function poderesDeMonstro($el) {
       mostraOpcoes('ataqueMais');
       break;
   }
-}
-
-function irProCemiterio($estacarta, $posicao) {
-  $estacarta.addClass('cemiterio');
-  setTimeout(function () {
-    $estacarta.remove();
-  }, delayTime * 0.5);
-
-  switch (deck.length < 1) {
-    case true:
-      switch (emJogo.length == 1) {
-        case true:
-          setTimeout(function () {
-            muito__bem();
-          }, delayTime * 0.5);
-          break;
-
-        default:
-          mandando_pra_cova();
-          break;
-      }
-
-      break;
-
-    default:
-      mandando_pra_cova();
-      break;
-  }
-
-  function mandando_pra_cova() {
-    switch (emJogo.length) {
-      case 1:
-        cemiterio.push(emJogo.pop());
-        $('.deckPlace').attr('data-qtd', '');
-        setTimeout(function () {
-          logsTexto('Clique na carta para jogar');
-          viraCartasDoDeck(deck, 1);
-        }, 0);
-        break;
-
-      default:
-        var invertePos = emJogo.length - 1 - estaPosicao;
-        cemiterio.push(emJogo[estaPosicao]);
-        emJogo.splice(estaPosicao, 1);
-        $('.deckPlace').attr('data-qtd', '');
-        $('.deckPlace').attr('data-qtd', 'qtd-' + emJogo.length);
-
-        for (var i = 3; i >= 0; i--) {
-          $('.deckPlace .pos-' + i).removeClass('pos-' + i); // console.log(i);
-        }
-
-        setTimeout(function () {
-          $('.deckPlace .deFrente').each(function (i, el) {
-            $(this).addClass('pos-' + i);
-            $(this).data('pos', i);
-          });
-          mostraOpcoes('ataqueMais');
-          console.log('mostraOpcoes(ataqueMais) em irProCemiterio');
-        }, delayTime / 2);
-        break;
-    }
-  }
-} // ==========================================================
+} // function irProCemiterio($estacarta, $posicao) {
+//     $estacarta.addClass('cemiterio');
+//     setTimeout(function(){
+//         $estacarta.remove();
+//     },delayTime*0.5);
+//     switch (deck.length < 1) {
+//         case true:
+//             switch (emJogo.length == 1) {
+//                 case true:
+//                     setTimeout(function(){
+//                         muito__bem();    
+//                     }, delayTime*0.5);
+//                     break;
+//                 default: 
+//                     mandando_pra_cova();
+//                     break;
+//             }            
+//             break;
+//         default:
+//          mandando_pra_cova();
+//             break;
+//     }
+//     function mandando_pra_cova() {
+//         switch (emJogo.length) {
+//                 case 1:
+//                     cemiterio.push(emJogo.pop());
+//                     $('.deckPlace').attr('data-qtd','');
+//                     setTimeout(function(){
+//                         logsTexto('Clique na carta para jogar');
+//                         viraCartasDoDeck(deck, 1);
+//                     },0);
+//                     break;
+//                 default:
+//                     var invertePos = (emJogo.length - 1) - estaPosicao;
+//                     cemiterio.push(emJogo[estaPosicao]);
+//                     emJogo.splice(estaPosicao, 1);
+//                     $('.deckPlace').attr('data-qtd','');
+//                     $('.deckPlace').attr('data-qtd','qtd-'+emJogo.length);
+//                     for (var i = 3; i >= 0; i--) {
+//                         $('.deckPlace .pos-'+i).removeClass('pos-'+i);
+//                         // console.log(i);
+//                     }
+//                     setTimeout(function(){
+//                         $('.deckPlace .deFrente').each(function(i, el) {
+//                             $(this).addClass('pos-'+i);
+//                             $(this).data('pos',i);
+//                         });
+//                         mostraOpcoes('ataqueMais');
+//                         console.log('mostraOpcoes(ataqueMais) em irProCemiterio');
+//                     }, delayTime/2);
+//                     break;
+//             }
+//     }
+// }
+// ==========================================================
 // AÇÕES BOTÕES
 // ==========================================================
 
@@ -1384,14 +1446,21 @@ $(document).on('click', '.baseCarta', function (e) {
   // Base carta é um botão escondido...
   gameInfo = _CoreRules["default"].viraCartasBack(gameInfo, 1);
   console.log('bugHunt', gameInfo);
-  controleFront.viraCartasFront(gameInfo);
-  controleFront.mostraOpcoes(gameInfo);
+
+  _controleFront["default"].viraCartasFront(gameInfo);
+
+  _controleFront["default"].mostraOpcoes(gameInfo);
 });
 $(document).on('click', '.bt', function (e) {
-  var $action = $(e.target).attr('data-action');
+  var $this = $(e.target);
+  var $action = $this.attr('data-action');
+
+  _CoreRules["default"].debounce(function () {});
+
+  $('.showBts').empty();
 
   if ($action === 'ataque') {
-    $('.showBts').html('');
+    // $('.showBts').html('');
     turnosdecombate(emJogo[0]);
   }
 
@@ -1400,44 +1469,15 @@ $(document).on('click', '.bt', function (e) {
   }
 
   if ($action === 'ataquemais') {
+    // $('.showBts').html('');
+    $this.remove();
     gameInfo = gameInfo.cartas.emJogo.length ? _CoreRules["default"].ataqueComUmInimigo(gameInfo) : ataqueComVariosInimigos(gameInfo);
-    gameInfo = _CoreRules["default"].jogadaDeIniciativa(gameInfo);
-    gameInfo = _CoreRules["default"].combateMais(gameInfo);
-
-    if (gameInfo.apoio.atacanteAtual === 'jogador') {
-      console.log('jogador rola o ataque');
-    } else {
-      console.log('inimigo rola o ataque');
-    } // this.turnoJogadorMais(inimigos.esteInimigo, estaPosicao);
-    // this.turnoInimigoMais(cartas.emJogo[index], posicao);
-    // console.log('ataqueMaisClick: ', gameInfo);
-    // $(this).remove();
-    // estaPosicao = 0;
-    // console.log('emJogo.length em mostraOpcoes = '+emJogo.length);
-    // if(emJogo.length) {
-    //     esteInimigo = {};
-    //     esteInimigo = emJogo[estaPosicao];
-    //     turnosdecombateMais(emJogo, emJogo[estaPosicao], estaPosicao);
-    //     return;
-    // } else {
-    //     $('.showBts').html('Escolha uma carta para atacar');
-    //     fakeCards(emJogo.length);
-    //     $('.fkCards').click(function(event) {
-    //         var inimigoSelecionado = $(this).attr('data-pos');
-    //         $('.fkCards').remove();
-    //         var posInimigo = (emJogo.length - 1) - inimigoSelecionado;
-    //         estaPosicao = posInimigo;
-    //         esteInimigo = {};
-    //         esteInimigo = emJogo[posInimigo];
-    //         turnosdecombateMais(emJogo, esteInimigo, posInimigo);
-    //     });
-    // }
-
+    gameInfo = _CoreRules["default"].novoCombate(gameInfo);
   }
 
   if ($action === 'continuar') {
-    $(_this).remove();
-    irProCemiterio($('.card.pos-0'), 0);
+    // $(this).remove();
+    retiraDoTopoDaMesa();
   }
 
   if ($action === 'testar') {

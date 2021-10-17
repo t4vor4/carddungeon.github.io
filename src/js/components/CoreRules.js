@@ -1,5 +1,7 @@
 import helpers from "./helpers";
 
+import controleFront from "./controleFront";
+
 export default {
 
     viraCartasBack: (info, $qtd) => {
@@ -36,6 +38,19 @@ export default {
 
     },
 
+    debounce(func, timeout = 300){
+        let timer;
+        return (...args) => {
+            if (!timer) {
+                func.apply(this, args);
+              }
+              clearTimeout(timer);
+              timer = setTimeout(() => {
+                timer = undefined;
+              }, timeout);
+        };
+    },
+
     ataqueComVariosInimigos(info) {
         console.log('Preciso montar a luta com mais de 1 inimigo');
         return info;
@@ -56,6 +71,56 @@ export default {
         //     esteInimigo = emJogo[posInimigo];
         //     turnosdecombateMais(emJogo, esteInimigo, posInimigo);
         // });
+    },
+
+    novoCombate(info) {
+        const ataque = this.ataque;
+
+        let {heroi, inimigos, cartas} = info;
+
+        let dano;
+
+        const jogadaHeroi = 10//heroi.habilidade + helpers.rollDice(6);
+
+        const jogadaInimigo = 1//inimigos.esteInimigo.habilidade + helpers.rollDice(6);
+
+        if ( jogadaHeroi >= jogadaInimigo ) {
+            // O heroi ataca o monstro
+            dano = ataque(heroi, inimigos.esteInimigo);
+
+            if (!dano) {
+                inimigos.esteInimigo.pv = this.danoMortal(inimigos.esteInimigo.pv, dano);
+            } else {
+                controleFront.inimigoDefende(info);
+            }
+
+            info.inimigos = inimigos;
+
+            if (inimigos.esteInimigo.pv) {
+                controleFront.danoEmInimigo(info, dano);
+
+                controleFront.mostraOpcoes(info);
+
+            } else {
+                cartas.cemiterio.push(cartas.emJogo.pop());
+                
+                info.cartas = cartas;
+                
+                controleFront.retiraDoTopoDaMesa();
+
+                controleFront.escolhaCarta();
+            }
+
+        } else {
+            // O mostro ataca o heroi
+            dano = ataque(inimigos.esteInimigo, heroi);
+
+            heroi.pv = this.danoMortal(heroi.pv, dano);
+            
+            info.heroi = heroi;
+        }
+
+        return info;
     },
 
     jogadaDeIniciativa(info) {
@@ -158,9 +223,12 @@ export default {
     }, 
 
     ataque($atacante, $defensor) {
-        const forcaAtaque = $atacante.forca + helpers.calcularJogada(6);
+        const atk = $atacante.forca;
+        const def = $defensor.resistencia;
+
+        const forcaAtaque = atk + helpers.calcularJogada(6);
         
-        const forcaDefesa = $defensor.resistencia + helpers.calcularJogada(6);
+        const forcaDefesa = def + helpers.calcularJogada(6);
     
         if (forcaDefesa >= forcaAtaque) {
             return 0;
@@ -168,6 +236,12 @@ export default {
         else {
             return forcaAtaque-forcaDefesa;
         }    
+    },
+
+    danoMortal(pv, dano) {
+        pv -= dano;
+
+        return pv >= 0 ? pv : 0;
     }
 
 }

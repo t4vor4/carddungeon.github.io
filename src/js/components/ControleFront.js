@@ -1,9 +1,7 @@
 import helpers from "./helpers";
 
-export default class ControlFront {
+export default {
     // Mais pra frente deve receber o objeto principal
-
-    constructor () {}
 
     configuraHeroi(info) {
         const barra = $('.heroBar');
@@ -12,7 +10,7 @@ export default class ControlFront {
         barra.find('.resistencia .valor').html(info.heroi.resistencia);
         barra.find('.pv .valor').html(info.heroi.pv);
         return;
-    }
+    },
 
     poeAsCartas(info) {
         const carta = this.carta;
@@ -37,7 +35,7 @@ export default class ControlFront {
                 }, tempoCartaNaMesa);
             });        
         },500);
-    }
+    },
 
     carta(info) {
         const imgType = {
@@ -62,7 +60,7 @@ export default class ControlFront {
                 <p class="descricao"></p>
             </div>
         </div>`;
-    }
+    },
 
     viraCartasFront(info) {
         const configuraCarta = this.configuraCarta;
@@ -85,19 +83,19 @@ export default class ControlFront {
             configuraCarta(topododeck, info);
             
         }
-    }
+    },
 
     
     removeDuplos(array) {
        return array.filter( ( elem, index, array ) => {
            return array.indexOf( elem ) === index;
        });
-    }
+    },
 
     mapTipos1(arr) {
         const tipos = arr.map((el) => el.tipo);
         return tipos;
-    }
+    },
 
     calculaOpcoes(info) {
         const removeDuplos =  this.removeDuplos;
@@ -106,49 +104,7 @@ export default class ControlFront {
         let {emJogo} = info.cartas;
 
         return removeDuplos(mapTipos1(emJogo));
-    }
-    
-    // viraCartasDoDeck(info, $qtd){
-    //     var configuraCarta = this.configuraCarta;
-
-    //     const cartas = info.cartas;
-        
-    //     var topododeck = $('.card:nth-of-type('+cartas.deck.length+')');
-        
-    //     var count = 0;
-
-    //     $('.showText').text('');
-        
-    //     if (count === 0){
-    //         var qtd = $qtd;
-
-    //         if (cartas.deck.length < $qtd) {
-    //             qtd = cartas.deck.length;
-    //         }
-
-    //         $('.baseCarta').hide();
-
-    //         setTimeout(function(){
-    //             $('.deckPlace').attr('data-qtd','qtd-'+qtd);
-
-    //             for (qtd > cartas.emJogo.length; qtd--;) { 
-    //                 topododeck = $('.card:nth-of-type('+cartas.deck.length+')').removeClass('nodeckcompra').addClass('pos-'+qtd).attr('data-pos',qtd);
-
-    //                 cartas.emJogo.push(cartas.deck.pop());
-
-    //                 console.log('beleçelç: ', topododeck);
-    //                 configuraCarta(topododeck, info);
-
-    //             }
-    //             //interacaoComCartas(info);
-    //         },0)
-    //     }
-
-    //     info.cartas = cartas;
-
-    //     count++;
-    //     return info;
-    // }
+    },
     
     configuraCarta($carta, info) {
         var front = $carta.find('.frontCard');
@@ -179,7 +135,25 @@ export default class ControlFront {
         }
 
         $carta.addClass('deFrente');
-    }
+    },
+
+    inimigoDefende(info) {
+        const {inimigos, delayTime} = info;
+
+        const $text = `${inimigos.esteInimigo.nome} defende o golpe.`
+        this.displayTextAutoErase($text, delayTime);
+
+        setTimeout(() => {
+            this.mostraOpcoes('ataqueMais');
+        }, delayTime*2);
+    },
+
+    displayTextAutoErase (string, delayTime) {
+        $('.showText').text(string);
+        setTimeout(function () {
+            $('.showText').text('');
+        }, delayTime * 3);
+    },
     
     interacaoComCartas(info) {
         const inimigos = info.inimigos;
@@ -190,7 +164,6 @@ export default class ControlFront {
 
         inimigos.inimigoPV = [];
         
-        console.log('cartas.emJogoDoido: ', info.cartas.emJogo);
         $(info.cartas.emJogo).each(function(i,el){
             console.log('el: ', el)
         
@@ -202,8 +175,6 @@ export default class ControlFront {
                 });
 
                 info.opcoesAtuais.push('ataqueMais');
-                // poderesDeMonstro(el); // esse aqui deve ir para o "Backend"
-                // mostraOpcoes(info);
             }
 
             
@@ -233,8 +204,7 @@ export default class ControlFront {
             // }		
         });
         return info;
-        console.log('testeDoido', inimigos, cartas, opcoesAtuais);
-    }
+    },
 
     filtraOpcoes(info) {
         const opcoes = this.calculaOpcoes(info);
@@ -248,12 +218,12 @@ export default class ControlFront {
         }
 
         return novasOpcoes;
-    }
+    },
 
     mostraOpcoes(info) {
         const buttonTemplate = helpers.buttonTemplate;
 
-        const opcoes = this.filtraOpcoes(info);
+        const opcoes = typeof(info) !== 'string' ? this.filtraOpcoes(info) : info;
 
         let $html = '';
 
@@ -281,6 +251,54 @@ export default class ControlFront {
         console.log('$html: ',$html)
 
         $('.showBts').html($html);
-    }
+    },
+ 
+    danoEmInimigo(info, dano) {
+        let {inimigos, delayTime} = info;
 
+        let cartaInimigo = $('.card.pos-0');
+
+        cartaInimigo.find('.pv .valor').text(inimigos.esteInimigo.pv).addClass('mudandoValor');
+
+        setTimeout(function(){
+            cartaInimigo.find('.pv .valor').removeClass('mudandoValor');
+        },delayTime/3);
+    },
+
+    retiraDoTopoDaMesa() {
+        const $estacarta = $('.card.pos-0');
+
+        $estacarta.addClass('cemiterio');
+
+        setTimeout(function(){
+
+            $estacarta.remove();
+
+        }, 1000);
+    },
+
+    escolhaCarta() {
+        $('.showText').text('Clique na carta para continuar');
+        $('.baseCarta').show();
+    },
+
+    fimDeJogo() {
+        switch (deck.length < 1) {
+            case true:
+                switch (emJogo.length == 1) {
+                    case true:
+                        setTimeout(function(){
+                            muito__bem();    
+                        }, delayTime*0.5);
+                        break;
+                    default: 
+                        mandando_pra_cova();
+                        break;
+                }            
+                break;
+            default:
+             mandando_pra_cova();
+                break;
+        }
+    }
 }

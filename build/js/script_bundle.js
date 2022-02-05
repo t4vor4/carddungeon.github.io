@@ -14,44 +14,40 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-
-var _this = void 0;
-
 var _default = {
   dado: function dado(n) {
     return Math.floor(Math.random() * n) + 1;
   },
   jogadaDeAtaque: function jogadaDeAtaque(h, m) {
-    return h.habilidade + _this.dado(6) >= m.habilidade + _this.dado(6);
+    return h.habilidade + this.dado(6) >= m.habilidade + this.dado(6);
   },
   jogadaDano: function jogadaDano(atacante, defensor) {
     return defensor.pv - atacante.forca;
   },
   efeitoDano: function efeitoDano(atacante, defensor) {
-    return console.log("".concat(atacante.nome, " acerta um golpe em ").concat(defensor.nome));
+    console.log("".concat(atacante.nome, " acerta um golpe em ").concat(defensor.nome));
   },
   msgMorte: function msgMorte(morto) {
     return console.log("O ".concat(morto.nome, " morreu. :("));
   },
   resolucaoAttack: function resolucaoAttack(atacante, defensor) {
-    defensor.pv = _this.jogadaDano(atacante, defensor);
+    defensor.pv = this.jogadaDano(atacante, defensor);
 
     if (defensor.pv <= 0) {
-      _this.msgMorte(defensor);
+      this.msgMorte(defensor);
     } else {
-      _this.efeitoDano(atacante, defensor);
+      this.efeitoDano(atacante, defensor);
     }
   },
   sequenciaAtack: function sequenciaAtack(heroi, monster) {
-    var x = _this.jogadaDeAtaque;
     var h = heroi;
     var m = monster;
-    attacker = x(h, m);
+    var attacker = this.jogadaDeAtaque(h, m);
 
     if (attacker) {
-      _this.resolucaoAttack(h, m);
+      this.resolucaoAttack(h, m);
     } else {
-      _this.resolucaoAttack(m, h);
+      this.resolucaoAttack(m, h);
     }
   }
 };
@@ -265,35 +261,13 @@ var heroi = {
   habilidade: 1,
   resistencia: 1,
   pv: 10
-}; // const dado = n =>  Math.floor(Math.random() * n) + 1;
-// const jogadaDeAtaque = (h, m) => h.habilidade+dado(6) >= m.habilidade+dado(6);
-// const jogadaDano = (atacante, defensor) => defensor.pv - atacante.forca;
-// const efeitoDano = (atacante, defensor) => console.log(`${atacante.nome} acerta um golpe em ${defensor.nome}`);
-// const msgMorte = morto => console.log(`O ${morto.nome} morreu. :(`);
-// const resolucaoAttack = (atacante, defensor) => {
-//     defensor.pv = jogadaDano(atacante, defensor);
-//     if (defensor.pv <= 0) {
-//         msgMorte(defensor);
-//     } else {
-//         efeitoDano(atacante, defensor);
-//     }
-// }
-// const sequenciaAtack = async (heroi, monster) => {
-//     let h = heroi;
-//     let m = monster;
-//     const attacker = await jogadaDeAtaque(h,m);
-//     if (attacker) {
-//         resolucaoAttack(h, m);
-//     } else {
-//         resolucaoAttack(m, h);
-//     }
-// }
+};
 
-function clickButton(cb) {
+function clickButton(action, cb) {
   document.addEventListener('click', function (e) {
-    var action = e.target.getAttribute('action');
+    var $action = e.target.getAttribute('action');
 
-    if (!!action) {
+    if (!!$action) {
       console.log("🚀 ~ file: scripts_main.js ~ line 45 ~ clickButton ~ action", action);
       cb && cb();
     } else {
@@ -303,7 +277,7 @@ function clickButton(cb) {
 }
 
 var testButton = function testButton(_) {
-  var $html = "<button action=\"atack\">Ataque</button>";
+  var $html = "<button action=\"attack\">Ataque</button>";
   var content = document.querySelector('.content');
   content.innerHTML = $html;
   return;
@@ -311,7 +285,7 @@ var testButton = function testButton(_) {
 
 var init = function init() {
   // jogadaDeAtaque();
-  clickButton(function (_) {
+  clickButton('attack', function (_) {
     return _sequenciaAttack["default"].sequenciaAtack(heroi, monster);
   });
   testButton();

@@ -1,15 +1,23 @@
 export default {
-    dado: n =>  Math.floor(Math.random() * n) + 1,
+    dado(n) {
+        return Math.floor(Math.random() * n) + 1;
+    },
     
-    jogadaDeAtaque: (h, m) => h.habilidade+this.dado(6) >= m.habilidade+this.dado(6),
+    jogadaDeAtaque(h, m) {
+        return h.habilidade+this.dado(6) >= m.habilidade+this.dado(6)
+    },
     
-    jogadaDano: (atacante, defensor) => defensor.pv - atacante.forca,
+    jogadaDano(atacante, defensor) {
+        return defensor.pv - atacante.forca
+    },
     
-    efeitoDano: (atacante, defensor) => console.log(`${atacante.nome} acerta um golpe em ${defensor.nome}`),
+    efeitoDano(atacante, defensor) {
+        console.log(`${atacante.nome} acerta um golpe em ${defensor.nome}`)
+    },
     
-    msgMorte: morto => console.log(`O ${morto.nome} morreu. :(`),
+    msgMorte(morto) {return console.log(`O ${morto.nome} morreu. :(`)},
     
-    resolucaoAttack: (atacante, defensor) => {
+    resolucaoAttack(atacante, defensor) {
         defensor.pv = this.jogadaDano(atacante, defensor);
         if (defensor.pv <= 0) {
             this.msgMorte(defensor);
@@ -18,13 +26,11 @@ export default {
         }
     },
     
-    sequenciaAtack: (heroi, monster) => {
-
-        const x = this.jogadaDeAtaque;
+    sequenciaAtack(heroi, monster) {
         let h = heroi;
         let m = monster;
     
-        attacker = x(h,m);
+        let attacker = this.jogadaDeAtaque(h,m);
     
         if (attacker) {
             this.resolucaoAttack(h, m);

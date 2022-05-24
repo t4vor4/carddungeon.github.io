@@ -85,6 +85,11 @@ const javascriptBuild = async _ => {
             .pipe(dest(`${path.dest}/js`))
     );
 }
+
+const myImages = async _ => {
+    return src(`${path.src}/img/*.*`)
+    .pipe(dest(`${path.dest}/img`));
+}
 const bsReload = _ => browserSync.reload;
 
 // Observa mudanças no sass
@@ -105,5 +110,5 @@ const bSync = _ => browserSync.init({injectChanges: true, proxy: "http://localho
 const bSyncServer = _ => browserSync.init( { server: { baseDir: "./" }} );
 
 
-exports.default = series(compileSass, javascriptBuild, parallel( watchHtml, watchSass, watchJs, watchReloadCss, watchReloadJs, watchReloadJson, bSync) );
-exports.local = series(compileSass, javascriptBuild, parallel( watchHtml, watchSass, watchJs, watchReloadCss, watchReloadJs, watchReloadJson, bSyncServer) );
+exports.default = series(compileSass, javascriptBuild, myImages, parallel( watchHtml, watchSass, watchJs, watchReloadCss, watchReloadJs, watchReloadJson, bSync) );
+exports.local = series(compileSass, javascriptBuild, myImages, parallel( watchHtml, watchSass, watchJs, watchReloadCss, watchReloadJs, watchReloadJson, bSyncServer) );

@@ -1,0 +1,32 @@
+*, *::after, *::before {
+	box-sizing: border-box;
+}
+
+body {
+	font-size: 14px;
+	box-sizing: border-box;
+	color: $white;
+	background-color: $bgcolor;
+	background-position: center;
+	font-family: $font-1;
+	margin: 0;
+    padding: 0;
+}
+
+
+
+.content {
+	background-color: $white;
+	display: block;
+	margin: 0 auto;
+	min-height: 540px;
+	width: 320px;
+}
+
+.stage {
+	background-color: red;
+	display: flex;
+	flex-direction: column;
+	margin: 0;
+	padding: 0;
+}

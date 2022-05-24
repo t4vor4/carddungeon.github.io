@@ -1,0 +1,50 @@
+.heroi {
+    background-color: $headerColor;
+}
+
+.heroi__row {
+    display: flex;
+    width: 100%;
+    margin: 0;
+    padding: $gutter;
+}
+
+.heroi__row--1 {
+    align-content: flex-end;
+    justify-content: flex-start;
+}
+
+.heroi__face {
+    width: 33px;
+    height: 33px;
+    margin-right: $gutter;
+    background-color: $black;
+    background-image: url('../img/portraits.png');
+    background-position: 0 0;
+    border: $simpleBorder;
+}
+
+.heroi__info {
+    margin-left: $gutter;
+}
+
+.heroi__lifeBar {
+    width: 90%;
+    background: $white;
+    height: 8px;
+    display: block;
+    border: $simpleBorder;
+    margin-top: $gutter;
+    position: relative;
+    transform: skewX(45deg);
+}
+
+.heroi__lifeBar__inner {
+    height: 100%;
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: $blood;
+}
+

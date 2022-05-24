@@ -1,78 +1,4 @@
 {
-    "bonus": [
-        {
-            "id": "0008",
-            "nome": "Arena do Poder",
-            "tipo": "buff",
-            "tipo2": "forca",
-            "descricao": "Teste sua habilidade. Em caso de sucesso, você ganha 1 ponto de força",
-            "imagem": "green--potion.png",
-            "alt": "Uma sala circular com uma estátua no centro. Essa estatua representa um homem de pé, segurando um leão com o braço esquerdo e levantando sua espada aos céus como braço direito. É a representação de uma antiga divindade relacionada a força."
-        },
-        {
-            "id": "0009",
-            "nome": "Caminho da Habilidade",
-            "tipo": "buff",
-            "tipo2": "habilidade",
-            "descricao": "Teste sua habilidade. Em caso de sucesso, você ganha 1 ponto de Habilidade",
-            "imagem": "green--potion.png",
-            "alt": "Um corredor se projeta a frente com esculturas em alto-relevo de raposas, coelhos e outros animais silvestres na parede. Aparentemente, essas imagens estão ligadas aos espíritos da floresta que circula a masmorra."
-        },
-        {
-            "id": "0010",
-            "nome": "Area da Resistencia",
-            "tipo": "buff",
-            "tipo2": "resistencia",
-            "descricao": "Teste sua habilidade. Em caso de sucesso, você ganha 1 ponto de Resistencia",
-            "imagem": "green--potion.png",
-            "alt": "Um salão a estatua de uma jovem segurando um touro pelos chifres. A imagem representa uma divindade local ligada a resistência física e mental."
-        },
-        {
-            "id": "0011",
-            "nome": "Fonte da Vida",
-            "tipo": "buff",
-            "tipo2": "pv",
-            "descricao": "Teste sua habilidade. Em caso de sucesso, você ganha 1d6 ponto de Pontos de vida",
-            "imagem": "green--potion.png",
-            "alt": "No centro desta sala se encontra uma fonte de águas cristalinas. No topo da fonte há uma estatua de uma mulher com as mãos espalmadas na altura da cintura. De suas mãos descem fios de águas claras e de aspecto revigorante."
-        },
-        {
-            "id": "0012",
-            "nome": "Aura de Cansaço",
-            "tipo": "debuff",
-            "tipo2": "forca",
-            "descricao": "Teste sua habilidade. Em caso de falha, o Heroi perde 1 de força",
-            "imagem": "armadilha.png",
-            "alt": "Esta área exala um aroma putrido e nauseante."
-        },
-        {
-            "id": "0013",
-            "nome": "Chão de espinhos",
-            "tipo": "debuff",
-            "tipo2": "habilidade",
-            "descricao": "Teste sua habilidade. Em caso de falha, o Heroi perde 1 de Habilidade",
-            "imagem": "armadilha.png",
-            "alt": "O chão desse aposento está coberto de pequenos buracos que, ao detectarem a aproximação de alguém, projetam lâminas de quarenta centímetros em grande velocidade."
-        },
-        {
-            "id": "0014",
-            "nome": "Correntes da Corrupção",
-            "tipo": "debuff",
-            "tipo2": "resistencia",
-            "descricao": "Teste sua habilidade. Em caso de falha, o Heroi perde 1 de Resistencia",
-            "imagem": "armadilha.png",
-            "alt": "As paredes dessa sala possuem sulcos profundos de onde são projetadas correntes de brilho mágico. Ao encostarem em seu alvo, as correntes emitem um brilho e desaparecem, mas seu peso ainda é sentido pela vítima."
-        },
-        {
-            "id": "0015",
-            "nome": "Vapores Venenosos",
-            "tipo": "debuff",
-            "tipo2": "pv",
-            "descricao": "Teste sua habilidade. Em caso de falha, o Heroi perde +1d6 de Pontos de vida",
-            "imagem": "armadilha.png",
-            "alt": "Vapores pesados sobem de maneira sinuosa do chão deste recinto. O ar tem um cheiro ocre e pungente e pelos cantos pequenos roedores jazem mortos."
-        }
-    ],
     "monsters": [
         {
             "id": 1,
@@ -171,6 +97,131 @@
             "poder": 0,
             "imagem": "rei-maldito.png",
             "alt": "Um rei cadaver, com uma barba longa e cinzenta como teias de aranha, usando uma armadura prateada por cima de uma malha negra. Sobre sua cabeça esta uma coroa dourada cravejada de diamentes. Suas costas estão cobertas por uma capa da cor da realeza, e de sua cintura desce uma faixa do mesmo tecido. Em sua mão direita segura um escudo prateado e em sua mão esquerda esta uma espada brilhante de aspecto mágico."
+        }
+    ],
+    "bonus": [
+        {
+            "id": "0008",
+            "nome": "Arena do Poder",
+            "tipo": "buff",
+            "tipo2": "forca",
+            "descricao": "Teste sua habilidade. Em caso de sucesso, você ganha 1 ponto de força",
+            "imagem": "green--potion.png",
+            "alt": "Uma sala circular com uma estátua no centro. Essa estatua representa um homem de pé, segurando um leão com o braço esquerdo e levantando sua espada aos céus como braço direito. É a representação de uma antiga divindade relacionada a força."
+        },
+        {
+            "id": "0009",
+            "nome": "Caminho da Habilidade",
+            "tipo": "buff",
+            "tipo2": "habilidade",
+            "descricao": "Teste sua habilidade. Em caso de sucesso, você ganha 1 ponto de Habilidade",
+            "imagem": "green--potion.png",
+            "alt": "Um corredor se projeta a frente com esculturas em alto-relevo de raposas, coelhos e outros animais silvestres na parede. Aparentemente, essas imagens estão ligadas aos espíritos da floresta que circula a masmorra."
+        },
+        {
+            "id": "0010",
+            "nome": "Area da Resistencia",
+            "tipo": "buff",
+            "tipo2": "resistencia",
+            "descricao": "Teste sua habilidade. Em caso de sucesso, você ganha 1 ponto de Resistencia",
+            "imagem": "green--potion.png",
+            "alt": "Um salão a estatua de uma jovem segurando um touro pelos chifres. A imagem representa uma divindade local ligada a resistência física e mental."
+        },
+        {
+            "id": "0011",
+            "nome": "Fonte da Vida",
+            "tipo": "buff",
+            "tipo2": "pv",
+            "descricao": "Teste sua habilidade. Em caso de sucesso, você ganha 1d6 ponto de Pontos de vida",
+            "imagem": "green--potion.png",
+            "alt": "No centro desta sala se encontra uma fonte de águas cristalinas. No topo da fonte há uma estatua de uma mulher com as mãos espalmadas na altura da cintura. De suas mãos descem fios de águas claras e de aspecto revigorante."
+        },
+        {
+            "id": "0012",
+            "nome": "Aura de Cansaço",
+            "tipo": "debuff",
+            "tipo2": "forca",
+            "descricao": "Teste sua habilidade. Em caso de falha, o Heroi perde 1 de força",
+            "imagem": "armadilha.png",
+            "alt": "Esta área exala um aroma putrido e nauseante."
+        },
+        {
+            "id": "0013",
+            "nome": "Chão de espinhos",
+            "tipo": "debuff",
+            "tipo2": "habilidade",
+            "descricao": "Teste sua habilidade. Em caso de falha, o Heroi perde 1 de Habilidade",
+            "imagem": "armadilha.png",
+            "alt": "O chão desse aposento está coberto de pequenos buracos que, ao detectarem a aproximação de alguém, projetam lâminas de quarenta centímetros em grande velocidade."
+        },
+        {
+            "id": "0014",
+            "nome": "Correntes da Corrupção",
+            "tipo": "debuff",
+            "tipo2": "resistencia",
+            "descricao": "Teste sua habilidade. Em caso de falha, o Heroi perde 1 de Resistencia",
+            "imagem": "armadilha.png",
+            "alt": "As paredes dessa sala possuem sulcos profundos de onde são projetadas correntes de brilho mágico. Ao encostarem em seu alvo, as correntes emitem um brilho e desaparecem, mas seu peso ainda é sentido pela vítima."
+        },
+        {
+            "id": "0015",
+            "nome": "Vapores Venenosos",
+            "tipo": "debuff",
+            "tipo2": "pv",
+            "descricao": "Teste sua habilidade. Em caso de falha, o Heroi perde +1d6 de Pontos de vida",
+            "imagem": "armadilha.png",
+            "alt": "Vapores pesados sobem de maneira sinuosa do chão deste recinto. O ar tem um cheiro ocre e pungente e pelos cantos pequenos roedores jazem mortos."
+        }
+    ],    
+    "items": [
+        {
+            "id": "0016",
+            "nome": "Espada",
+            "tipo": "Item",
+            "tipo2": "equip",
+            "effect": {"forca": 1},
+            "descricao": "Uma espada", 
+            "equiped": false
+        },
+        {
+            "id": "0017",
+            "nome": "Espada Grande",
+            "tipo": "Item",
+            "tipo2": "equip",
+            "effect": {"forca": 2, "habilidade": -1},
+            "descricao": "Uma espada grande",
+            "equiped": false
+        },
+        {
+            "id": "0018",
+            "nome": "Botas de Agilidade",
+            "tipo": "Item",
+            "tipo2": "equip",
+            "effect": {"habilidade": 1},
+            "descricao": "Botas finas e bem trabalhadas",
+            "equiped": false
+        }
+        ,
+        {
+            "id": "0019",
+            "nome": "Pão de forma",
+            "tipo": "Item",
+            "tipo2": "instant",
+            "effect": {"pv": 5},
+            "descricao": "Um pão para uma refeição simples",
+            "equiped": false
+        }
+    ],
+    "herois": [
+        {
+            "id": 0,
+            "nome": "Heroi",
+            "tipo": "Heroi",
+            "tipo2": "Cavaleiro",
+            "forca": 1,
+            "habilidade": 1,
+            "resistencia": 1,
+            "pv": 10
         }
     ]
 }

@@ -1,0 +1,22 @@
+.myModal {
+    float: left;
+    position: fixed;
+    z-index: 100;
+    background: $boulder;
+    width: 320px;
+    max-height: 540px;
+    top: 0;
+    padding: $gutter*4;
+}
+
+.myModal__close {
+    float: right;
+    position: absolute;
+    right: $gutter*3;
+    top: $gutter*3;
+    background: transparent;
+    border: none;
+    color: $white;
+    text-shadow: 3px 2px $black;
+    cursor: pointer;
+  }

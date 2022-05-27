@@ -15,12 +15,12 @@
 }
 
 .heroi__face {
-    width: 33px;
-    height: 33px;
+    width: 34px;
+    height: 34px;
     margin-right: $gutter;
     background-color: $black;
-    background-image: url('../img/portraits.png');
-    background-position: 0 0;
+    background-image: $spriteImage;
+    background-position: -66px 0;
     border: $simpleBorder;
 }
 
@@ -35,6 +35,7 @@
     display: block;
     border: $simpleBorder;
     margin-top: $gutter;
+    margin-left: $gutter/2;
     position: relative;
     transform: skewX(45deg);
 }
@@ -48,3 +49,96 @@
     background: $blood;
 }
 
+.heroi__btn {
+    border: none;
+    margin-left: $gutter;
+    width: 32px;
+    height: 32px;
+    background-image: $spriteImage;
+    background-position: 0 0;
+    background-color: transparent;
+    cursor: pointer;
+
+    &--status {
+        background-position: -32px 0;
+    }
+}
+
+//modal Infostatus
+.infoStatus__row--1 {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.infoStatus__row--1 h2 {
+    flex-basis: 100%;
+}
+
+.infoStatus__charPhoto {
+    width: $tileBase*2;
+    height: $tileBase*2;
+    background-color: $black;
+    margin-right: $gutter*2;
+    background-image: $spriteImage;
+    background-size: cover;
+    background-position: 0 0;
+    border: $simpleBorder;
+}
+
+.infoStatus__nameClass {
+    flex-basis: 60%;
+}
+
+.infoStatus__name {
+    font-size: 1rem;
+    margin-top: 18px;
+}
+
+.infoStatus__class {
+    font-size: .8rem;
+    margin-top: 8px;
+}
+
+.heroi__point {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0 $gutter;
+
+    &:nth-of-type(even) {
+        background-color: $gray;
+    }
+}
+
+.heroi__point__desc {
+    font-size: 0.7rem;
+    margin: 0 0 $gutter/2;
+}
+
+.heroi__point__icon {
+    width: 32px;
+    height: 32px;
+    display: inline-block;
+    background-image: $spriteImage;
+
+    &--forca {
+        background-position: -$tileBase*3 0;
+    }
+
+    &--hab {
+        background-position: -$tileBase*4 0;
+    }
+
+    &--res {
+        background-position: -$tileBase*5 0;
+    }
+
+    &--pv {
+        background-position: -$tileBase*6 0;
+    }
+}
+
+.infoStatus__history {
+    font-size: 0.6rem;
+    line-height: 1.6em;
+}

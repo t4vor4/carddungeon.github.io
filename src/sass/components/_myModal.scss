@@ -4,9 +4,14 @@
     z-index: 100;
     background: $boulder;
     width: 320px;
-    max-height: 540px;
+    height: 540px;
     top: 0;
     padding: $gutter*4;
+    display: none;
+}
+
+.myModal h2 {
+    font-size: 1.2rem;
 }
 
 .myModal__close {

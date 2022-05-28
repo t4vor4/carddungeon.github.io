@@ -6,10 +6,14 @@ export default class Stage {
         let heroi = gameState.chars.hero;
 
         const characterInfo = this.characterInfo(heroi);
+        const stage = this.stage();
+        const actionArea = this.actionArea()
 
         const $html = `
             <div class="stage">
                 ${characterInfo}
+                ${stage}
+                ${actionArea}
             </div>
         `
         
@@ -28,7 +32,7 @@ export default class Stage {
                         </span>
                     </div>
                     <button class="heroi__btn heroi__btn--status myModal__btn" data-for="heroiStatus" title="Status"></button>
-                    <button class="heroi__btn heroi__btn--itens myModal__btn" data-for="heroiItens" title="Items"></button>
+                    <button class="heroi__btn heroi__btn--config myModal__btn" data-for="heroiConfig" title="Configurações"></button>
                 </div>
                 
                 <div class="myModal" id="heroiStatus">
@@ -65,19 +69,30 @@ export default class Stage {
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde iste, consequuntur quod suscipit non sit aliquid quia autem architecto?
                             </div>
                         </div>
+                    </div>
+                </div>
 
+                <div class="myModal" id="heroiConfig">
+                    <button class="myModal__close">X</button>
+                    <div class="myModal__body config">
+                        <h2>Configurações</h2>
                         
 
                     </div>
                 </div>
-
-                <!-- <div class="heroi__info__points">
-                    <span class="heroi__point heroi__point--forca">Força: ${heroi.forca}</span>
-                    <span class="heroi__point heroi__point--habilidade">Habilidade: ${heroi.habilidade}</span>
-                    <span class="heroi__point heroi__point--resistencia">Resistência: ${heroi.resistencia}</span>
-                    <span class="heroi__point heroi__point--pv">Vida: ${heroi.pv}</span>
-                </div> -->
             </header>
+        `;
+    }
+    stage() {
+        return `
+            <div class="mainStage">
+            </div>
+        `;
+    }
+    actionArea() {
+        return `
+            <div class="footer actionArea">
+            </div>
         `;
     }
 }

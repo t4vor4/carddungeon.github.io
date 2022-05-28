@@ -2,14 +2,17 @@ import Cards from './json/cards.json';
 import Combate from './components/sequenciaAttack';
 import GamePrincipal from './components/gameStateConstructor';
 import MontaEstagio from './components/gameStage';
+import Modals from './components/modal';
 
 // console.log(Cards);
 
 var gameStates = new GamePrincipal(Cards); 
 var combate = new Combate();
 var montaEstagio = new MontaEstagio(gameStates);
+var modals = new Modals();
 
-
+modals.openModal();
+modals.closeModal();
 
 // renderiza um botao de teste
 const testButton = type => {

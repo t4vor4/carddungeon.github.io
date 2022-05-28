@@ -60,13 +60,25 @@ var Stage = /*#__PURE__*/function () {
     value: function base(gameState) {
       var heroi = gameState.chars.hero;
       var characterInfo = this.characterInfo(heroi);
-      var $html = "\n            <div class=\"stage\">\n                ".concat(characterInfo, "\n            </div>\n        ");
+      var stage = this.stage();
+      var actionArea = this.actionArea();
+      var $html = "\n            <div class=\"stage\">\n                ".concat(characterInfo, "\n                ").concat(stage, "\n                ").concat(actionArea, "\n            </div>\n        ");
       $('.content').append($html);
     }
   }, {
     key: "characterInfo",
     value: function characterInfo(heroi) {
-      return "\n            <header class=\"heroi\"> \n                <div class=\"heroi__row\">\n                    <div class=\"heroi__face\">\n                    </div>\n                    <div class=\"heroi_content\">\n                        <span class=\"heroi__nome\">".concat(heroi.nome, "</span>/<small class=\"heroi__classe\">").concat(heroi.tipo2, "</small>\n                        <span class=\"heroi__lifeBar\">\n                            <span class=\"heroi__lifeBar__inner\" style=\"width: 90%;\"></span>\n                        </span>\n                    </div>\n                    <button class=\"heroi__btn heroi__btn--status myModal__btn\" data-for=\"heroiStatus\" title=\"Status\"></button>\n                    <button class=\"heroi__btn heroi__btn--itens myModal__btn\" data-for=\"heroiItens\" title=\"Items\"></button>\n                </div>\n                \n                <div class=\"myModal\" id=\"heroiStatus\">\n                    <button class=\"myModal__close\">X</button>\n                    <div class=\"myModal__body infoStatus\">\n                        <div class=\"infoStatus__row infoStatus__row--1\">\n                            <h2>Informa\xE7\xF5es</h2>\n                            <div class=\"infoStatus__charPhoto\"></div>\n                            <div class=\"infoStatus__nameClass\">\n                                <div class=\"infoStatus__name\">").concat(heroi.nome, "</div>\n                                <div class=\"infoStatus__class\">").concat(heroi.tipo2, "</div>\n                            </div>\n                        </div>\n                        <div class=\"infoStatus__row infoStatus__row--2\">\n                            <h2>Status</h2>\n                            <div class=\"infoStatus__content\">\n                                <span class=\"heroi__point\">\n                                    <h3 class=\"heroi__point__desc\"><i class=\"heroi__point__icon heroi__point__icon--forca\"></i> For\xE7a</h3> <span class=\"heroi__point__value\">").concat(heroi.forca, "</span>\n                                </span>\n                                <span class=\"heroi__point\">\n                                    <h3 class=\"heroi__point__desc\"><i class=\"heroi__point__icon heroi__point__icon--hab\"></i> Habilidade</h3> <span class=\"heroi__point__value\">").concat(heroi.habilidade, "</span>\n                                </span>\n                                <span class=\"heroi__point\">\n                                    <h3 class=\"heroi__point__desc\"><i class=\"heroi__point__icon heroi__point__icon--res\"></i> Resist\xEAncia</h3> <span class=\"heroi__point__value\">").concat(heroi.resistencia, "</span>\n                                </span>\n                                <span class=\"heroi__point\">\n                                    <h3 class=\"heroi__point__desc\"><i class=\"heroi__point__icon heroi__point__icon--pv\"></i> Vida</h3> <span class=\"heroi__point__value\">").concat(heroi.pv, "</span>\n                                </span>\n                            </div>\n                        </div>\n                        <div class=\"infoStatus__row infoStatus__row--3\">\n                            <h2>Historia</h2>\n                            <div class=\"infoStatus__history\">\n                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde iste, consequuntur quod suscipit non sit aliquid quia autem architecto?\n                            </div>\n                        </div>\n\n                        \n\n                    </div>\n                </div>\n\n                <!-- <div class=\"heroi__info__points\">\n                    <span class=\"heroi__point heroi__point--forca\">For\xE7a: ").concat(heroi.forca, "</span>\n                    <span class=\"heroi__point heroi__point--habilidade\">Habilidade: ").concat(heroi.habilidade, "</span>\n                    <span class=\"heroi__point heroi__point--resistencia\">Resist\xEAncia: ").concat(heroi.resistencia, "</span>\n                    <span class=\"heroi__point heroi__point--pv\">Vida: ").concat(heroi.pv, "</span>\n                </div> -->\n            </header>\n        ");
+      return "\n            <header class=\"heroi\"> \n                <div class=\"heroi__row\">\n                    <div class=\"heroi__face\">\n                    </div>\n                    <div class=\"heroi_content\">\n                        <span class=\"heroi__nome\">".concat(heroi.nome, "</span>/<small class=\"heroi__classe\">").concat(heroi.tipo2, "</small>\n                        <span class=\"heroi__lifeBar\">\n                            <span class=\"heroi__lifeBar__inner\" style=\"width: 90%;\"></span>\n                        </span>\n                    </div>\n                    <button class=\"heroi__btn heroi__btn--status myModal__btn\" data-for=\"heroiStatus\" title=\"Status\"></button>\n                    <button class=\"heroi__btn heroi__btn--config myModal__btn\" data-for=\"heroiConfig\" title=\"Configura\xE7\xF5es\"></button>\n                </div>\n                \n                <div class=\"myModal\" id=\"heroiStatus\">\n                    <button class=\"myModal__close\">X</button>\n                    <div class=\"myModal__body infoStatus\">\n                        <div class=\"infoStatus__row infoStatus__row--1\">\n                            <h2>Informa\xE7\xF5es</h2>\n                            <div class=\"infoStatus__charPhoto\"></div>\n                            <div class=\"infoStatus__nameClass\">\n                                <div class=\"infoStatus__name\">").concat(heroi.nome, "</div>\n                                <div class=\"infoStatus__class\">").concat(heroi.tipo2, "</div>\n                            </div>\n                        </div>\n                        <div class=\"infoStatus__row infoStatus__row--2\">\n                            <h2>Status</h2>\n                            <div class=\"infoStatus__content\">\n                                <span class=\"heroi__point\">\n                                    <h3 class=\"heroi__point__desc\"><i class=\"heroi__point__icon heroi__point__icon--forca\"></i> For\xE7a</h3> <span class=\"heroi__point__value\">").concat(heroi.forca, "</span>\n                                </span>\n                                <span class=\"heroi__point\">\n                                    <h3 class=\"heroi__point__desc\"><i class=\"heroi__point__icon heroi__point__icon--hab\"></i> Habilidade</h3> <span class=\"heroi__point__value\">").concat(heroi.habilidade, "</span>\n                                </span>\n                                <span class=\"heroi__point\">\n                                    <h3 class=\"heroi__point__desc\"><i class=\"heroi__point__icon heroi__point__icon--res\"></i> Resist\xEAncia</h3> <span class=\"heroi__point__value\">").concat(heroi.resistencia, "</span>\n                                </span>\n                                <span class=\"heroi__point\">\n                                    <h3 class=\"heroi__point__desc\"><i class=\"heroi__point__icon heroi__point__icon--pv\"></i> Vida</h3> <span class=\"heroi__point__value\">").concat(heroi.pv, "</span>\n                                </span>\n                            </div>\n                        </div>\n                        <div class=\"infoStatus__row infoStatus__row--3\">\n                            <h2>Historia</h2>\n                            <div class=\"infoStatus__history\">\n                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde iste, consequuntur quod suscipit non sit aliquid quia autem architecto?\n                            </div>\n                        </div>\n                    </div>\n                </div>\n\n                <div class=\"myModal\" id=\"heroiConfig\">\n                    <button class=\"myModal__close\">X</button>\n                    <div class=\"myModal__body config\">\n                        <h2>Configura\xE7\xF5es</h2>\n                        \n\n                    </div>\n                </div>\n            </header>\n        ");
+    }
+  }, {
+    key: "stage",
+    value: function stage() {
+      return "\n            <div class=\"mainStage\">\n            </div>\n        ";
+    }
+  }, {
+    key: "actionArea",
+    value: function actionArea() {
+      return "\n            <div class=\"footer actionArea\">\n            </div>\n        ";
     }
   }]);
   return Stage;
@@ -259,6 +271,49 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
 
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
 
+var Modal = /*#__PURE__*/function () {
+  function Modal() {
+    (0, _classCallCheck2["default"])(this, Modal);
+    this.openModal();
+    this.closeModal();
+  }
+
+  (0, _createClass2["default"])(Modal, [{
+    key: "openModal",
+    value: function openModal() {
+      $(document).on('click', '.myModal__btn', function (e) {
+        var $id = $(e.currentTarget).data('for');
+        var $target = $("#".concat($id));
+        if ($target.length) $("#".concat($id)).show();
+      });
+    }
+  }, {
+    key: "closeModal",
+    value: function closeModal() {
+      $(document).on('click', '.myModal__close', function (e) {
+        $(e.currentTarget).closest('.myModal').hide();
+      });
+    }
+  }]);
+  return Modal;
+}();
+
+exports["default"] = Modal;
+
+},{"@babel/runtime/helpers/classCallCheck":1,"@babel/runtime/helpers/createClass":2,"@babel/runtime/helpers/interopRequireDefault":3}],7:[function(require,module,exports){
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
+
 /**
  * Classe com funções de controle de combate
  */
@@ -366,7 +421,7 @@ var Combate = /*#__PURE__*/function () {
 
 exports["default"] = Combate;
 
-},{"@babel/runtime/helpers/classCallCheck":1,"@babel/runtime/helpers/createClass":2,"@babel/runtime/helpers/interopRequireDefault":3}],7:[function(require,module,exports){
+},{"@babel/runtime/helpers/classCallCheck":1,"@babel/runtime/helpers/createClass":2,"@babel/runtime/helpers/interopRequireDefault":3}],8:[function(require,module,exports){
 module.exports={
     "monsters": [
         {
@@ -594,7 +649,7 @@ module.exports={
         }
     ]
 }
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -607,10 +662,15 @@ var _gameStateConstructor = _interopRequireDefault(require("./components/gameSta
 
 var _gameStage = _interopRequireDefault(require("./components/gameStage"));
 
+var _modal = _interopRequireDefault(require("./components/modal"));
+
 // console.log(Cards);
 var gameStates = new _gameStateConstructor["default"](_cards["default"]);
 var combate = new _sequenciaAttack["default"]();
-var montaEstagio = new _gameStage["default"](gameStates); // renderiza um botao de teste
+var montaEstagio = new _gameStage["default"](gameStates);
+var modals = new _modal["default"]();
+modals.openModal();
+modals.closeModal(); // renderiza um botao de teste
 
 var testButton = function testButton(type) {
   var $html = "<button action=\"".concat(type, "\">").concat(type, "</button>");
@@ -628,4 +688,4 @@ var init = function init() {
 
 window.onload = init();
 
-},{"./components/gameStage":4,"./components/gameStateConstructor":5,"./components/sequenciaAttack":6,"./json/cards.json":7,"@babel/runtime/helpers/interopRequireDefault":3}]},{},[8]);
+},{"./components/gameStage":4,"./components/gameStateConstructor":5,"./components/modal":6,"./components/sequenciaAttack":7,"./json/cards.json":8,"@babel/runtime/helpers/interopRequireDefault":3}]},{},[9]);

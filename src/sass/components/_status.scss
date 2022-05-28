@@ -20,7 +20,7 @@
     margin-right: $gutter;
     background-color: $black;
     background-image: $spriteImage;
-    background-position: -66px 0;
+    background-position: 0 0;
     border: $simpleBorder;
 }
 
@@ -55,13 +55,17 @@
     width: 32px;
     height: 32px;
     background-image: $spriteImage;
-    background-position: 0 0;
     background-color: transparent;
     cursor: pointer;
+}
 
-    &--status {
-        background-position: -32px 0;
-    }
+.heroi__btn--status {
+    background-position-x: -$tileBase;
+    background-position-y: -$tileBase;
+}
+
+.heroi__btn--config {
+    background-position: -$tileBase*2 -$tileBase;
 }
 
 //modal Infostatus
@@ -70,7 +74,7 @@
     flex-wrap: wrap;
 }
 
-.infoStatus__row--1 h2 {
+.infoStatus__row h2 {
     flex-basis: 100%;
 }
 
@@ -80,8 +84,7 @@
     background-color: $black;
     margin-right: $gutter*2;
     background-image: $spriteImage;
-    background-size: cover;
-    background-position: 0 0;
+    background-position: -$tileBase*4 0;
     border: $simpleBorder;
 }
 
@@ -122,19 +125,19 @@
     background-image: $spriteImage;
 
     &--forca {
-        background-position: -$tileBase*3 0;
+        background-position: 0 (-$tileBase*2);
     }
 
     &--hab {
-        background-position: -$tileBase*4 0;
+        background-position: (-$tileBase*1) (-$tileBase*2);
     }
 
     &--res {
-        background-position: -$tileBase*5 0;
+        background-position: (-$tileBase*2) (-$tileBase*2);
     }
 
     &--pv {
-        background-position: -$tileBase*6 0;
+        background-position: (-$tileBase*3) (-$tileBase*2);
     }
 }
 
